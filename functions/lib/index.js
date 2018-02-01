@@ -1,9 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const functions = require("firebase-functions");
+// import * as firebase from 'firebase';
 const express = require("express");
 const React = require("react");
 const ReactDOMServer = require("react-dom/server");
+const firebase = require('firebase');
 const app = express();
 // React App
 const ServerApp = React.createFactory(require('../build/server.bundle.js').default);
@@ -20,7 +22,7 @@ const renderApplication = (url, res, initialState) => {
     res.send(templatedHtml);
 };
 app.get('/favicon.ico', function (req, res) {
-    res.send(204);
+    res.sendStatus(204);
 });
 app.get('/:userId?', (req, res) => {
     res.set('Cache-Control', 'public, max-age=60, s-maxage=180');
@@ -28,14 +30,12 @@ app.get('/:userId?', (req, res) => {
         // client is requesting user-details page with userId
         // load the data for that employee and its direct reports
         database.getEmployeeById(req.params.userId).then(resp => {
-            console.log(resp);
             renderApplication(req.url, res, resp);
         });
     }
     else {
         // index page. load data for all employees
         database.getAllEmployees().then(resp => {
-            console.log(resp);
             renderApplication(req.url, res, resp);
         });
     }

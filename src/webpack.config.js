@@ -8,7 +8,7 @@ module.exports = {
   resolve: {
     extensions: [".js", ".jsx"],
     alias: {
-      'firebase-database': path.resolve(__dirname, '../functions/src/firebase-database'),
+      'firebase-database': path.resolve(__dirname, '../functions/lib/firebase-database')
     },
   },
   resolveLoader: {
@@ -19,19 +19,7 @@ module.exports = {
     rules: [{
       test: /\.jsx?$/,
       exclude: /node_modules/,
-      loader: 'babel-loader',
-      query: {
-        presets: [ "react", ["es2015", {modules: false}], "stage-0"]
-      }
+      loader: 'babel-loader'
     }]
-  },
-
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,   // enable source maps to map errors (stack traces) to modules
-      output: {
-        comments: false, // remove all comments
-      },
-    }),
-  ]
+  }
 };

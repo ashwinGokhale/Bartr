@@ -7,7 +7,6 @@
     "build": "npm run buildClient && npm run buildServer"
   },
   "dependencies": {
-    "firebase": "3.9.0",
     "lodash": "4.17.4",
     "react": "15.5.4",
     "react-dom": "15.5.4",
@@ -17,9 +16,17 @@
   "devDependencies": {
     "babel-core": "6.24.1",
     "babel-loader": "7.0.0",
-    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-es2017": "^6.24.1",
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-0": "6.24.1",
+    "firebase": "^4.9.0",
     "webpack": "2.5.0"
+  },
+  "babel": {
+    "presets": [
+      "es2017",
+      "react",
+      "stage-0"
+    ]
   }
 }

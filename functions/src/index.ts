@@ -1,8 +1,9 @@
 import * as functions from 'firebase-functions';
-import * as firebase from 'firebase';
+// import * as firebase from 'firebase';
 import * as express from 'express';
 import * as React from 'react';
 import * as ReactDOMServer from 'react-dom/server';
+const firebase = require('firebase');
 
 const app = express();
 
@@ -24,7 +25,7 @@ const renderApplication = (url, res, initialState) => {
 };
 
 app.get('/favicon.ico', function(req, res) {
-  res.send(204);
+  res.sendStatus(204);
 });
 
 app.get('/:userId?', (req, res) => {
@@ -33,13 +34,11 @@ app.get('/:userId?', (req, res) => {
     // client is requesting user-details page with userId
     // load the data for that employee and its direct reports
     database.getEmployeeById(req.params.userId).then(resp => {
-      console.log(resp);
       renderApplication(req.url, res, resp);
     });
   } else {
     // index page. load data for all employees
     database.getAllEmployees().then(resp => {
-      console.log(resp);
       renderApplication(req.url, res, resp);
     });
   }
