@@ -1,4 +1,7 @@
-# See https://help.github.com/ignore-files/ for more about ignoring files.
+# Webpack output
+functions/index.js*
+public/
+public/bundle.js*
 
 # dependencies
 node_modules/
