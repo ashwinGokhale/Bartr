@@ -2,6 +2,8 @@ const webpack = require("webpack");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const autoprefixer = require("autoprefixer");
 const path = require('path');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const nodeExternals = require('webpack-node-externals');
 
 const browserConfig = {
   entry: "./src/browser/index.js",
@@ -9,7 +11,7 @@ const browserConfig = {
     warnings:false
   },
   output: {
-    path: path.resolve(__dirname),
+    path: path.resolve(process.cwd()),
     filename: "./public/bundle.js"
   },
   devtool: "cheap-module-source-map",
@@ -30,7 +32,7 @@ const browserConfig = {
             test: /js$/,
             exclude: /(node_modules)/,
             loader: "babel-loader",
-            query: { presets: ["react-app"] }
+            query: { presets: [ ['es2015', { modules: false }], 'react', 'stage-0' ] }
           },
           {
             test: /\.css$/,
@@ -59,34 +61,26 @@ const browserConfig = {
   plugins: [
     new ExtractTextPlugin({
       filename: "public/css/[name].css"
-    })
+    }),
+    // new UglifyJsPlugin()
   ]
 };
 
 const serverConfig = {
   entry: "./src/server/index.js",
-  // resolve: {
-  //   extensions: [".js", ".jsx"],
-  //   alias: {
-  //     'firebase-database': path.resolve(__dirname, 'functions/firebase-database'),
-  //   },
-  // },
-  // resolveLoader: {
-  //   modules: [path.resolve(__dirname, "node_modules")],
-  // },
   stats: {
     warnings:false
   },
-  node: {
-    __filename: true,
-    __dirname: true
-  },
+  // node: {
+  //   __filename: true,
+  //   __dirname: true
+  // },
   target: "node",
   output: {
-    path: path.resolve(__dirname, 'functions'),
+    path: path.resolve(process.cwd(), 'functions'),
     filename: "index.js",
     libraryTarget: "commonjs2",
-    publicPath: path.resolve(__dirname, 'public')
+    publicPath: path.resolve(process.cwd(), 'public')
   },
   devtool: "cheap-module-source-map",
   module: {
@@ -117,10 +111,19 @@ const serverConfig = {
         test: /js$/,
         exclude: /(node_modules)/,
         loader: "babel-loader",
-        query: { presets: ["react-app"] }
+        query: { presets: [ ['es2015', { modules: false }], 'react', 'stage-0' ] }
       }
     ]
-  }
+  },
+  externals: {
+    "firebase-admin": 'firebase-admin',
+    "firebase-functions": 'firebase-functions',
+    "firebase": 'firebase'
+  },
+  // externals: [nodeExternals()],
+  plugins: [
+    // new UglifyJsPlugin()
+  ]
 };
 
 module.exports = [browserConfig, serverConfig];

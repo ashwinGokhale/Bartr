@@ -13,7 +13,17 @@ import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import * as firebase from 'firebase';
 
-firebase.initializeApp(functions.config().firebase);
+// firebase.initializeApp(functions.config().firebase);
+var config = {
+  apiKey: "AIzaSyDBETqIADd-E75bR2lSbS-VuqP5-RD1U4Q",
+  authDomain: "bartr-b1856.firebaseapp.com",
+  databaseURL: "https://bartr-b1856.firebaseio.com",
+  projectId: "bartr-b1856",
+  storageBucket: "bartr-b1856.appspot.com",
+  messagingSenderId: "952082363953"
+};
+
+firebase.initializeApp(config);
 
 const app = express();
 
