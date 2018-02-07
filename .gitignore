@@ -1,7 +1,13 @@
+# Firebase
+.firebaserc
+
 # Webpack output
 functions/index.js*
 public/
 public/bundle.js*
+public/css*
+public/media*
+public/*
 
 # dependencies
 node_modules/

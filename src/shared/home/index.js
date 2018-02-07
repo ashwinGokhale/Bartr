@@ -11,12 +11,6 @@ class Home extends Component {
         <header>
           <img src={logo} />
         </header>
-        {/* <aside>
-          <p className="selected">About</p>
-          <p>
-            <Link to="/news">Wizard News</Link>
-          </p>
-        </aside> */}
         <article>
           <h1>W Combinator created a new model for funding early stage wizardry.</h1>
           <p>

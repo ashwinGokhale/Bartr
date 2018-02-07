@@ -23,7 +23,7 @@ const newsError = () => ({ type: FETCH_NEWS_FAILURE });
 
 export const fetchNews = () => (dispatch, getState) => {
   dispatch(requestNews());
-  return fetch("http://localhost:5000/api/news")
+  return fetch('/api/news')
     .then(response => response.json())
     .then(news => dispatch(receivedNews(news)))
     .catch(err => dispatch(newsError(err)));

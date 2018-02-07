@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start-dev": "NODE_ENV=development webpack -w & NODE_ENV=development firebase serve --only functions,hosting",
+    "start-dev": "NODE_ENV=development webpack -w --display-error-details & NODE_ENV=development firebase serve --only functions,hosting",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -12,29 +12,30 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.4",
-    "express": "^4.15.3",
+    "express": "^4.16.2",
+    "firebase": "3.9.0",
+    "firebase-admin": "~5.8.1",
+    "firebase-functions": "^0.8.1",
     "isomorphic-fetch": "^2.2.1",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
-    "react-redux": "^5.0.5",
-    "react-router-dom": "^4.1.2",
+    "react": "^15.6.2",
+    "react-dom": "^15.6.2",
+    "react-redux": "^5.0.6",
+    "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
+    "semantic-ui-css": "^2.2.14",
     "serialize-javascript": "^1.4.0",
-    "source-map-support": "^0.4.15",
-    "firebase-admin": "~5.8.1",
-    "firebase-functions": "^0.8.1"
+    "source-map-support": "^0.4.18"
   },
   "devDependencies": {
-    "autoprefixer": "^7.1.2",
-    "babel-core": "^6.25.0",
-    "babel-loader": "^7.1.1",
-    "babel-preset-react-app": "^3.0.1",
-    "css-loader": "^0.28.4",
+    "autoprefixer": "^7.2.5",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-react-app": "^3.1.1",
+    "css-loader": "^0.28.9",
     "extract-text-webpack-plugin": "^2.1.2",
     "file-loader": "^0.11.2",
-    "nodemon": "^1.11.0",
-    "postcss-loader": "^2.0.6",
-    "webpack": "^3.1.0"
+    "postcss-loader": "^2.1.0",
+    "webpack": "^3.10.0"
   }
 }
