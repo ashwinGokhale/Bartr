@@ -1,42 +1,17 @@
 import express from "express";
-import cors from "cors";
 import React from "react";
 import { renderToString } from "react-dom/server";
 import { Provider } from "react-redux";
 import { StaticRouter, matchPath } from "react-router-dom";
 import serialize from "serialize-javascript";
-import routes from "../shared/routes";
-import configureStore from "../shared/configureStore";
-import App from "../shared/App";
+import routes from "../../shared/routes";
+import configureStore from "../../shared/configureStore";
+import App from "../../shared/App";
 import "source-map-support/register";
-import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
-import * as firebase from 'firebase';
 
-// firebase.initializeApp(functions.config().firebase);
-var config = {
-  apiKey: "AIzaSyDBETqIADd-E75bR2lSbS-VuqP5-RD1U4Q",
-  authDomain: "bartr-b1856.firebaseapp.com",
-  databaseURL: "https://bartr-b1856.firebaseio.com",
-  projectId: "bartr-b1856",
-  storageBucket: "bartr-b1856.appspot.com",
-  messagingSenderId: "952082363953"
-};
+export const router = express.Router();
 
-firebase.initializeApp(config);
-
-const app = express();
-
-app.use(cors());
-app.use(express.static("public"));
-
-app.get("/api/news", (req, res) => {
-  firebase.database().ref('/news').once('value').then(resp => {
-    res.json(resp.val())
-  });
-});
-
-app.get("*", (req, res, next) => {
+router.get("*", (req, res, next) => {
   const store = configureStore();
 
   const promises = routes.reduce((acc, route) => {
@@ -62,7 +37,7 @@ app.get("*", (req, res, next) => {
         <!DOCTYPE html>
         <html>
           <head>
-            <title>W Combinator</title>
+            <title>Bartr</title>
             <link rel="stylesheet" href="/css/main.css">
             <script src="/bundle.js" defer></script>
             <script>window.__initialData__ = ${serialize(initialData)}</script>
@@ -76,5 +51,3 @@ app.get("*", (req, res, next) => {
     })
     .catch(next);
 });
-
-export const server = functions.https.onRequest(app);

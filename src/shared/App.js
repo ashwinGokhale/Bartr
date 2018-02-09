@@ -13,10 +13,11 @@ class App extends Component {
 				<div className="navbar-header">
 					<Link to='/' className="navbar-brand">Home</Link>
 					<Link to='/news' className="navbar-brand">News</Link>
+					<Link to='/post' className="navbar-brand">Post</Link>
 				</div>
 			</div>
 			</nav>
-			<Switch>
+				<Switch>
       			{routes.map((route, i) => <Route key={i} {...route} />)}
     		</Switch>
 		</div>

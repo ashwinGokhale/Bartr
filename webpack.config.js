@@ -67,7 +67,8 @@ const browserConfig = {
 };
 
 const serverConfig = {
-  entry: "./src/server/index.js",
+  entry: './src/server/bin/www.js',
+  // entry: "./src/server/index.js",
   stats: {
     warnings:false
   },

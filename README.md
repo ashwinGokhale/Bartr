@@ -5,5 +5,5 @@ Exchange goods and services with people in your area
 * `npm i`
 * `firebase use --add`
 * When it says choose an alias, type "bartr"
-* `npm run start-dev`
+* `npm run start`
 * Open localhost:5000

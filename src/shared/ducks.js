@@ -1,4 +1,5 @@
 import "isomorphic-fetch";
+import { combineReducers } from 'redux';
 
 // Actions
 const FETCH_NEWS_REQUEST = "FETCH_NEWS_REQUEST";

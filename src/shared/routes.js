@@ -1,5 +1,6 @@
 import Home from "./home";
 import News from "./news";
+import Post from './post';
 
 const routes = [
   {
@@ -10,6 +11,10 @@ const routes = [
   {
     path: "/news",
     component: News
+  },
+  {
+    path: '/post',
+    component: Post
   }
 ];
 
