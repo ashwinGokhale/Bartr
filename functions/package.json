@@ -14,7 +14,6 @@
   "dependencies": {
     "@types/algoliasearch": "^3.24.9",
     "algoliasearch": "^3.24.11",
-    "algoliasearch-helper": "^2.24.0",
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
@@ -23,7 +22,6 @@
     "firebase": "^4.9.1",
     "firebase-admin": "~5.8.1",
     "firebase-functions": "^0.8.1",
-    "geofire": "^4.1.2",
     "morgan": "^1.9.0",
     "uuid": "^3.2.1"
   },

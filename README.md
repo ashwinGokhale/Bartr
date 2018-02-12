@@ -2,6 +2,11 @@
 
 Exchange goods and services with people in your area
 
+## Prerequisites
+* Yarn
+* Firebase
+* Typescript
+
 ## Setup
 
 1. `./node_modules/.bin/firebase login`
@@ -17,8 +22,11 @@ Exchange goods and services with people in your area
 
 ## Backend Usage
 
-1. `yarn`
-2. `yarn serve`
+1. `cd functions`
+2. `yarn`
+3. `yarn watch`
+4. Open another terminal window
+5. `yarn serve`
 
 
 ## Notes
