@@ -6,6 +6,7 @@
     "watch": "./node_modules/.bin/tsc -w",
     "serve": "./node_modules/.bin/firebase serve --only functions,hosting",
     "shell": "npm run build && ./node_modules/.bin/firebase experimental:functions:shell",
+    "watchServe": "(npm run watch &) && npm run serve",
     "start": "npm run shell",
     "deploy": "./node_modules/.bin/firebase deploy --only functions",
     "logs": "./node_modules/.bin/firebase functions:log"

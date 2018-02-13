@@ -12,7 +12,6 @@ Exchange goods and services with people in your area
 1. `./node_modules/.bin/firebase login`
 2. `./node_modules/.bin/firebase use --add`
     * Choose the "Bartr" project
-3. Copy `firebase.config.js` and `.env` into the root directory
 
 ## Frontend Usage
 
