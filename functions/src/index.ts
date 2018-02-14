@@ -6,6 +6,7 @@ import * as cors from "cors";
 import { router as news } from './routes/news';
 import { router as employees } from './routes/employees';
 import { router as posts } from './routes/posts';
+import { router as users } from './routes/users';
 import * as functions from 'firebase-functions';
 import * as firebase from 'firebase-admin';
 import * as algoliasearch from 'algoliasearch';
@@ -32,6 +33,7 @@ app.get('/', (req, res) => {
 app.use('/news', news);
 app.use('/employees', employees);
 app.use('/posts', posts);
+app.use('/users', users);
 
 
 // Update the search index every time a blog post is written.

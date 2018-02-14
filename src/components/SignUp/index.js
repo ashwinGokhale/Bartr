@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import {
-  Link,
-  withRouter,
-} from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import axios from 'axios';
 
-import { auth, db } from '../../firebase';
-import * as routes from '../../constants/routes';
+import { auth } from '../../firebase';
+import * as routes from '../../constants';
 
 const SignUpPage = ({ history }) =>
   <div>
@@ -18,7 +16,7 @@ const updateByPropertyName = (propertyName, value) => () => ({
 });
 
 const INITIAL_STATE = {
-  username: '',
+  displayName: '',
   email: '',
   passwordOne: '',
   passwordTwo: '',
@@ -33,29 +31,25 @@ class SignUpForm extends Component {
   }
 
   onSubmit = (event) => {
-    const {
-      username,
-      email,
-      passwordOne,
-    } = this.state;
-
-    const {
-      history,
-    } = this.props;
+    const { displayName, email, passwordOne } = this.state;
+    const { history } = this.props;
 
     auth.createUserWithEmailAndPassword(email, passwordOne)
       .then(authUser => {
-
-        // Create a user in your own accessible Firebase Database too
-        db.ref(`users/${authUser.uid}`).set({
-          username,
-          email,
+        // Create user in database
+        axios.post(`/api/users/${authUser.uid}`, {
+          uid: authUser.uid,
+          displayName,
+          photoUrl: authUser.photoURL || 'none',
+          email
         })
+          // .then(response => response.data)
           .then(() => {
             this.setState(() => ({ ...INITIAL_STATE }));
             history.push(routes.HOME);
           })
           .catch(error => {
+            console.log(error)
             this.setState(updateByPropertyName('error', error));
           });
 
@@ -68,25 +62,19 @@ class SignUpForm extends Component {
   }
 
   render() {
-    const {
-      username,
-      email,
-      passwordOne,
-      passwordTwo,
-      error,
-    } = this.state;
+    const { displayName, email, passwordOne, passwordTwo, error } = this.state;
 
     const isInvalid =
       passwordOne !== passwordTwo ||
       passwordOne === '' ||
-      username === '' ||
+      displayName === '' ||
       email === '';
 
     return (
       <form onSubmit={this.onSubmit}>
         <input
-          value={username}
-          onChange={event => this.setState(updateByPropertyName('username', event.target.value))}
+          value={displayName}
+          onChange={event => this.setState(updateByPropertyName('displayName', event.target.value))}
           type="text"
           placeholder="Full Name"
         />

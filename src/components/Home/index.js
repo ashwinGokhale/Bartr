@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import axios from 'axios';
 
 import withAuthorization from '../Session/withAuthorization';
-import { db } from '../../firebase';
 
 class HomePage extends Component {
   componentDidMount() {
     const { onSetUsers } = this.props;
-
-    db.ref('users').once('value').then(snapshot =>
-      onSetUsers(snapshot.val())
-    );
+    axios.get('/api/users')
+      .then(response => onSetUsers(response.data))
   }
 
   render() {
@@ -33,9 +31,14 @@ const UserList = ({ users }) =>
     <h2>List of Usernames of Users</h2>
     <p>(Saved on Sign Up in Firebase Database)</p>
 
-    {Object.keys(users).map(key =>
-      <div key={key}>{users[key].username}</div>
-    )}
+    <ul>
+      {Object.keys(users).map(key =>
+        <li key={key}>
+          <div>Name: {users[key].displayName}</div>
+          <div>UID: {users[key].uid}</div>
+        </li>
+      )}
+    </ul>
   </div>
 
 const mapStateToProps = (state) => ({
@@ -46,9 +49,7 @@ const mapDispatchToProps = (dispatch) => ({
   onSetUsers: (users) => dispatch({ type: 'USERS_SET', users }),
 });
 
-const authCondition = (authUser) => !!authUser;
-
 export default compose(
-  withAuthorization(authCondition),
+  withAuthorization((authUser) => !!authUser),
   connect(mapStateToProps, mapDispatchToProps)
 )(HomePage);

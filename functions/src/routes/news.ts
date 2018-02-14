@@ -7,6 +7,6 @@ router.get("/", async (req, res) => {
 		const resp = await firebase.firestore().collection('/news').get();
 		res.json(resp.docs.map(doc => doc.data()))
 	} catch (err) {
-		res.sendStatus(500).send(err);
+		res.status(500).send(err);
 	}
 });

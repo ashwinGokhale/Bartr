@@ -8,18 +8,18 @@ router.get("/", async (req, res) => {
 		const resp = await firebase.firestore().collection('/posts').get();
 		res.json(resp.docs.map(doc => doc.data()))
 	} catch (err) {
-		res.sendStatus(500).send(err);
+		res.status(400).send(err);
 	}
 });
 
-// Create a post
+// Create / update a post
 router.post('/', async (req, res) => {
-	if (!req.body.title) res.sendStatus(500).send('Post must have a title')
-	else if (!req.body.title) res.sendStatus(500).send('Post must have a picture')
-	else if (!req.body.picture) res.sendStatus(500).send('Post must have a title')
-	else if (!req.body.description) res.sendStatus(500).send('Post must have a description')
-	else if (!req.body.seller) res.sendStatus(500).send('Post must have a seller')
-	else if (!req.body._geoloc) res.sendStatus(500).send('Post must have a Geo location')
+	if (!req.body.title) res.status(400).send('Post must have a title')
+	else if (!req.body.title) res.status(400).send('Post must have a picture')
+	else if (!req.body.picture) res.status(400).send('Post must have a title')
+	else if (!req.body.description) res.status(400).send('Post must have a description')
+	else if (!req.body.userId) res.status(400).send('Post must have a user id')
+	else if (!req.body._geoloc) res.status(400).send('Post must have a Geo location')
 	else {
 		try {
 			const newPost = await firebase.firestore().collection('/posts').add({
@@ -28,12 +28,14 @@ router.post('/', async (req, res) => {
 				description: req.body.description,
 				tags: req.body.tags,
 				state: 'PENDING',
-				seller: req.body.seller,
+				userId: req.body.userId,
+				createdAt: new Date(),
+				lastModified: new Date(),
 				_geoloc: req.body._geoloc
 			});
-			res.sendStatus(200).send('Created: ' + JSON.stringify(newPost));	
+			res.status(200).send('Created: ' + JSON.stringify(newPost));	
 		} catch (err) {
-			res.sendStatus(400).send(err);
+			res.status(400).send(err);
 		}
 	}
 });

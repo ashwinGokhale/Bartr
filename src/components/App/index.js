@@ -5,14 +5,16 @@ import {
 } from 'react-router-dom';
 
 import Navigation from '../Navigation';
+import Footer from '../Footer';
 import LandingPage from '../Landing';
 import SignUpPage from '../SignUp';
 import SignInPage from '../SignIn';
 import PasswordForgetPage from '../PasswordForget';
 import HomePage from '../Home';
 import AccountPage from '../Account';
+import SettingsPage from '../Settings'
 import withAuthentication from '../Session/withAuthentication';
-import * as routes from '../../constants/routes';
+import * as routes from '../../constants';
 
 import './index.css';
 
@@ -29,20 +31,11 @@ const App = () =>
       <Route exact path={routes.PASSWORD_FORGET} component={PasswordForgetPage} />
       <Route exact path={routes.HOME} component={HomePage} />
       <Route exact path={routes.ACCOUNT} component={AccountPage} />
+      <Route exact path={routes.SETTINGS} component={SettingsPage} />
 
       <hr/>
 
-      <div>
-        <a>How It Works</a>
-        <a>Team</a>
-        <a>Values</a>
-        <a>Blog</a>
-        <a>Help</a>
-        <a>Invite Friends</a>
-        <a>Terms</a>
-        <a>Privacy</a>
-        <a>Contact</a>
-      </div>
+      <Footer/>
     </div>
   </Router>
 
