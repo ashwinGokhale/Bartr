@@ -9,7 +9,7 @@
 }
 
 .logo {
-    width: 125px;
+    width: 150px;
     height: 70%;
     margin-top: 0.5%;
     margin-left: 2%;
@@ -49,7 +49,11 @@
 }
 
 button:hover {
-     background-color: rgb(136,228,191);
+     background-color: white;
+     color: rgb(78, 138, 205);
+     border-bottom-color: rgb(78, 138, 205);
+     border-style: solid;
+     border-bottom-width: 0.25px;
      transition: all 0.4s;
      cursor: pointer;
 }
