@@ -1,0 +1,40 @@
+.signInButton {
+    text-align: center;
+    font-size: inherit;
+    border: 0.0em solid white;
+    border-radius: 1em 1em 1em 1em;
+    background-color:  rgb(78, 138, 205);
+    color: white;
+    padding: 0.4em 1em;
+    outline: 0;
+}
+
+.emailBar {
+    text-align: center;
+    padding-bottom: 4px;
+    margin: auto;
+    height: 16px;
+    border: 0.0em solid #ddd;
+    font-size: 20px;
+    outline: 0;
+}
+
+.loginHeader {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    padding-top: 30px;
+    font-weight: 100;
+    color: dimgrey;
+}
+
+.lines {
+    text-align: center;
+    font-weight: 100;
+    color: dimgrey;
+}
+
+.center {
+    text-align: center;
+    margin: auto;
+    padding-top: 30px;
+}

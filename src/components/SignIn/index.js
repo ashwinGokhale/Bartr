@@ -5,10 +5,12 @@ import { SignUpLink } from '../SignUp';
 import { PasswordForgetLink } from '../PasswordForget';
 import { auth } from '../../firebase';
 import * as routes from '../../constants';
+import './index.css'
 
 const SignInPage = ({ history }) =>
   <div>
-    <h1>SignIn</h1>
+    <h1 className="loginHeader">LOG IN</h1>
+    <h1 className="lines">_______________________</h1>
     <SignInForm history={history} />
     <PasswordForgetLink />
     <SignUpLink />
@@ -66,21 +68,33 @@ class SignInForm extends Component {
 
     return (
       <form onSubmit={this.onSubmit}>
-        <input
-          value={email}
-          onChange={event => this.setState(updateByPropertyName('email', event.target.value))}
-          type="text"
-          placeholder="Email Address"
-        />
-        <input
-          value={password}
-          onChange={event => this.setState(updateByPropertyName('password', event.target.value))}
-          type="password"
-          placeholder="Password"
-        />
-        <button disabled={isInvalid} type="submit">
-          Sign In
-        </button>
+        <div className="emailBar">
+          <input
+            value={email}
+            onChange={event => this.setState(updateByPropertyName('email', event.target.value))}
+            type="text"
+            placeholder="Email Address"
+          />
+        </div>
+
+        <div className="emailBar">
+          <input
+            value={password}
+            onChange={event => this.setState(updateByPropertyName('password', event.target.value))}
+            type="password"
+            placeholder="Password"
+          />
+        </div>
+
+        <div className="center">
+          <button 
+            className="signInButton"
+            disabled={isInvalid} type="submit">
+            Sign In
+          </button>
+        </div>
+
+        <h1 className="lines">_______________________</h1>
 
         { error && <p>{error.message}</p> }
       </form>
