@@ -9,6 +9,8 @@
     background-color: rgb(78, 138, 205);
     height: 60px;
     width: 100%;
+    position: fixed;
+    border-bottom: solid white 0.25px;
 }
 
 .logo {
@@ -29,10 +31,11 @@
     border-top-width: 0px;
     border-bottom-width: 0px;
     width: 100px;
-    height: 100%;
-    color: white;
+    height: 99%;
+    color: white !important;
     justify-content: center;
     font-family: Arial, Helvetica, sans-serif;
+    font-weight: 200;
     background-color: rgb(78, 138, 205);
     font-size: 17px;
     transition: 0.4s;
@@ -51,14 +54,34 @@
     font-size: 0;
 }
 
-button:hover {
-     background-color: white;
+button:hover > a {
      color: rgb(78, 138, 205);
-     border-bottom-color: rgb(78, 138, 205);
-     border-style: solid;
-     border-bottom-width: 0.25px;
-     transition: all 0.4s;
+     transition: all 0.1s linear;
      cursor: pointer;
+}
+
+button:hover{
+    background-color: white;
+    border-bottom-color: rgb(78, 138, 205);
+    border-style: solid;
+    border-bottom-width: 0.25px;
+    transition: 0.3s linear;
+}
+
+.right {
+    border-right-color: white;
+    border-right-style: solid;
+    border-right-width: 0.25px;
+}
+
+button > a {
+    color: white;
+    background-color: transparent;
+    text-decoration: none;
+}
+
+button:active, button:focus {
+    outline: none;
 }
 
 .searchBar {
