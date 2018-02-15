@@ -54,30 +54,20 @@
     font-size: 0;
 }
 
-button:hover > a {
-     color: rgb(78, 138, 205);
-     transition: all 0.1s linear;
-     cursor: pointer;
-}
-
 button:hover{
     background-color: white;
+    color: rgb(78, 138, 205) !important;
     border-bottom-color: rgb(78, 138, 205);
     border-style: solid;
     border-bottom-width: 0.25px;
-    transition: 0.3s linear;
+    transition: 0.2s linear;
+    cursor: pointer;
 }
 
 .right {
     border-right-color: white;
     border-right-style: solid;
     border-right-width: 0.25px;
-}
-
-button > a {
-    color: white;
-    background-color: transparent;
-    text-decoration: none;
 }
 
 button:active, button:focus {
