@@ -22,7 +22,14 @@ import './index.css'
 //   </ul>
 
 const NavigationAuth = () =>
-  <div className="buttonsGroup">
+
+<div className="buttonsGroup">
+    
+    <div className="searchBar">
+        <input type="text" class="searchBarInput" placeholder="Search..."/>
+        <search class="searchBarButton">🔍</search>
+    </div>
+    
     <button className="navButton"><Link to={routes.LANDING}>Landing</Link></button>
     <button className="navButton"><Link to={routes.HOME}>Home</Link></button>
     <button className="navButton"><Link to={routes.ACCOUNT}>Account</Link></button>
