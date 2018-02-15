@@ -1,11 +1,14 @@
 .navBar {
     margin: 0;
     padding: 0 0px;
+    position: relative;
+    padding-top: 0px;
+    padding-bottom: -5px;
+
     box-sizing: border-box;
     background-color: rgb(78, 138, 205);
     height: 60px;
     width: 100%;
-    position: fixed;
 }
 
 .logo {
