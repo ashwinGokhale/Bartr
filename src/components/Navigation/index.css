@@ -95,7 +95,7 @@ button:hover {
     outline: 0;
 }
 
-search:hover {
+.searchBarButton:hover {
     background-color: rgb(185, 234, 217);
     color: white;
     transition: color 0.4s;

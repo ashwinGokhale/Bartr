@@ -31,7 +31,7 @@ class NavigationHeader extends Component {
         </Link>
         <div className="searchBar">
           <input type="text" className="searchBarInput" placeholder="Search..."/>
-          <span role="img" className="searchBarButton">🔍</span>
+          <span role="img" aria-label="Search" className="searchBarButton">🔍</span>
         </div>
         { this.props.authUser ? <NavigationAuth /> : <NavigationNonAuth /> }
       </div>
