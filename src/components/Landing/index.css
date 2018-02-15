@@ -1,0 +1,60 @@
+.navBarSpace {
+    margin-top: 50px;
+    height: 400px;
+    border-bottom-style: solid;
+    border-color:black;
+    border-width: 1px;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.navBarSpace { 
+    background: linear-gradient(-45deg, rgb(78, 138, 205), rgb(100,158,203), rgb(121,177,200), rgb(142,197,198), rgb(163, 216, 195));
+    background-size: 800% 800%;
+
+    -webkit-animation: AnimationName 20s ease infinite;
+    -moz-animation: AnimationName 20s ease infinite;
+    animation: AnimationName 20s ease infinite;
+}
+
+@-webkit-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@-moz-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@keyframes AnimationName { 
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+.style {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 100;
+}
+
+.Sm {
+    font-size: 25px;
+    font-weight: 400;
+    margin-top: 10px;
+}
+.Md {
+    font-size: 35px;
+    font-weight: 400;
+    padding-top: 100px;
+    margin-bottom: 0px;
+}
+
+.Lg {
+    font-size: 50px;
+    font-weight: 700;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+

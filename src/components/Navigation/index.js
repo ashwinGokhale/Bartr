@@ -26,7 +26,7 @@ const NavigationAuth = () =>
     <button className="navButton"><Link to={routes.LANDING}>Landing</Link></button>
     <button className="navButton"><Link to={routes.HOME}>Home</Link></button>
     <button className="navButton"><Link to={routes.ACCOUNT}>Account</Link></button>
-    <button className="navButton"><Link to={routes.SETTINGS}>Settings</Link></button>
+    <button className="navButton right"><Link to={routes.SETTINGS}>Settings</Link></button>
     <SignOutButton />
   </div>
 
@@ -34,7 +34,7 @@ const NavigationNonAuth = () =>
   <div className="buttonsGroup">
     <button className="navButton"><Link to={routes.LANDING}>Landing</Link></button>
     <button className="navButton"><Link to={routes.LOGIN}>Login</Link></button>
-    <button className="navButton"><Link to={routes.SIGN_UP}>Sign up</Link></button>
+    <button className="navButton right"><Link to={routes.SIGN_UP}>Sign up</Link></button>
   </div>
 
 class NavigationHeader extends Component {
