@@ -1,8 +1,8 @@
 .navBarSpace {
     margin-top: 50px;
-    height: 400px;
+    height: 450px;
     border-bottom-style: solid;
-    border-color:black;
+    border-color:rgb(255, 255, 255);
     border-width: 1px;
     color: white;
     text-align: center;
@@ -16,6 +16,7 @@
     -webkit-animation: AnimationName 20s ease infinite;
     -moz-animation: AnimationName 20s ease infinite;
     animation: AnimationName 20s ease infinite;
+    border-bottom: solid rgb(255, 255, 255) 4px;
 }
 
 @-webkit-keyframes AnimationName {
@@ -58,3 +59,31 @@
     margin-bottom: 0px;
 }
 
+.image {
+    height: 150px;
+    width: 200px;
+}
+
+.third {
+    height: 220px;
+    display:block;
+    background-color: rgb(243, 243, 243);
+    text-align: center;
+    border-left: solid white 2px;
+    border-right: solid white 2px;
+}
+
+.thirdHolder {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+h4 {
+    font-size: 30px;
+    font-weight: 400;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding-top: 15px;
+    padding-bottom: 5px;
+    color: rgb(122, 122, 122);
+}
