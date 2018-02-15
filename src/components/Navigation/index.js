@@ -8,7 +8,6 @@ import './index.css'
 
 const NavigationAuth = () =>
   <div className="buttonsGroup">
-    <Link to={routes.LANDING}><button className="navButton">Landing</button></Link>
     <Link to={routes.HOME}><button className="navButton">Home</button></Link>
     <Link to={routes.ACCOUNT}><button className="navButton">Account</button></Link>
     <Link to={routes.SETTINGS}><button className="navButton">Settings</button></Link>
@@ -17,8 +16,7 @@ const NavigationAuth = () =>
 
 const NavigationNonAuth = () =>
   <div className="buttonsGroup">
-    <Link to={routes.LANDING}><button className="navButton">Landing</button></Link>
-    <Link to={routes.LOGIN}><button className="navButton">Login</button></Link>
+    <Link to={routes.LOGIN}><button className="navButton shift">Login</button></Link>
     <Link to={routes.SIGN_UP}><button className="navButton right">Sign up</button></Link>
   </div>
 
