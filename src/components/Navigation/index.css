@@ -1,6 +1,10 @@
 .navBar {
     margin: 0;
     padding: 0 0px;
+    position: relative;
+    padding-top: 0px;
+    padding-bottom: -5px;
+
     box-sizing: border-box;
     background-color: rgb(78, 138, 205);
     height: 60px;
@@ -78,4 +82,46 @@ button > a {
 
 button:active, button:focus {
     outline: none;
+}
+
+.searchBar {
+    display: inline-flex;
+    position: absolute;
+    left: 300px;
+    width: 800px;
+    height: 100px;
+    padding-top: 11px;
+    border: 0.0em solid #ddd;
+    font-size: 17px;
+    height: 64%;
+    justify-content: center;
+    outline: 0;
+}
+
+.searchBarInput {
+    font-size: inherit;
+    width: 800px;
+    border: 0.0em solid #ddd;
+    border-radius: 1em 0 0 1em;
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 0.2em 0.5em;
+    outline: 0;
+}
+
+.searchBarButton {
+    font-size: inherit;
+    border: 0.0em solid #ddd;
+    border-radius: 0 1em 1em 0;
+    background-color:  white;
+    color: rgb(78, 138, 205);
+    padding: 0.4em 1em;
+    outline: 0;
+}
+
+search:hover {
+    background-color: rgb(185, 234, 217);
+    color: white;
+    transition: color 0.4s;
+    transition: background-color 0.5s;
+    cursor: pointer;
 }

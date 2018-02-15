@@ -6,8 +6,9 @@ const signOut = (event) => auth.signOut();
 
 const SignOutButton = () =>
   <button
-    type="button"
+    // type="button"
     onClick={signOut}
+    className="navButton"
   >
     Sign Out
   </button>
