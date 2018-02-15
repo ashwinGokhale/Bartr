@@ -19,20 +19,20 @@ const NavigationNonAuth = () =>
   <div className="buttonsGroup">
     <Link to={routes.LANDING}><button className="navButton">Landing</button></Link>
     <Link to={routes.LOGIN}><button className="navButton">Login</button></Link>
-    <Link to={routes.SIGN_UP}><button className="navButton">Sign up</button></Link>
+    <Link to={routes.SIGN_UP}><button className="navButton right">Sign up</button></Link>
   </div>
 
 class NavigationHeader extends Component {
   render() {
     return (
       <div className="navBar">
-        <div className="searchBar">
-          <input type="text" className="searchBarInput" placeholder="Search..."/>
-          <search className="searchBarButton">🔍</search>
-        </div>
-        <Link to={routes.HOME}>
+        <Link to={this.props.authUser ? routes.HOME : routes.LANDING}>
           <img className="logo" src={logo} alt="Bartr"></img>
         </Link>
+        <div className="searchBar">
+          <input type="text" className="searchBarInput" placeholder="Search..."/>
+          <span role="img" aria-label="Search" className="searchBarButton">🔍</span>
+        </div>
         { this.props.authUser ? <NavigationAuth /> : <NavigationNonAuth /> }
       </div>
     )
