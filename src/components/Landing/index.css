@@ -1,0 +1,89 @@
+.navBarSpace {
+    margin-top: 50px;
+    height: 450px;
+    border-bottom-style: solid;
+    border-color:rgb(255, 255, 255);
+    border-width: 1px;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.navBarSpace { 
+    background: linear-gradient(-45deg, rgb(78, 138, 205), rgb(100,158,203), rgb(121,177,200), rgb(142,197,198), rgb(163, 216, 195));
+    background-size: 800% 800%;
+
+    -webkit-animation: AnimationName 20s ease infinite;
+    -moz-animation: AnimationName 20s ease infinite;
+    animation: AnimationName 20s ease infinite;
+    border-bottom: solid rgb(255, 255, 255) 4px;
+}
+
+@-webkit-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@-moz-keyframes AnimationName {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+@keyframes AnimationName { 
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+.style {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 100;
+}
+
+.Sm {
+    font-size: 25px;
+    font-weight: 400;
+    margin-top: 10px;
+}
+.Md {
+    font-size: 35px;
+    font-weight: 400;
+    padding-top: 100px;
+    margin-bottom: 0px;
+}
+
+.Lg {
+    font-size: 50px;
+    font-weight: 700;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.image {
+    height: 150px;
+    width: 200px;
+}
+
+.third {
+    height: 220px;
+    display:block;
+    background-color: rgb(243, 243, 243);
+    text-align: center;
+    border-left: solid white 2px;
+    border-right: solid white 2px;
+}
+
+.thirdHolder {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+h4 {
+    font-size: 30px;
+    font-weight: 400;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding-top: 15px;
+    padding-bottom: 5px;
+    color: rgb(122, 122, 122);
+}

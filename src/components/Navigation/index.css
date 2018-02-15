@@ -1,0 +1,121 @@
+.navBar {
+    margin: 0;
+    padding: 0 0px;
+    position: relative;
+    padding-top: 0px;
+    padding-bottom: -5px;
+
+    box-sizing: border-box;
+    background-color: rgb(78, 138, 205);
+    height: 60px;
+    width: 100%;
+    position: fixed;
+    border-bottom: solid white 0.25px;
+}
+
+.logo {
+    width: 150px;
+    height: 70%;
+    margin-top: 0.5%;
+    margin-left: 2%;
+    margin-right: 1%;
+    border-color: rgba(0, 0, 0, 0);
+}
+
+.navButton {
+    margin: 0px;
+    border-style: solid;
+    border-color: white;
+    border-left-width: 0.25px;
+    border-right-width: 0px;
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+    width: 100px;
+    height: 99%;
+    color: white !important;
+    justify-content: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 200;
+    background-color: rgb(78, 138, 205);
+    font-size: 17px;
+    transition: 0.4s;
+}
+
+.rightButton {
+    border-style: solid;
+    border-right-width: 0.25px;
+    border-color: white;
+}
+
+.buttonsGroup {
+    width: 400px;
+    height: 100%;
+    float: right;
+    font-size: 0;
+}
+
+button:hover{
+    background-color: white;
+    color: rgb(78, 138, 205) !important;
+    border-bottom-color: rgb(78, 138, 205);
+    border-style: solid;
+    border-bottom-width: 0.25px;
+    transition: 0.2s linear;
+    cursor: pointer;
+}
+
+.right {
+    border-right-color: white;
+    border-right-style: solid;
+    border-right-width: 0.25px;
+}
+
+button:active, button:focus {
+    outline: none;
+}
+
+.searchBar {
+    display: inline-flex;
+    position: absolute;
+    left: 300px;
+    width: 800px;
+    height: 100px;
+    padding-top: 11px;
+    border: 0.0em solid #ddd;
+    font-size: 17px;
+    height: 64%;
+    justify-content: center;
+    outline: 0;
+}
+
+.searchBarInput {
+    font-size: inherit;
+    width: 800px;
+    border: 0.0em solid #ddd;
+    border-radius: 1em 0 0 1em;
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 0.2em 0.5em;
+    outline: 0;
+}
+
+.searchBarButton {
+    font-size: inherit;
+    border: 0.0em solid #ddd;
+    border-radius: 0 1em 1em 0;
+    background-color:  white;
+    color: rgb(78, 138, 205);
+    padding: 0.4em 1em;
+    outline: 0;
+}
+
+.searchBarButton:hover {
+    background-color: rgb(185, 234, 217);
+    color: white;
+    transition: color 0.4s;
+    transition: background-color 0.5s;
+    cursor: pointer;
+}
+
+.shift {
+    margin-left: 200px;
+}

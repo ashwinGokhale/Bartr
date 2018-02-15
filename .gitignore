@@ -1,6 +1,7 @@
 # Firebase
 .firebaserc
 firebase.config.js
+functions/firebase-debug.log
 
 # Webpack output
 functions/lib/

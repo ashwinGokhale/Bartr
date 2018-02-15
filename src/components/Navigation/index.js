@@ -1,29 +1,36 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-
 import SignOutButton from '../SignOut';
 import * as routes from '../../constants';
+import logo from '../../assets/bartrLogo.png';
+import './index.css'
 
 const NavigationAuth = () =>
-  <ul>
-    <li><Link to={routes.LANDING}>Landing</Link></li>
-    <li><Link to={routes.HOME}>Home</Link></li>
-    <li><Link to={routes.ACCOUNT}>Account</Link></li>
-    <li><Link to={routes.SETTINGS}>Settings</Link></li>
-    <li><SignOutButton /></li>
-  </ul>
+  <div className="buttonsGroup">
+    <Link to={routes.HOME}><button className="navButton">Home</button></Link>
+    <Link to={routes.ACCOUNT}><button className="navButton">Account</button></Link>
+    <Link to={routes.SETTINGS}><button className="navButton">Settings</button></Link>
+    <SignOutButton />
+  </div>
 
 const NavigationNonAuth = () =>
-  <ul>
-    <li><Link to={routes.LANDING}>Landing</Link></li>
-    <li><Link to={routes.SIGN_IN}>Sign In</Link></li>
-  </ul>
+  <div className="buttonsGroup">
+    <Link to={routes.LOGIN}><button className="navButton shift">Login</button></Link>
+    <Link to={routes.SIGN_UP}><button className="navButton right">Sign up</button></Link>
+  </div>
 
 class NavigationHeader extends Component {
   render() {
     return (
-      <div>
+      <div className="navBar">
+        <Link to={this.props.authUser ? routes.HOME : routes.LANDING}>
+          <img className="logo" src={logo} alt="Bartr"></img>
+        </Link>
+        <div className="searchBar">
+          <input type="text" className="searchBarInput" placeholder="Search..."/>
+          <span role="img" aria-label="Search" className="searchBarButton">🔍</span>
+        </div>
         { this.props.authUser ? <NavigationAuth /> : <NavigationNonAuth /> }
       </div>
     )
