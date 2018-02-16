@@ -6,7 +6,7 @@ import * as routes from '../../constants';
 import './index.css';
 
 const PasswordForgetPage = () =>
-  <div>
+  <div className="passResetPageBackground">
     <h1>PasswordForget</h1>
     <PasswordForgetForm />
   </div>
@@ -50,19 +50,24 @@ class PasswordForgetForm extends Component {
     const isInvalid = email === '';
 
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          value={this.state.email}
-          onChange={event => this.setState(updateByPropertyName('email', event.target.value))}
-          type="text"
-          placeholder="Email Address"
-        />
-        <button disabled={isInvalid} type="submit">
-          Reset My Password
-        </button>
-
-        { error && <p>{error.message}</p> }
-      </form>
+      <div className="passResetBackground">
+        <form onSubmit={this.onSubmit}>
+          <div className="resetPassInfo">
+            <input
+              value={this.state.email}
+              onChange={event => this.setState(updateByPropertyName('email', event.target.value))}
+              type="text"
+              placeholder="Email Address"
+            />
+            <div className="centerPassReset">
+              <button className="passButton" disabled={isInvalid} type="submit">
+                Reset My Password
+              </button>
+            </div>
+          </div>
+          { error && <p>{error.message}</p> }
+        </form>
+      </div>
     );
   }
 }
