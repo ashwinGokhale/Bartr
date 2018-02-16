@@ -10,3 +10,63 @@
     transition: 0.2s linear;
     cursor: pointer;
 }
+
+.passResetPageBackground {
+    margin: 0;
+    padding: 0;
+    background-color: rgb(220,245,236);
+    background-size: cover;
+    background-position: center;
+    width: auto;
+    height: 945px;
+}
+
+.passResetBackground {
+    width: 320px;
+    height: 180px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    border-radius: 0.5em 0.5em 0.5em 0.5em;
+    padding: 40px 10px;
+}
+
+.resetPassInfo input[type="text"] {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid white;
+    background: transparent;
+    outline: none;
+    height: 40px;
+    color: white;
+    font-size: 16px;
+}
+
+.resetPassInfo a {
+    text-decoration: none;
+    font-size: 14px;
+    color: white;
+}
+
+.passButton {
+    text-align: center;
+    font-size: inherit;
+    border: 0.0em solid white;
+    border-radius: 1em 1em 1em 1em;
+    background-color:  rgb(78, 138, 205);
+    color: white;
+    padding: 0.4em 1em;
+    outline: 0;
+    height: 40px;
+    width: 200px;
+}
+
+.centerPassReset {
+    text-align: center;
+    margin: auto;
+    padding-top: 30px;
+}
