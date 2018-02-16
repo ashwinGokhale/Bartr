@@ -7,7 +7,7 @@ import * as routes from '../../constants';
 import './index.css';
 
 const SignUpPage = ({ history }) =>
-  <div>
+  <div className="signUpPageBackground">
     <h1>SignUp</h1>
     <SignUpForm history={history} />
   </div>
@@ -72,44 +72,49 @@ class SignUpForm extends Component {
       email === '';
 
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          value={displayName}
-          onChange={event => this.setState(updateByPropertyName('displayName', event.target.value))}
-          type="text"
-          placeholder="Full Name"
-        />
-        <input
-          value={email}
-          onChange={event => this.setState(updateByPropertyName('email', event.target.value))}
-          type="text"
-          placeholder="Email Address"
-        />
-        <input
-          value={passwordOne}
-          onChange={event => this.setState(updateByPropertyName('passwordOne', event.target.value))}
-          type="password"
-          placeholder="Password"
-        />
-        <input
-          value={passwordTwo}
-          onChange={event => this.setState(updateByPropertyName('passwordTwo', event.target.value))}
-          type="password"
-          placeholder="Confirm Password"
-        />
-        <button disabled={isInvalid} type="submit">
-          Sign Up
-        </button>
-
-        { error && <p>{error.message}</p> }
-      </form>
+      <div className="signUpBackground">
+        <form onSubmit={this.onSubmit}>
+          <div className="signUpInfo">
+            <input
+              value={displayName}
+              onChange={event => this.setState(updateByPropertyName('displayName', event.target.value))}
+              type="text"
+              placeholder="Full Name"
+            />
+            <input
+              value={email}
+              onChange={event => this.setState(updateByPropertyName('email', event.target.value))}
+              type="text"
+              placeholder="Email Address"
+            />
+            <input
+              value={passwordOne}
+              onChange={event => this.setState(updateByPropertyName('passwordOne', event.target.value))}
+              type="password"
+              placeholder="Password"
+            />
+            <input
+              value={passwordTwo}
+              onChange={event => this.setState(updateByPropertyName('passwordTwo', event.target.value))}
+              type="password"
+              placeholder="Confirm Password"
+            />
+          </div>
+          <div className="centerSignUp">
+            <button className="signUpButton" disabled={isInvalid} type="submit">
+              Sign Up
+            </button>
+          </div>
+          { error && <p>{error.message}</p> }
+        </form>
+      </div>
     );
   }
 }
 
 const SignUpLink = () =>
   <p>
-    <div className="centerAlign">
+    <div>
       Don't have an account?
       {' '}
       <Link className="formats" to={routes.SIGN_UP}>Sign Up</Link>
