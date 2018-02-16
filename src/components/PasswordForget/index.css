@@ -1,0 +1,12 @@
+.format {
+    text-decoration: none;
+    color: white !important;
+    float: right;
+    padding-bottom: 15%;
+}
+
+.format:hover {
+    color: rgb(185, 234, 217) !important;
+    transition: 0.2s linear;
+    cursor: pointer;
+}

@@ -5,13 +5,11 @@ import { SignUpLink } from '../SignUp';
 import { PasswordForgetLink } from '../PasswordForget';
 import { auth } from '../../firebase';
 import * as routes from '../../constants';
+import './index.css'
 
 const SignInPage = ({ history }) =>
-  <div>
-    <h1>SignIn</h1>
-    <SignInForm history={history} />
-    <PasswordForgetLink />
-    <SignUpLink />
+  <div className="pageBackground">
+      <SignInForm history={history} />
   </div>
 
 const updateByPropertyName = (propertyName, value) => () => ({
@@ -65,25 +63,40 @@ class SignInForm extends Component {
       email === '';
 
     return (
-      <form onSubmit={this.onSubmit}>
-        <input
-          value={email}
-          onChange={event => this.setState(updateByPropertyName('email', event.target.value))}
-          type="text"
-          placeholder="Email Address"
-        />
-        <input
-          value={password}
-          onChange={event => this.setState(updateByPropertyName('password', event.target.value))}
-          type="password"
-          placeholder="Password"
-        />
-        <button disabled={isInvalid} type="submit">
-          Sign In
-        </button>
+      <div className="loginBackground">
+        <h1 className="loginHeader">LOG IN</h1>
+        <form onSubmit={this.onSubmit}>
+          <div className="emailBar">
+            <input
+              className="textBox"
+              value={email}
+              onChange={event => this.setState(updateByPropertyName('email', event.target.value))}
+              type="text"
+              placeholder="Email Address"
+            />
+          </div>
 
-        { error && <p>{error.message}</p> }
-      </form>
+          <div className="emailBar">
+            <input
+              className="textBox"
+              value={password}
+              onChange={event => this.setState(updateByPropertyName('password', event.target.value))}
+              type="password"
+              placeholder="Password"
+            />
+          </div>
+          <PasswordForgetLink />
+          <div className="centerLogIn">
+            <button 
+              className="signInButton"
+              disabled={isInvalid} type="submit">
+              Log In
+            </button>
+          </div>
+          { error && <p>{error.message}</p> }
+        </form>
+        <SignUpLink />
+      </div>
     );
   }
 }

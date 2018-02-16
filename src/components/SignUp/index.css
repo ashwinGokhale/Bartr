@@ -1,0 +1,15 @@
+.centerAlign {
+    padding-top: 10%;
+    text-align: center;
+}
+
+.formats {
+    text-decoration: none;
+    color: white !important;
+}
+
+.formats:hover {
+    color: rgb(185, 234, 217) !important;
+    transition: 0.2s linear;
+    cursor: pointer;
+}
