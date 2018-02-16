@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import { auth } from '../../firebase';
 import * as routes from '../../constants';
+import './index.css';
 
 const SignUpPage = ({ history }) =>
   <div>
@@ -108,9 +109,11 @@ class SignUpForm extends Component {
 
 const SignUpLink = () =>
   <p>
-    Don't have an account?
-    {' '}
-    <Link to={routes.SIGN_UP}>Sign Up</Link>
+    <div className="centerAlign">
+      Don't have an account?
+      {' '}
+      <Link className="formats" to={routes.SIGN_UP}>Sign Up</Link>
+    </div>
   </p>
 
 export default withRouter(SignUpPage);

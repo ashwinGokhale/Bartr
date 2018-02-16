@@ -7,33 +7,81 @@
     color: white;
     padding: 0.4em 1em;
     outline: 0;
+    height: 40px;
+    width: 200px;
 }
 
-.emailBar {
+.pageBackground {
+    margin: 0;
+    padding: 0;
+    background-color: rgb(220,245,236);
+    background-size: cover;
+    background-position: center;
+    width: auto;
+    height: 945px;
+}
+
+::placeholder {
+    color: rgb(192, 192, 192);
+}
+
+.loginBackground {
+    width: 320px;
+    height: 420px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    border-radius: 0.5em 0.5em 0.5em 0.5em;
+    padding: 40px 10px;
+}
+
+.emailBar p{
     text-align: center;
-    padding-bottom: 4px;
+    padding-bottom: 8px;
     margin: auto;
-    height: 16px;
-    border: 0.0em solid #ddd;
+    height: 40px;
     font-size: 20px;
-    outline: 0;
+    border: 0.2em;
+    border-color: rgb(78, 138, 205);
+    resize: vertical;
+    overflow: auto;
+    font-size: 16px;
+}
+
+.emailBar input[type="text"], input[type="password"] {
+    border: none;
+    border-bottom: 1px solid white;
+    background: transparent;
+    outline: none;
+    height: 40px;
+    color: white;
+    font-size: 16px;
+}
+
+.emailBar a {
+    text-decoration: none;
+    font-size: 14px;
+    color: white;
+}
+
+.textBox {
+    font-size: 16pt;
+    height: 30px;
+    width: 300px;
 }
 
 .loginHeader {
     text-align: center;
     font-family: Arial, Helvetica, sans-serif;
-    padding-top: 30px;
     font-weight: 100;
-    color: dimgrey;
+    color: white;
 }
 
-.lines {
-    text-align: center;
-    font-weight: 100;
-    color: dimgrey;
-}
-
-.center {
+.centerLogIn {
     text-align: center;
     margin: auto;
     padding-top: 30px;
