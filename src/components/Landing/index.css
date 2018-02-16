@@ -1,12 +1,16 @@
 .navBarSpace {
     margin-top: 50px;
-    height: 450px;
+    /*height: 450px;*/
+    width: 100%;
     border-bottom-style: solid;
     border-color:rgb(255, 255, 255);
     border-width: 1px;
     color: white;
     text-align: center;
     vertical-align: middle;
+    position: absolute;
+    top: 10px;
+    bottom: 252px;
 }
 
 .navBarSpace { 
@@ -66,16 +70,18 @@
 
 .third {
     height: 220px;
-    display:block;
+    width: 33%;
     background-color: rgb(243, 243, 243);
     text-align: center;
     border-left: solid white 2px;
     border-right: solid white 2px;
+    float:left;
 }
 
 .thirdHolder {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    width: 100%;
+    position : absolute;
+    bottom : 32px;
 }
 
 h4 {
