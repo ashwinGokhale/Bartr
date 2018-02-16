@@ -13,9 +13,9 @@
     background: linear-gradient(-45deg, rgb(78, 138, 205), rgb(100,158,203), rgb(121,177,200), rgb(142,197,198), rgb(163, 216, 195));
     background-size: 800% 800%;
 
-    -webkit-animation: AnimationName 20s ease infinite;
-    -moz-animation: AnimationName 20s ease infinite;
-    animation: AnimationName 20s ease infinite;
+    -webkit-animation: AnimationName 15s ease infinite;
+    -moz-animation: AnimationName 15s ease infinite;
+    animation: AnimationName 15s ease infinite;
     border-bottom: solid rgb(255, 255, 255) 4px;
 }
 
