@@ -73,6 +73,7 @@ class SignUpForm extends Component {
 
     return (
       <div className="signUpBackground">
+        <h1 className="signUpHeader">SIGN UP</h1>
         <form onSubmit={this.onSubmit}>
           <div className="signUpInfo">
             <input

@@ -79,3 +79,10 @@
     position : absolute;
     bottom : 32px;
 }
+
+.signUpHeader {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 100;
+    color: white;
+}
