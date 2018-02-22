@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import SignOutButton from '../SignOut';
 import * as routes from '../../constants';
 import logo from '../../assets/bartrLogo.png';
+import search from '../../assets/search.png';
 import './index.css'
 
 const NavigationAuth = () =>
@@ -16,7 +17,7 @@ const NavigationAuth = () =>
 
 const NavigationNonAuth = () =>
   <div className="buttonsGroup">
-    <Link to={routes.LOGIN}><button className="navButton shift">Login</button></Link>
+    <Link to={routes.LOGIN}><button className="navButton shift">Log In</button></Link>
     <Link to={routes.SIGN_UP}><button className="navButton right">Sign up</button></Link>
   </div>
 
