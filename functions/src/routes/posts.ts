@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
 });
 
 // Create / update a post
-router.post('/', async (req, res) => {
+module.exports.makePost = router.post('/', async (req, res) => {
 	if (!req.body.title) res.status(400).send('Post must have a title')
 	else if (!req.body.title) res.status(400).send('Post must have a picture')
 	else if (!req.body.picture) res.status(400).send('Post must have a title')
