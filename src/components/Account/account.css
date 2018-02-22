@@ -1,0 +1,24 @@
+.profileInfo {
+    margin-top: 50px;
+    width: 100%;
+    border-bottom-style: solid;
+    border-color: rgb(0, 0, 0);
+    border-width: 1px;
+    color: rgb(0, 0, 0);
+    text-align: center;
+    vertical-align: middle;
+    position: absolute;
+    top: 10px;
+    bottom: 652px;
+}
+
+.profileInfo {
+    background: linear-gradient(-45deg, rgb(78, 138, 205), rgb(100,158,203), rgb(121,177,200), rgb(142,197,198), rgb(163, 216, 195));
+    background-size: 800% 800%;
+
+    -webkit-animation: AnimationName 15s ease infinite;
+    -moz-animation: AnimationName 15s ease infinite;
+    animation: AnimationName 15s ease infinite;
+    border-bottom: solid rgb(255, 255, 255) 4px;
+
+}
