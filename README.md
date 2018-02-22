@@ -27,6 +27,16 @@ Exchange goods and services with people in your area
 4. Open another terminal window
 5. `yarn serve`
 
+## Backend Unit Test
+
+1. 'cd into functions for the following steps'
+2. 'yarn'
+3. 'yarn watch'
+4. Open another terminal window
+5. 'yarn serve'
+6. Open another terminal window
+7. 'yarn test'
+
 
 ## Notes
 * Frontend runs on port 3000 from webpack dev server
