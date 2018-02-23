@@ -10,15 +10,21 @@ import { router as users } from './routes/users';
 import * as functions from 'firebase-functions';
 import * as firebase from 'firebase-admin';
 import * as algoliasearch from 'algoliasearch';
+const serviceAccount = require('../serviceaccount.json')
+
 
 // Initialize app and dependencies
 const app = express();
-firebase.initializeApp(functions.config().firebase);
+firebase.initializeApp({
+  credential: firebase.credential.cert(serviceAccount),
+  databaseURL: "https://bartr-b1856.firebaseio.com"
+});
+// firebase.initializeApp(functions.config().firebase);
 const algolia = algoliasearch(
   'JAGNN9QV1Z', // functions.config().algolia.app,
   '23a58b75df085d3635a653ba0b54c27f' // functions.config().algolia.key
 );
-const index = algolia.initIndex('posts');
+const postsIndex = algolia.initIndex('posts');
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -36,7 +42,7 @@ app.use('/posts', posts);
 app.use('/users', users);
 
 
-// Update the search index every time a blog post is written.
+// Update the search postsIndex every time a blog post is written.
 exports.postCreated = functions.firestore.document('/posts/{postId}').onCreate(event => {
   // Get the note document
   const post = event.data.data();
@@ -46,8 +52,8 @@ exports.postCreated = functions.firestore.document('/posts/{postId}').onCreate(e
 
   console.log('Saving:', post, 'to Algolia');
 
-  // Write to the algolia index
-  return index.saveObject(post);
+  // Write to the algolia postsIndex
+  return postsIndex.saveObject(post);
 });
 
 exports.api = functions.https.onRequest(express().use('/api', app));

@@ -4,17 +4,34 @@ import * as bodyParser from 'body-parser';
 export const router = express.Router();
 
 // Get all users
-router.get("/", (req, res) => {
-	firebase.firestore().collection('/users').get()
-		.then(userDocs => userDocs.docs.map(doc => doc.data()))
-		.then(resp => res.json(resp))
-		.catch(error => res.status(500).send(error))
+router.get("/", async (req, res) => {
+	const userToken: string = req.headers.token as string;
+	if (userToken) {
+		try {
+			const tok = await firebase.auth().verifyIdToken(userToken, true)
+			const userDocs = await firebase.firestore().collection('/users').get()
+			res.json(userDocs.docs.map(doc => doc.data()))
+		} catch (error) {
+			res.status(400).send(error);
+		}
+	}
+	else 
+		res.status(401).send('Unauthorized')
 });
 
-router.get('/:uid', (req, res) => {
-	firebase.firestore().doc(`/users/${req.params.uid}`).get()
-		.then(userSnap => res.json(userSnap.data()))
-		.catch(error => res.status(400).send(error))
+router.get('/:uid', async (req, res) => {
+	const userToken: string = req.headers.token as string;
+	if (userToken) {
+		try {
+			const tok = await firebase.auth().verifyIdToken(userToken, true)
+			const userSnap = await firebase.firestore().doc(`/users/${req.params.uid}`).get()
+			res.json(userSnap.data())
+		} catch (error) {
+			res.status(400).send(error);
+		}
+	}
+	else 
+		res.status(401).send('Unauthorized')
 })
 
 
@@ -65,3 +82,22 @@ router.post('/:uid', (req, res) => {
 			}
 		})
 });
+
+router.delete('/:uid', async (req, res) => {
+	const userToken: string = req.headers.token as string;
+	if (userToken) {
+		try {
+			const tok = await firebase.auth().verifyIdToken(userToken, true)
+			if (tok.uid === req.params.uid) {
+				const userSnap = await firebase.firestore().doc(`/users/${req.params.uid}`).get()
+				res.json(userSnap.data())
+			}
+			else
+				res.status(401).send('Unauthorized')
+		} catch (error) {
+			res.status(400).send(error);
+		}
+	}
+	else 
+		res.status(401).send('Unauthorized')
+})

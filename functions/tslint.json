@@ -43,6 +43,8 @@
         "trailing-comma": {"severity": "warning"}
     },
     "rules": {
+        "no-require-imports": false,
+        "no-var-requires":false,
         "adjacent-overload-signatures": true,
         "ban-comma-operator": true,
         "no-namespace": true,
