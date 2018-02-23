@@ -244,3 +244,16 @@ ul {
     padding-left: 35px;
     padding-right: 20px;
 }
+
+.radio {
+    display: inline-block;
+}
+
+.radioTag {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.filterItem {
+    height: 8%;
+}
