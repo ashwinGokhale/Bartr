@@ -10,11 +10,20 @@ import './account.css'
 
 const AccountPage = ({ authUser }) =>
   <div>
+
+
     <div className='profileInfo'>
       <h1>Account: {authUser.email}</h1>
+        <div className='aboutBackground'>
+        </div>
 
+        <div className='reviewBackground'>
+        </div>
+
+        <div className='postBackground'>
+        </div>
+      </div>
     </div>
-  </div>
 
 const mapStateToProps = (state) => ({
   authUser: state.sessionState.authUser,

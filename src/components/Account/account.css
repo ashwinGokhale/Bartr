@@ -9,16 +9,59 @@
     vertical-align: middle;
     position: absolute;
     top: 10px;
-    bottom: 652px;
+    bottom: 752px;
 }
 
 .profileInfo {
     background: linear-gradient(-45deg, rgb(78, 138, 205), rgb(100,158,203), rgb(121,177,200), rgb(142,197,198), rgb(163, 216, 195));
-    background-size: 800% 800%;
+    background-size: 100% 100%;
 
     -webkit-animation: AnimationName 15s ease infinite;
     -moz-animation: AnimationName 15s ease infinite;
     animation: AnimationName 15s ease infinite;
     border-bottom: solid rgb(255, 255, 255) 4px;
+}
 
+.aboutBackground {
+    width: 10%x;
+    height: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    top: 70%;
+    left: 10%;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    border-radius: 0.5em 0.5em 0.5em 0.5em;
+    padding: 40px 10px;
+    position: absolute;
+    top: 10px;
+    bottom: 100px;
+}
+
+.reviewBackground {
+    width: 15%;
+    height: 620px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    top: 58%;
+    left: 90%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    border-radius: 0.5em 0.5em 0.5em 0.5em;
+    padding: 40px 10px;    
+}
+
+.postBackground {
+    width: 60%;
+    height: 620px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    top: 58%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    border-radius: 0.5em 0.5em 0.5em 0.5em;
+    padding: 40px 10px;    
 }
