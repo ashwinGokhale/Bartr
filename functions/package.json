@@ -37,6 +37,7 @@
     "node-mocks-http": "^1.6.7",
     "sinon": "^4.3.0",
     "sinon-chai": "^2.14.0",
+    "supertest": "^3.0.0",
     "uuid": "^3.2.1"
   },
   "devDependencies": {
@@ -53,6 +54,7 @@
     "firebase-tools": "^3.17.4",
     "mocha": "^3.5.3",
     "sinon-chai": "^2.14.0",
+    "supertest": "^3.0.0",
     "ts-node": "^4.1.0",
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.7.0",

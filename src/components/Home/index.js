@@ -5,25 +5,38 @@ import axios from 'axios';
 import defaultPhoto from '../../assets/default.png';
 import insertHere from '../../assets/insertHere.png';
 import './index.css';
-
 import withAuthorization from '../Session/withAuthorization';
 
 class HomePage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dbUser: this.props.dbUser
+    }
+  }
+  
+  
   componentDidMount() {
-    const { onSetUser } = this.props;
+    const { onSetDBUser } = this.props;
 	
-	this.props.user.getIdToken().then(token => {
-		console.log(token)
-		axios.get(
-			`/api/users/${this.props.user.uid}`,
-			{headers: {token}}
-		)
-		.then(response => onSetUser(response.data))
-	})
+    this.props.user.getIdToken().then(token => {
+      axios.get(
+        `/api/users/${this.props.user.uid}`,
+        {
+          headers: {
+            token: this.props.user.pa
+          }
+        }
+      )
+      .then(response => {
+        this.setState({ dbUser: response.data })
+        onSetDBUser(response.data)
+      })
+    })
   }
 
   render() {
-    const { user } = this.props;
+    const { dbUser } = this.state;
 
     return (
       <div>
@@ -32,7 +45,7 @@ class HomePage extends Component {
             <div className="profile">
               <div className="profileCard">
                 <img className="profilePhoto" src={defaultPhoto} alt="goodsForGoods.png"></img>
-                { !!user && <UserList user={user} /> }
+                { !!dbUser && <UserList user={dbUser} /> }
                 <h5 className="rating">-----rating is future sprint-----</h5>
               </div>
             </div>
@@ -87,7 +100,6 @@ class HomePage extends Component {
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -95,17 +107,21 @@ class HomePage extends Component {
   }
 }
 
-const UserList = ({ user }) =>
-  <div>
-    <h5 className="userName">{user.email}</h5>
-  </div>
+const UserList = ({ user }) => {
+  return (
+    <div>
+      <h5 className="userName">{user.displayName}</h5>
+    </div>
+  )
+}
 
 const mapStateToProps = (state) => ({
   user: state.sessionState.authUser,
+  dbUser: state.sessionState.dbUser
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onSetUser: (user) => dispatch({ type: 'USERS_SET', user }),
+  onSetDBUser: (user) => dispatch({ type: 'DB_USER_SET', user })
 });
 
 export default compose(
