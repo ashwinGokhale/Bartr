@@ -14,7 +14,7 @@ const AccountPage = ({ authUser }) =>
   <div>
     <div>
       <div className="row">
-        <div className="column leftSide">
+        <div className="column leftCol">
           <div className="profile">
             <div className="profileCard">
               <img className="profilePhoto" src={defaultPhoto} alt="goodsForGoods.png"></img>
@@ -29,27 +29,58 @@ const AccountPage = ({ authUser }) =>
             </div>
           </div>
         </div>
-        <div className="column rightSide">
+        <div className="column centerCol">
           <div className="createPost">
-            <div className="postUpload">
+            <div className="postUploadAccount">
               <img className="insertHere" src={insertHere} alt="insertPictureHere.png"></img>
               <button className="uploadPhoto">Choose A Photo</button>
             </div>
             <div className="postInformation">
-              <textarea className="title" placeholder="Add a title..."></textarea>
-              <textarea className="description" placeholder="Add a description..."></textarea>
-              <button className="create">Create Post</button>
+              <textarea className="titleAccount" placeholder="Add a title..."></textarea>
+              <textarea className="descriptionAccount" placeholder="Add a description..."></textarea>
+              <button className="createAccountPost">Create Post</button>
+            </div>
+          </div>
+ 
+          <div className="postFeed">
+              <div className="placeHolder">
+                <div className="postTitle">
+                  <h3>Thermaltake View 71 RGB 4-Sided Tempered Glass</h3>
+                </div>
+                <div className="postInfo">
+                  <div className="postPicture">
+                    <img className="itemPicture" src="https://images10.newegg.com/NeweggImage/ProductImage/11-133-359-V01.jpg"></img>
+                  </div>
+                  <div className="postDescription">
+                    <ul className="descriptionDetails">
+                      <li>4-Sided 5mm thick Tempered Glass "Spaced" panels</li>
+                      <li>Dual Swing 180 degree doors with full side panel windows</li>
+                      <li>Vertical GPU Float bracket (Riser Cable Sold Separately)</li>
+                      <li>Support up to 10x 2.5" SSD drives or 7x 3.5" HDD Drives</li>
+                      <li>3-Way Radiator Mounting (Top, Front, Vertical Side) – Up to 420mm</li>
+                      <li>Top/Front 45 degree mount I/O Panel with 2x USB 3.0/2x USB 2.0 with HD Audio</li>
+                      <li><strong>THIS POST IS A STUB</strong></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
             </div>
 
-          </div>
-          <div className="postFeed">
-
-          </div>
-
         </div>
-        <div className="reviewPost">
-          
-        </div>
+
+        <div className="column rightCol">
+          <div className="reviewPost">
+            <div className="reviewCard">
+              <center><h4>Reviews</h4></center>
+              <div className="underline"></div>
+              <div className="reviewPosting">
+                <center><h8>User Name</h8></center>
+                <textarea className="reviewDescription" placeholder="stub for user review..."></textarea>
+              </div>
+
+            </div>
+          </div>
+        </div>  
       </div>
     </div>
   </div>

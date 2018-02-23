@@ -58,14 +58,21 @@
     width: 100%;
 }
 
-.leftSide {
+.leftCol {
     width: 30%;
     height: 100%;
 }
 
-.rightSide {
-    width: 70%;
+.centerCol {
+    width: 49%;
     height: 100%;
+}
+
+.rightCol {
+    width: 21%;
+    height: 100%;
+    border-left: 1px;
+    border-color: rgb(238, 237, 237);
 }
 
 .profile {
@@ -98,21 +105,38 @@
     margin-top: 5%;
     margin-left: 5%;
     margin-right: 5%;
+    padding-top: 20px;
     border-radius: 0.5em 0.5em 0.5em 0.5em;
 }
 
 .reviewPost {
     background-color: rgb(238, 237, 237);
-    height: 100%;
-    width: 50%;
-    float: right;
-    border-left: white solid 10px;
+    border-left: white solid 1px;
     border-bottom: rgb(238, 237, 237) 1px;
+    height: 70%;
+    width: 90%;
 }
 
 .reviewCard {
-
+    background-color: white;
+    height: 100%;
+    width: 88%;
+    padding: 4%;
+    margin-left: 7.5%;
+    margin-top: 7.5%;
+    border-radius: 0.5em 0.5em 0.5em 0.5em;
 }
+
+.reviewPosting {
+    margin-top: 5%;
+    margin-left: 5%;
+    width: 90%;
+    height: 20%;
+    background-color: white;
+    border: rgb(238, 237, 237) solid 2px;
+    border-radius: 0.5em 0.5em 0.5em 0.5em;
+}
+
 
 .underline {
     display: block;
@@ -151,6 +175,16 @@
     float: left;
 }
 
+.reviewDescription {
+    width: 88%;
+    height: 34%;
+    margin-left: 3%;
+    margin-bottom: 1.5%;
+    vertical-align: text-top;
+    font-size: 15px;
+    border-color: transparent !important;
+}
+
 .userName {
     font-size: 18px;
     padding-left: 40%;
@@ -168,30 +202,42 @@ h5 {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-.postUpload {
+.postUploadAccount {
     height: 100%;
-    width: 20%;
+    width: 25%;
     float: left;
 }
 
 .postInformation {
     height: 100%;
-    width: 80%;
+    width: 75%;
     float: left;
 }
 
-.title {
-    width: 62%;
-    height: 12%;
-    margin-top: 3%;
+.postDescription {
+    height: 77%;
+    width: 69%;
+    float: left;
+    border-left: rgb(173, 173, 173) solid 1.5px;
+}
+
+.descriptionDetails {
+    overflow-x: auto;
+    font-size: 15px;
+}
+
+.titleAccount {
+    width: 88%;
+    height: 13%;
+    margin-top: 4.4%;
     margin-left: 3%;
     margin-bottom: 1%;
     font-size: 20px;
 }
 
-.description {
-    width: 62%;
-    height: 32%;
+.descriptionAccount {
+    width: 88%;
+    height: 34%;
     margin-left: 3%;
     margin-bottom: 1.5%;
     vertical-align: text-top;
@@ -226,11 +272,11 @@ textarea {
     border-radius: 0.5em 0.5em 0.5em 0.5em;
 }
 
-.create {
+.createAccountPost {
     background-color: rgb(78, 138, 205);
     color: white;
     border: gray solid 1px;
-    width: 63%;
+    width: 89%;
     height: 13%;
     margin-left: 3%;
     border-radius: 0.5em 0.5em 0.5em 0.5em;
