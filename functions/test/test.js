@@ -3,11 +3,13 @@ var sinon = require('sinon');
 chai.use(require('chai-as-promised'));
 chai.use(require('sinon-chai'));
 const firebase = require('firebase');
+const supertest = require('supertest');
 const functions = require('firebase-functions');
 require('firebase/firestore');
 
 var should = require('chai').should();
 var expect = require('chai').expect;
+var api = supertest('http://localhost:5000');
 
 describe('----Firestore Unit Tests---- \n\n', function(){
     var db;
@@ -25,7 +27,7 @@ describe('----Firestore Unit Tests---- \n\n', function(){
     })
 
     
-    describe("--Posts Collection--\n", () => {
+    describe("\n--Posts Collection--\n", () => {
         it("Should add a post to firestore collection posts", () => {
             return output = db.collection("/posts").doc("Test").set({
                 title: `Test post`,
@@ -72,6 +74,33 @@ describe('----Firestore Unit Tests---- \n\n', function(){
             })
         })
     });    
+
+    describe("\n\n\n--Test Endpoints--\n", () => {
+        it('Should test / the landing page endpoint and return a 200 response', function(done){
+            api.get('/')
+            .expect(200, done)
+        })
+        it('Should test /post endpoint and return a 200 response', function(done){
+            api.get('/posts')
+            .expect(200, done)
+        })
+        it('Should test /login endopoint and return a 200 response', function(done){
+            api.get('/login')
+            .expect(200, done)
+        })
+        it('Should test /signup endopoint and return a 200 response', function(done){
+            api.get('/signup')
+            .expect(200, done)
+        })
+        it('Should test /pw-forget endopoint and return a 200 response', function(done){
+            api.get('/pw-forget')
+            .expect(200, done)
+        })
+        it('Should test /chat endopoint and return a 200 response', function(done){
+            api.get('/chat')
+            .expect(200, done)
+        })
+    })
 })
 
 
