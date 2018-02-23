@@ -15,18 +15,18 @@ class SettingsPage extends Component {
 			radius: this.props.radius,
 			error: null
 		}
-		console.log('State:', this.state);
-		console.log('User ID:', auth.currentUser.uid)
+		// console.log('State:', this.state);
+		// console.log('User ID:', auth.currentUser.uid)
 	}
 
-	isRadiusValid = value => (value > 50 || value < 5) ? false : true
+	isRadiusValid = value => (value < 5) ? false : true
 	isLatitudeValid = value => (value > 90 || value < -90) ? false : true
 	isLongitudeValid = value => (value > 180 || value < -180) ? false : true
 	validateAll = (event) => {
 		let valid = true;
 			// Validate latitude, longitude, and radius
 			if (!this.isRadiusValid(this.state.radius)) {
-				this.setState({ error: 'Radius must be <= 50 and >= 0'});
+				this.setState({ error: 'Radius must be >= 5'});
 				valid = false;
 			}
 			
@@ -61,7 +61,7 @@ class SettingsPage extends Component {
 	onSubmit = (event) => {
 		event.preventDefault();
 		if (this.isRadiusValid(this.state.radius) && this.isLatitudeValid(this.state._geoloc.lat) && this.isLongitudeValid(this.state._geoloc.lng)) {
-			console.log(this.props.authUser)
+			// console.log(this.props.authUser)
 			const { _geoloc, radius } = this.state;
 			
 			axios.post(`/api/users/${this.props.authUser.uid}`, {

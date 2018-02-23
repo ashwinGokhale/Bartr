@@ -11,8 +11,15 @@ import withAuthorization from '../Session/withAuthorization';
 class HomePage extends Component {
   componentDidMount() {
     const { onSetUser } = this.props;
-    axios.get('/API/users/${this.props.user.uid}')
-      .then(response => onSetUser(response.data))
+	
+	this.props.user.getIdToken().then(token => {
+		console.log(token)
+		axios.get(
+			`/api/users/${this.props.user.uid}`,
+			{headers: {token}}
+		)
+		.then(response => onSetUser(response.data))
+	})
   }
 
   render() {
