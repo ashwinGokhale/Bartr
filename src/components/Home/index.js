@@ -24,7 +24,7 @@ class HomePage extends Component {
         `/api/users/${this.props.user.uid}`,
         {
           headers: {
-            token: this.props.user.pa
+            token
           }
         }
       )

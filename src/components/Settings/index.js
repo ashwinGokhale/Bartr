@@ -63,6 +63,8 @@ class SettingsPage extends Component {
 		if (this.isRadiusValid(this.state.radius) && this.isLatitudeValid(this.state._geoloc.lat) && this.isLongitudeValid(this.state._geoloc.lng)) {
 			// console.log(this.props.authUser)
 			const { _geoloc, radius } = this.state;
+			this.props.onSetGeoLoc(this.state._geoloc);
+			this.props.onSetRadius(this.state.radius);
 			
 			axios.post(`/api/users/${this.props.authUser.uid}`, {
 				_geoloc,
