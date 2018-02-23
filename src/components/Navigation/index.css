@@ -48,7 +48,7 @@
 }
 
 .buttonsGroup {
-    width: 400px;
+    width: 500px;
     height: 100%;
     float: right;
     font-size: 0;
@@ -77,7 +77,7 @@ button:active, button:focus {
 .searchBar {
     display: inline-flex;
     position: absolute;
-    left: 300px;
+    left: 230px;
     width: 800px;
     height: 100px;
     padding-top: 11px;
@@ -90,7 +90,7 @@ button:active, button:focus {
 
 .searchBarInput {
     font-size: inherit;
-    width: 800px;
+    width: 700px;
     border: 0.0em solid #ddd;
     border-radius: 1em 0 0 1em;
     font-family: Arial, Helvetica, sans-serif;
@@ -117,5 +117,5 @@ button:active, button:focus {
 }
 
 .shift {
-    margin-left: 200px;
+    margin-left: 300px;
 }

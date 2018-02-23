@@ -10,6 +10,7 @@ const NavigationAuth = () =>
   <div className="buttonsGroup">
     <Link to={routes.HOME}><button className="navButton">Home</button></Link>
     <Link to={routes.ACCOUNT}><button className="navButton">Account</button></Link>
+    <Link to={routes.CHAT}><button className="navButton">Chat</button></Link>
     <Link to={routes.SETTINGS}><button className="navButton">Settings</button></Link>
     <SignOutButton />
   </div>
