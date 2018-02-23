@@ -13,17 +13,6 @@ const postsIndex = algolia.initIndex('posts');
 // Get post by id
 router.get("/geo", async (req, res) => {
 	const userToken: string = req.headers.token as string;
-	if (userToken) {
-		try {
-			const tok = await firebase.auth().verifyIdToken(userToken, true)
-			const val = await firebase.firestore().doc(`/posts/${req.params.postId}`).delete()
-			res.send('Delete succeeded')	
-		} catch (error) {
-			res.status(400).send(error);
-		}
-	}
-	else 
-		res.status(401).send('Unauthorized')
 	
 	if (!req.query.radius) res.status(400).send('Query must have a Radius')
 	else if (isNaN(req.query.radius)) res.status(400).send('Radius must be a number')

@@ -14,7 +14,7 @@ const serviceAccount = require('../serviceaccount.json')
 
 
 // Initialize app and dependencies
-const app = express();
+export const app = express();
 firebase.initializeApp({
   credential: firebase.credential.cert(serviceAccount),
   databaseURL: "https://bartr-b1856.firebaseio.com"

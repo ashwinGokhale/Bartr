@@ -4,11 +4,7 @@ import { connect } from 'react-redux';
 import SignOutButton from '../SignOut';
 import * as routes from '../../constants';
 import logo from '../../assets/bartrLogo.png';
-<<<<<<< HEAD
 import './index.css'
-=======
-import './index.css';
->>>>>>> 1f70ded5a705df04b2b1fa3284e8cbccf2123bbf
 
 const NavigationAuth = () =>
   <div className="buttonsGroup">
