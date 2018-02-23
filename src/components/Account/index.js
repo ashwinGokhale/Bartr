@@ -5,10 +5,12 @@ import { compose } from 'recompose';
 import { PasswordForgetForm } from '../PasswordForget';
 import PasswordChangeForm from '../PasswordChange';
 import withAuthorization from '../Session/withAuthorization';
+import './index.css'
 
 const AccountPage = ({ authUser }) =>
-  <div>
-    <h1>Account: {authUser.email}</h1>
+  <div className="displayFormat">
+    <h1>Email: {authUser.email}</h1>
+    <h1>Display Name: {console.log(authUser)}</h1>
     <PasswordForgetForm />
     <PasswordChangeForm />
   </div>
