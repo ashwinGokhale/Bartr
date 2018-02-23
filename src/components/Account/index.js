@@ -7,12 +7,14 @@ import PasswordChangeForm from '../PasswordChange';
 import withAuthorization from '../Session/withAuthorization';
 import './index.css'
 
+import './account.css'
+
 const AccountPage = ({ authUser }) =>
-  <div className="displayFormat">
-    <h1>Email: {authUser.email}</h1>
-    <h1>Display Name: {console.log(authUser)}</h1>
-    <PasswordForgetForm />
-    <PasswordChangeForm />
+  <div>
+    <div className='profileInfo'>
+      <h1>Account: {authUser.email}</h1>
+
+    </div>
   </div>
 
 const mapStateToProps = (state) => ({
