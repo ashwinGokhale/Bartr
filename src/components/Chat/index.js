@@ -1,5 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import firebase from 'firebase';
+import withAuthorization from '../Session/withAuthorization';
 
 class Chat extends Component{
 
@@ -51,11 +54,9 @@ class Chat extends Component{
     }
 
     render(){
-        const currentMessage = this.state.messages.map((message, i) => {
-             return(
-                <p>{message.uname}: {message.text}</p>
-             )
-        })
+        const currentMessage = this.state.messages.map((message, i) =>
+            <p key={i}>{message.uname}: {message.text}</p>
+        )
 
         return (
             <div>
@@ -73,4 +74,8 @@ class Chat extends Component{
     }
 }
 
-  export default Chat;
+export default compose (
+    withAuthorization((authUser) => !!authUser)
+)(Chat);
+
+// export default Chat;
