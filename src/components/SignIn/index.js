@@ -63,39 +63,41 @@ class SignInForm extends Component {
       email === '';
 
     return (
-      <div className="loginBackground">
-        <h1 className="loginHeader">LOG IN</h1>
-        <form onSubmit={this.onSubmit}>
-          <div className="emailBar">
-            <input
-              className="textBox"
-              value={email}
-              onChange={event => this.setState(updateByPropertyName('email', event.target.value))}
-              type="text"
-              placeholder="Email Address"
-            />
-          </div>
+      <div>
+        <div className="loginBackground">
+          <h1 className="loginHeader">LOG IN</h1>
+          <form onSubmit={this.onSubmit}>
+            <div className="emailBar">
+              <input
+                className="textBox"
+                value={email}
+                onChange={event => this.setState(updateByPropertyName('email', event.target.value))}
+                type="text"
+                placeholder="Email Address"
+              />
+            </div>
 
-          <div className="emailBar">
-            <input
-              className="textBox"
-              value={password}
-              onChange={event => this.setState(updateByPropertyName('password', event.target.value))}
-              type="password"
-              placeholder="Password"
-            />
-          </div>
-          <PasswordForgetLink />
-          <div className="centerLogIn">
-            <button 
-              className="signInButton"
-              disabled={isInvalid} type="submit">
-              Log In
-            </button>
-          </div>
-          { error && <p>{error.message}</p> }
-        </form>
-        <SignUpLink />
+            <div className="emailBar">
+              <input
+                className="textBox"
+                value={password}
+                onChange={event => this.setState(updateByPropertyName('password', event.target.value))}
+                type="password"
+                placeholder="Password"
+              />
+            </div>
+            <PasswordForgetLink />
+            <div className="centerLogIn">
+              <button 
+                className="signInButton"
+                disabled={isInvalid} type="submit">
+                Log In
+              </button>
+            </div>
+            { error && <p>{error.message}</p> }
+          </form>
+          <SignUpLink />
+        </div>
       </div>
     );
   }

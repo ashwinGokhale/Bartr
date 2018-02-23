@@ -5,6 +5,7 @@ import { compose } from 'recompose';
 import { PasswordForgetForm } from '../PasswordForget';
 import PasswordChangeForm from '../PasswordChange';
 import withAuthorization from '../Session/withAuthorization';
+import './index.css'
 
 import './account.css'
 

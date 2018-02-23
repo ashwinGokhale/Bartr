@@ -2,51 +2,74 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import axios from 'axios';
+import defaultPhoto from '../../assets/default.png';
+import insertHere from '../../assets/insertHere.png';
+import './index.css';
 
 import withAuthorization from '../Session/withAuthorization';
 
 class HomePage extends Component {
   componentDidMount() {
-    const { onSetUsers } = this.props;
-    axios.get('/api/users')
-      .then(response => onSetUsers(response.data))
+    const { onSetUser } = this.props;
+    axios.get('/API/users/${this.props.user.uid}')
+      .then(response => onSetUser(response.data))
   }
 
   render() {
-    const { users } = this.props;
+    const { user } = this.props;
 
     return (
       <div>
-        <h1>Home</h1>
-        <p>The Home Page is accessible by every signed in user.</p>
+        <div className="row">
+          <div className="column leftSide">
+            <div className="profile">
+              <div className="profileCard">
+                <img className="profilePhoto" src={defaultPhoto} alt="goodsForGoods.png"></img>
+                { !!user && <UserList user={user} /> }
+                <h5 className="rating">-----rating is future sprint-----</h5>
+              </div>
+            </div>
+            <div className="filters">
+              <div className="filtersCard">
 
-        { !!users && <UserList users={users} /> }
+              </div>
+            </div>
+          </div>
+          <div className="column rightSide">
+            <div className="createPost">
+              <div className="postUpload">
+                <img className="insertHere" src={insertHere} alt="insertPictureHere.png"></img>
+                <button className="uploadPhoto">Choose A Photo</button>
+              </div>
+              <div className="postInformation">
+                <textarea className="title" placeholder="Add a title..."></textarea>
+                <textarea className="description" placeholder="Add a description..."></textarea>
+                <button className="create">Create Post</button>
+              </div>
+
+            </div>
+            <div className="postFeed">
+
+            </div>
+
+          </div>
+        </div>
       </div>
     );
   }
 }
 
-const UserList = ({ users }) =>
+const UserList = ({ user }) =>
   <div>
-    <h2>List of Usernames of Users</h2>
-    <p>(Saved on Sign Up in Firebase Database)</p>
-
-    <ul>
-      {Object.keys(users).map(key =>
-        <li key={key}>
-          <div>Name: {users[key].displayName}</div>
-          <div>UID: {users[key].uid}</div>
-        </li>
-      )}
-    </ul>
+    <h5 className="userName">{user.email}</h5>
   </div>
 
 const mapStateToProps = (state) => ({
-  users: state.userState.users,
+  user: state.sessionState.authUser,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onSetUsers: (users) => dispatch({ type: 'USERS_SET', users }),
+  onSetUser: (user) => dispatch({ type: 'USERS_SET', user }),
 });
 
 export default compose(

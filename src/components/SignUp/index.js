@@ -8,7 +8,6 @@ import './index.css';
 
 const SignUpPage = ({ history }) =>
   <div className="signUpPageBackground">
-    <h1>SignUp</h1>
     <SignUpForm history={history} />
   </div>
 
