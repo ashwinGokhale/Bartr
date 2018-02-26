@@ -85,17 +85,17 @@ class SettingsPage extends Component {
       <div>
         <h1>Settings</h1>
         <h4>Change Settings</h4>
-				{ !!error ? <p style={{'color': 'red'}}>ERROR: {error}</p> : null }
-				<p>Latitude:  {lat}</p>
-				<p>Set Latitude: </p><input type='number' name='lat' onChange={this.onChange.bind(this)} />
-				<p>Longitutde:  {lng}</p>
-				<p>Set Longitutde: </p><input type='number' name='lng' onChange={this.onChange.bind(this)} />
-				<br/>
-				<p>Radius: {radius}</p>
+		{ !!error ? <p style={{'color': 'red'}}>ERROR: {error}</p> : null }
+		<p>Latitude:  {lat}</p>
+		<p>Set Latitude: </p><input type='number' name='lat' onChange={this.onChange.bind(this)} />
+		<p>Longitutde:  {lng}</p>
+		<p>Set Longitutde: </p><input type='number' name='lng' onChange={this.onChange.bind(this)} />
+		<br/>
+		<p>Radius: {radius}</p>
 
-				<p>Set Radius: </p><input type='number' name='radius' onChange={this.onChange.bind(this)} />
-				<br/>
-				<input type='submit' name='submit' onClick={this.onSubmit} />
+		<p>Set Radius: </p><input type='number' name='radius' onChange={this.onChange.bind(this)} />
+		<br/>
+		<input type='submit' name='submit' onClick={this.onSubmit} />
       </div>
     );
   }
