@@ -43,7 +43,7 @@ const AccountPage = ({ authUser }) =>
           </div>
  
           <div className="postFeed">
-              <div className="placeHolder">
+              {/* <div className="placeHolder">
                 <div className="postTitle">
                   <h3>Thermaltake View 71 RGB 4-Sided Tempered Glass</h3>
                 </div>
@@ -63,7 +63,7 @@ const AccountPage = ({ authUser }) =>
                     </ul>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
 
         </div>

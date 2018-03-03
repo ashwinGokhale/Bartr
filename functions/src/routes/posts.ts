@@ -35,6 +35,22 @@ router.get("/geo", async (req, res) => {
 	}
 });
 
+// Get all posts by user
+router.get('/user/:uid', async (req, res) =>  {
+	const userToken: string = req.headers.token as string;
+	if (userToken) {
+		try {
+			const tok = await firebase.auth().verifyIdToken(userToken, true)
+			const resp = await firebase.firestore().collection('/posts').where('userId', '==', req.params.uid).get()
+			res.json(resp.docs.map(doc => doc.data()))
+		} catch (error) {
+			res.status(400).send(error);
+		}
+	}
+	else 
+		res.status(401).send('Unauthorized')
+})
+
 // Get all posts
 router.get("/", async (req, res) => {
 	const userToken: string = req.headers.token as string;
@@ -52,7 +68,7 @@ router.get("/", async (req, res) => {
 });
 
 // Create / update a post
-module.exports.makePost = router.post('/', async (req, res) => {
+router.post('/', async (req, res) => {
 	const userToken: string = req.headers.token as string;
 	if (!req.body.title) res.status(400).send('Post must have a title')
 	else if (!req.body.title) res.status(400).send('Post must have a picture')
@@ -74,9 +90,10 @@ module.exports.makePost = router.post('/', async (req, res) => {
 				createdAt: new Date(),
 				lastModified: new Date(),
 				_geoloc: req.body._geoloc
-			});
-			res.status(200).send('Created: ' + JSON.stringify(newPost));	
+			})
+			res.status(200).send('Created: ' + newPost.id);
 		} catch (err) {
+			console.error('Error:', err);
 			res.status(400).send(err);
 		}
 	}
