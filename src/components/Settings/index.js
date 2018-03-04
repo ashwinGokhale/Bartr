@@ -5,6 +5,7 @@ import withAuthorization from '../Session/withAuthorization';
 import { authCondition } from '../../constants'
 import { auth } from '../../firebase';
 import axios from 'axios';
+import './index.css'
 
 class SettingsPage extends Component {
 	constructor(props) {
@@ -13,7 +14,8 @@ class SettingsPage extends Component {
 		this.state = { 
 			_geoloc: this.props._geoloc,
 			radius: this.props.radius,
-			error: null
+			error: null,
+			dbUser: this.props.dbUser
 		}
 		// console.log('State:', this.state);
 		// console.log('User ID:', auth.currentUser.uid)
@@ -76,40 +78,119 @@ class SettingsPage extends Component {
 		}
 	}
 	
+	componentDidMount() {
+		const { onSetDBUser } = this.props;
+		
+		this.props.user.getIdToken().then(token => {
+		  axios.get(
+			`/api/users/${this.props.user.uid}`,
+			{
+			  headers: {
+				token
+			  }
+			}
+		  )
+		  .then(response => {
+			this.setState({ dbUser: response.data })
+			onSetDBUser(response.data)
+		  })
+		})
+	  }
 
   render() {
+		const { dbUser } = this.state;
 		console.log('State:', this.state)
 		const { radius, error } = this.state;
 		const { lat, lng } = this.state._geoloc;
     return (
       <div>
-        <h1>Settings</h1>
-        <h4>Change Settings</h4>
-		{ !!error ? <p style={{'color': 'red'}}>ERROR: {error}</p> : null }
-		<p>Latitude:  {lat}</p>
-		<p>Set Latitude: </p><input type='number' name='lat' onChange={this.onChange.bind(this)} />
-		<p>Longitutde:  {lng}</p>
-		<p>Set Longitutde: </p><input type='number' name='lng' onChange={this.onChange.bind(this)} />
-		<br/>
-		<p>Radius: {radius}</p>
-
-		<p>Set Radius: </p><input type='number' name='radius' onChange={this.onChange.bind(this)} />
-		<br/>
-		<input type='submit' name='submit' onClick={this.onSubmit} />
+		<div className="background">
+			<div className="settingsForm">
+				<h4>Account Settings</h4>
+				<hr></hr>
+				<div className="columnLeft">
+					<p className="label">Display Name</p>
+					<p className="label">Photo URL</p>
+					<p className="label">Address</p>
+					<p className="label">Email</p>
+					<p className="label">Phone Number</p>
+					<p className="label">Latitude</p>
+					<p className="label">Longitude</p>
+					<p className="label">Radius</p>
+				</div>
+				<div className="columnRight">
+					{ !!dbUser && <DisplayName user={dbUser} /> }
+					{ !!dbUser && <PhotoURL user={dbUser} /> }
+					{ !!dbUser && <Address user={dbUser} /> }
+					{ !!dbUser && <Email user={dbUser} /> }
+					{ !!dbUser && <PhoneNumber user={dbUser} /> }
+					<input className="align" type='number' name='lat' placeholder={lat} onChange={this.onChange.bind(this)} />
+					<input className="align" type='number' name='lng' placeholder={lng} onChange={this.onChange.bind(this)} />
+					<input className="align" type='number' name='radius' placeholder={radius} onChange={this.onChange.bind(this)} />
+				</div>
+				<div className="warningForm">
+					{ !!error ? <p className="warning" style={{'color': 'red'}}>ERROR: {error}</p> : null }
+				</div>
+				<input className="submit" type='submit' name='submit' value='Update' onClick={this.onSubmit} />
+			</div>
+		</div>
       </div>
     );
   }
 }
 
+const DisplayName = ({ user }) => {
+	return (
+	  <div>
+		<input className="align" type="text" placeholder={user.displayName}></input>
+	  </div>
+	)
+  }
+
+  const PhotoURL = ({ user }) => {
+	return (
+	  <div>
+		<input className="align" type="text" placeholder={user.photoUrl}></input>
+	  </div>
+	)
+  }
+
+  const Address = ({ user }) => {
+	return (
+	  <div>
+		<input className="align" type="text" placeholder={user.contactInfo.address}></input>
+	  </div>
+	)
+  }
+
+  const Email = ({ user }) => {
+	return (
+	  <div>
+		<input className="align" type="text" placeholder={user.contactInfo.email}></input>
+	  </div>
+	)
+  }
+
+  const PhoneNumber = ({ user }) => {
+	return (
+	  <div>
+		<input className="align" type="text" placeholder={user.contactInfo.phoneNumber}></input>
+	  </div>
+	)
+  }
+
 const mapStateToProps = (state) => ({
 	_geoloc: state.settingsState._geoloc,
 	radius: state.settingsState.radius,
-	authUser: state.sessionState.authUser
+	authUser: state.sessionState.authUser,
+	user: state.sessionState.authUser,
+	dbUser: state.sessionState.dbUser
 });
 
 const mapDispatchToProps = (dispatch) => ({
 	onSetGeoLoc: (_geoloc) => dispatch({ type: 'GEOLOC_SET', _geoloc }),
-	onSetRadius: (radius) => dispatch({ type: 'RADIUS_SET', radius })
+	onSetRadius: (radius) => dispatch({ type: 'RADIUS_SET', radius }),
+	onSetDBUser: (user) => dispatch({ type: 'DB_USER_SET', user })
 });
 
 export default compose(
