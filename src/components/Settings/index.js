@@ -5,6 +5,7 @@ import withAuthorization from '../Session/withAuthorization';
 import { authCondition } from '../../constants'
 import { auth } from '../../firebase';
 import axios from 'axios';
+import './index.css'
 
 class SettingsPage extends Component {
 	constructor(props) {
@@ -83,19 +84,36 @@ class SettingsPage extends Component {
 		const { lat, lng } = this.state._geoloc;
     return (
       <div>
-        <h1>Settings</h1>
-        <h4>Change Settings</h4>
-		{ !!error ? <p style={{'color': 'red'}}>ERROR: {error}</p> : null }
-		<p>Latitude:  {lat}</p>
-		<p>Set Latitude: </p><input type='number' name='lat' onChange={this.onChange.bind(this)} />
-		<p>Longitutde:  {lng}</p>
-		<p>Set Longitutde: </p><input type='number' name='lng' onChange={this.onChange.bind(this)} />
-		<br/>
-		<p>Radius: {radius}</p>
-
-		<p>Set Radius: </p><input type='number' name='radius' onChange={this.onChange.bind(this)} />
-		<br/>
-		<input type='submit' name='submit' onClick={this.onSubmit} />
+		<div className="background">
+			<div className="settingsForm">
+				<h4>Account Settings</h4>
+				<hr></hr>
+				<div className="columnLeft">
+					<p className="label">Display Name</p>
+					<p className="label">Photo URL</p>
+					<p className="label">Address</p>
+					<p className="label">Email</p>
+					<p className="label">Phone Number</p>
+					<p className="label">Latitude</p>
+					<p className="label">Longitude</p>
+					<p className="label">Radius</p>
+				</div>
+				<div className="columnRight">
+					<input className="align" type="text"></input>
+					<input className="align" type="text"></input>
+					<input className="align" type="text"></input>
+					<input className="align" type="text"></input>
+					<input className="align" type="text"></input>
+					<input className="align" type='number' name='lat' placeholder={lat} onChange={this.onChange.bind(this)} />
+					<input className="align" type='number' name='lng' placeholder={lng} onChange={this.onChange.bind(this)} />
+					<input className="align" type='number' name='radius' placeholder={radius} onChange={this.onChange.bind(this)} />
+				</div>
+				<div className="warningForm">
+					{ !!error ? <p className="warning" style={{'color': 'red'}}>ERROR: {error}</p> : null }
+				</div>
+				<input className="submit" type='submit' name='submit' value='Update' onClick={this.onSubmit} />
+			</div>
+		</div>
       </div>
     );
   }
