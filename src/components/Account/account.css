@@ -281,3 +281,21 @@ textarea {
     margin-left: 3%;
     border-radius: 0.5em 0.5em 0.5em 0.5em;
 }
+
+.reportUser {
+    background-color: red;
+    color: white !important;
+    border-radius: 0.5em 0.5em 0.5em 0.5em;
+    width: 12%;
+    margin-left: 85%;
+}
+
+.reportUser:hover {
+    background-color: white;
+    color: rgb(255, 0, 0) !important;
+    border-bottom-color: rgb(255, 255, 255);
+    border-style: solid;
+    border-bottom-width: 0.25px;
+    transition: 0.2s linear;
+    cursor: pointer;
+}
