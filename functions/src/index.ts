@@ -3,8 +3,6 @@ import * as logger from 'morgan';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import * as cors from "cors";
-import { router as news } from './routes/news';
-import { router as employees } from './routes/employees';
 import { router as posts } from './routes/posts';
 import { router as users } from './routes/users';
 import * as functions from 'firebase-functions';
@@ -36,8 +34,6 @@ app.get('/', (req, res) => {
   res.send('This API Home Page')
 });
 
-app.use('/news', news);
-app.use('/employees', employees);
 app.use('/posts', posts);
 app.use('/users', users);
 

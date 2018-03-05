@@ -115,7 +115,7 @@ router.get('/:postId', async (req, res) => {
 		res.status(401).send('Unauthorized')
 })
 
-// Get post by id
+// Delete post by id
 router.delete('/:postId', async (req, res) => {
 	const userToken: string = req.headers.token as string;
 	if (userToken) {
