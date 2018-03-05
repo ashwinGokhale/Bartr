@@ -28,6 +28,7 @@ class SettingsPage extends Component {
 		// console.log('User ID:', auth.currentUser.uid)
 	}
 
+	invalidChars = value => (/^-?\d+(\.\d{1,6})?$/.test(value)) ? true : false
 	isRadiusValid = value => (value < 5) ? false : true
 	isLatitudeValid = value => (value > 90 || value < -90) ? false : true
 	isLongitudeValid = value => (value > 180 || value < -180) ? false : true
@@ -37,15 +38,24 @@ class SettingsPage extends Component {
 			if (!this.isRadiusValid(this.state.radius)) {
 				this.setState({ error: 'Radius must be >= 5'});
 				valid = false;
+			} else if(!this.invalidChars(this.state.radius)) {
+				this.setState({error: 'Radius isn\'t formatted correctly'});
+				valid = false;
 			}
 			
 			if (!this.isLatitudeValid(this.state._geoloc.lat)) {
 				this.setState({ error: 'Latitude must be <= 90 and >= -90'});
 				valid = false;
+			} else if(!this.invalidChars(this.state._geoloc.lat)) {
+				this.setState({error: 'Latitutde isn\'t formatted correcty'});
+				valid = false;
 			}
 			
 			if (!this.isLongitudeValid(this.state._geoloc.lng)) {
-				this.setState({ error: 'Latitude must be <= 180 and >= -180'});
+				this.setState({ error: 'Longitude must be <= 180 and >= -180'});
+				valid = false;
+			} else if(!this.invalidChars(this.state._geoloc.lng)) {
+				this.setState({error: 'Longitude isn\'t formatted correctly'});
 				valid = false;
 			}
 					
