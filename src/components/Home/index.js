@@ -20,13 +20,10 @@ class HomePage extends Component {
     const { onSetDBUser } = this.props;
 	
     this.props.user.getIdToken().then(token => {
+      // Get DB user and input into Redux store
       axios.get(
         `/api/users/${this.props.user.uid}`,
-        {
-          headers: {
-            token
-          }
-        }
+        {headers: {token}}
       )
       .then(response => {
         this.setState({ dbUser: response.data })
