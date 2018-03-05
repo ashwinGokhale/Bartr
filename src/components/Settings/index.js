@@ -11,16 +11,24 @@ class SettingsPage extends Component {
 	constructor(props) {
 		super(props);
 		console.log('Props: ', this.props);
+		this.onChange = this.onChange.bind(this);
 		this.state = { 
 			_geoloc: this.props._geoloc,
 			radius: this.props.radius,
 			error: null,
-			dbUser: this.props.dbUser
+			dbUser: this.props.dbUser,
+			
+			displayName: '',
+			photoUrl: '',
+			address: '',
+			email: '',
+			phoneNumber: ''
 		}
 		// console.log('State:', this.state);
 		// console.log('User ID:', auth.currentUser.uid)
 	}
 
+	invalidChars = value => (/^-?\d+(\.\d{1,6})?$/.test(value)) ? true : false
 	isRadiusValid = value => (value < 5) ? false : true
 	isLatitudeValid = value => (value > 90 || value < -90) ? false : true
 	isLongitudeValid = value => (value > 180 || value < -180) ? false : true
@@ -30,15 +38,24 @@ class SettingsPage extends Component {
 			if (!this.isRadiusValid(this.state.radius)) {
 				this.setState({ error: 'Radius must be >= 5'});
 				valid = false;
+			} else if(!this.invalidChars(this.state.radius)) {
+				this.setState({error: 'Radius isn\'t formatted correctly'});
+				valid = false;
 			}
 			
 			if (!this.isLatitudeValid(this.state._geoloc.lat)) {
 				this.setState({ error: 'Latitude must be <= 90 and >= -90'});
 				valid = false;
+			} else if(!this.invalidChars(this.state._geoloc.lat)) {
+				this.setState({error: 'Latitutde isn\'t formatted correcty'});
+				valid = false;
 			}
 			
 			if (!this.isLongitudeValid(this.state._geoloc.lng)) {
-				this.setState({ error: 'Latitude must be <= 180 and >= -180'});
+				this.setState({ error: 'Longitude must be <= 180 and >= -180'});
+				valid = false;
+			} else if(!this.invalidChars(this.state._geoloc.lng)) {
+				this.setState({error: 'Longitude isn\'t formatted correctly'});
 				valid = false;
 			}
 					
@@ -49,14 +66,27 @@ class SettingsPage extends Component {
 	onChange = (event) => {
 		event.preventDefault();
 
-		if (event.target.name === 'radius')
-			this.setState({ radius: event.target.value }, () => this.validateAll(event))
-		else if (event.target.name === 'lat')
-			this.setState({ _geoloc: {...this.state._geoloc, lat: event.target.value} }, () => this.validateAll(event))
-		else
-		this.setState({ _geoloc: {...this.state._geoloc, lng: event.target.value} }, () => this.validateAll(event))
+		if(event.target.id === 'displayName') {
+			this.setState({ displayName: event.target.textContent});
+		} else if(event.target.id === 'photoUrl') {
+			this.setState({ photoUrl: event.target.textContent});
+		} else if(event.target.id === 'address') {
+			this.setState({ address: event.target.textContent});
+		} else if(event.target.id === 'email') {
+			this.setState({ email: event.target.textContent});
+		} else if(event.target.id === 'phoneNumber') {
+			this.setState({ phoneNumber: event.target.textContent});
+		}
 
-		if (event.target.name === 'radius') this.props.onSetRadius(this.state.radius)
+		if (event.target.id === 'radius') {
+			this.setState({ radius: event.target.textContent }, () => this.validateAll(event));
+		} else if (event.target.id === 'lat') {
+			this.setState({ _geoloc: {...this.state._geoloc, lat: event.target.textContent} }, () => this.validateAll(event));
+		} else if(event.target.id === 'lng') {
+			this.setState({ _geoloc: {...this.state._geoloc, lng: event.target.textContent} }, () => this.validateAll(event));
+		}
+
+		if (event.target.id === 'radius') this.props.onSetRadius(this.state.radius)
 		else this.props.onSetGeoLoc(this.state._geoloc)
 	}
 
@@ -65,22 +95,43 @@ class SettingsPage extends Component {
 		if (this.isRadiusValid(this.state.radius) && this.isLatitudeValid(this.state._geoloc.lat) && this.isLongitudeValid(this.state._geoloc.lng)) {
 			// console.log(this.props.authUser)
 			const { _geoloc, radius } = this.state;
+			const { displayName } = this.state;
+			const { photoUrl } = this.state;
+			const { address } = this.state;
+			const { email } = this.state;
+			const { phoneNumber } = this.state;
 			this.props.onSetGeoLoc(this.state._geoloc);
 			this.props.onSetRadius(this.state.radius);
 			
 			axios.post(`/api/users/${this.props.authUser.uid}`, {
 				_geoloc,
-				radius
+				radius,
+				displayName,
+				photoUrl,
+				address,
+				email,
+				phoneNumber
 			})
 			.then(response => console.log(response.data))
 			.catch(error => console.error(error))
 
 		}
 	}
+
+	clearFixLat() {
+		document.getElementById("lat").textContent = '';
+	}
+
+	clearFixLng() {
+		document.getElementById("lng").textContent = '';
+	}
+
+	clearFixRadius() {
+		document.getElementById("radius").textContent = '';
+	}
 	
 	componentDidMount() {
 		const { onSetDBUser } = this.props;
-		
 		this.props.user.getIdToken().then(token => {
 		  axios.get(
 			`/api/users/${this.props.user.uid}`,
@@ -95,7 +146,7 @@ class SettingsPage extends Component {
 			onSetDBUser(response.data)
 		  })
 		})
-	  }
+	}
 
   render() {
 		const { dbUser } = this.state;
@@ -119,19 +170,19 @@ class SettingsPage extends Component {
 					<p className="label">Radius</p>
 				</div>
 				<div className="columnRight">
-					{ !!dbUser && <DisplayName user={dbUser} /> }
-					{ !!dbUser && <PhotoURL user={dbUser} /> }
-					{ !!dbUser && <Address user={dbUser} /> }
-					{ !!dbUser && <Email user={dbUser} /> }
-					{ !!dbUser && <PhoneNumber user={dbUser} /> }
-					<input className="align" type='number' name='lat' placeholder={lat} onChange={this.onChange.bind(this)} />
-					<input className="align" type='number' name='lng' placeholder={lng} onChange={this.onChange.bind(this)} />
-					<input className="align" type='number' name='radius' placeholder={radius} onChange={this.onChange.bind(this)} />
+					<div contenteditable="true" spellCheck="false" className="align" type="text" id="displayName" onInput={this.onChange.bind(this)}>{ !!dbUser && <DisplayName user={dbUser} /> }</div>
+					<div contenteditable="true" spellCheck="false" className="align" type="text" id="photoUrl" onInput={this.onChange.bind(this)}>{ !!dbUser && <PhotoUrl user={dbUser} /> }</div>
+					<div contenteditable="true" spellCheck="false" className="align" type="text" id="address" onInput={this.onChange.bind(this)}>{ !!dbUser && <Address user={dbUser} /> }</div>
+					<div contenteditable="true" spellCheck="false" className="align" type="text" id="email" onInput={this.onChange.bind(this)}>{ !!dbUser && <Email user={dbUser} /> }</div>
+					<div contenteditable="true" spellCheck="false" className="align" type="text" id="phoneNumber" onInput={this.onChange.bind(this)}>{ !!dbUser && <PhoneNumber user={dbUser} /> }</div>
+					<div contenteditable="true" spellCheck="false" className="align" type="text" id="lat" onFocus={this.clearFixLat.bind(this)} onInput={this.onChange.bind(this)}>{<Latitude latitude={lat}/>}</div>
+					<div contenteditable="true" spellCheck="false" className="align" type="text" id="lng" onFocus={this.clearFixLng.bind(this)} onInput={this.onChange.bind(this)}><p>{lng}</p></div>
+					<div contenteditable="true" spellCheck="false" className="align" type="text" id="radius" onFocus={this.clearFixRadius.bind(this)} onInput={this.onChange.bind(this)}><p>{radius}</p></div>
 				</div>
 				<div className="warningForm">
 					{ !!error ? <p className="warning" style={{'color': 'red'}}>ERROR: {error}</p> : null }
 				</div>
-				<input className="submit" type='submit' name='submit' value='Update' onClick={this.onSubmit} />
+				<input className="submit" type='submit' name='submit' value='Update' onClick={this.onSubmit.bind(this)} />
 			</div>
 		</div>
       </div>
@@ -141,43 +192,39 @@ class SettingsPage extends Component {
 
 const DisplayName = ({ user }) => {
 	return (
-	  <div>
-		<input className="align" type="text" placeholder={user.displayName}></input>
-	  </div>
+			<p>{user.displayName}</p>
 	)
-  }
+}
 
-  const PhotoURL = ({ user }) => {
+const PhotoUrl = ({ user }) => {
 	return (
-	  <div>
-		<input className="align" type="text" placeholder={user.photoUrl}></input>
-	  </div>
+	  <p>{user.photoUrl}</p>
 	)
-  }
+}
 
-  const Address = ({ user }) => {
+const Address = ({ user }) => {
 	return (
-	  <div>
-		<input className="align" type="text" placeholder={user.contactInfo.address}></input>
-	  </div>
+	  <p>{user.contactInfo.address}</p>
 	)
-  }
+}
 
-  const Email = ({ user }) => {
+const Email = ({ user }) => {
 	return (
-	  <div>
-		<input className="align" type="text" placeholder={user.contactInfo.email}></input>
-	  </div>
+	  <p>{user.contactInfo.email}</p>
 	)
-  }
+}
 
-  const PhoneNumber = ({ user }) => {
+const PhoneNumber = ({ user }) => {
 	return (
-	  <div>
-		<input className="align" type="text" placeholder={user.contactInfo.phoneNumber}></input>
-	  </div>
+	  <p>{user.contactInfo.phoneNumber}</p>
 	)
-  }
+}
+
+const Latitude = ({latitude}) => {
+	return (
+		<p>{latitude}</p>
+	)
+}
 
 const mapStateToProps = (state) => ({
 	_geoloc: state.settingsState._geoloc,
