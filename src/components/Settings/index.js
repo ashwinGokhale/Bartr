@@ -11,11 +11,18 @@ class SettingsPage extends Component {
 	constructor(props) {
 		super(props);
 		console.log('Props: ', this.props);
+		this.onChange = this.onChange.bind(this);
 		this.state = { 
 			_geoloc: this.props._geoloc,
 			radius: this.props.radius,
 			error: null,
-			dbUser: this.props.dbUser
+			dbUser: this.props.dbUser,
+			
+			displayName: '',
+			photoURL: '',
+			address: '',
+			email: '',
+			phoneNumber: ''
 		}
 		// console.log('State:', this.state);
 		// console.log('User ID:', auth.currentUser.uid)
@@ -49,12 +56,24 @@ class SettingsPage extends Component {
 	onChange = (event) => {
 		event.preventDefault();
 
+		if(event.target.name === 'displayName') {
+			this.setState({ displayName: event.target.value});
+		} else if(event.target.name === 'photoURL') {
+			this.setState({ photoURL: event.target.value});
+		} else if(event.target.name === 'address') {
+			this.setState({ address: event.target.value});
+		} else if(event.target.name === 'email') {
+			this.setState({ email: event.target.value});
+		} else if(event.target.name === 'phoneNumber') {
+			this.setState({ phoneNumber: event.target.value});
+		}
+
 		if (event.target.name === 'radius')
 			this.setState({ radius: event.target.value }, () => this.validateAll(event))
 		else if (event.target.name === 'lat')
 			this.setState({ _geoloc: {...this.state._geoloc, lat: event.target.value} }, () => this.validateAll(event))
-		else
-		this.setState({ _geoloc: {...this.state._geoloc, lng: event.target.value} }, () => this.validateAll(event))
+		else if(event.target.name === 'lng')
+			this.setState({ _geoloc: {...this.state._geoloc, lng: event.target.value} }, () => this.validateAll(event))
 
 		if (event.target.name === 'radius') this.props.onSetRadius(this.state.radius)
 		else this.props.onSetGeoLoc(this.state._geoloc)
@@ -68,6 +87,8 @@ class SettingsPage extends Component {
 			this.props.onSetGeoLoc(this.state._geoloc);
 			this.props.onSetRadius(this.state.radius);
 			
+			console.log("name: "+this.state.displayName);
+
 			axios.post(`/api/users/${this.props.authUser.uid}`, {
 				_geoloc,
 				radius
@@ -95,7 +116,7 @@ class SettingsPage extends Component {
 			onSetDBUser(response.data)
 		  })
 		})
-	  }
+	}
 
   render() {
 		const { dbUser } = this.state;
@@ -119,19 +140,19 @@ class SettingsPage extends Component {
 					<p className="label">Radius</p>
 				</div>
 				<div className="columnRight">
-					{ !!dbUser && <DisplayName user={dbUser} /> }
-					{ !!dbUser && <PhotoURL user={dbUser} /> }
-					{ !!dbUser && <Address user={dbUser} /> }
-					{ !!dbUser && <Email user={dbUser} /> }
-					{ !!dbUser && <PhoneNumber user={dbUser} /> }
-					<input className="align" type='number' name='lat' placeholder={lat} onChange={this.onChange.bind(this)} />
-					<input className="align" type='number' name='lng' placeholder={lng} onChange={this.onChange.bind(this)} />
-					<input className="align" type='number' name='radius' placeholder={radius} onChange={this.onChange.bind(this)} />
+					<div contenteditable="true" spellcheck="false" className="align " type="text" name="displayName" onChange={this.onChange.bind(this)}>{ !!dbUser && <DisplayName user={dbUser} /> }</div>
+					<div contenteditable="true" spellcheck="false" className="align" type="text" name="photoURL" onChange={this.onChange.bind(this)}>{ !!dbUser && <PhotoURL user={dbUser} /> }</div>
+					<div contenteditable="true" spellcheck="false" className="align" type="text" name="address" onChange={this.onChange.bind(this)}>{ !!dbUser && <Address user={dbUser} /> }</div>
+					<div contenteditable="true" spellcheck="false" className="align" type="text" name="email" onChange={this.onChange.bind(this)}>{ !!dbUser && <Email user={dbUser} /> }</div>
+					<div contenteditable="true" spellcheck="false" className="align" type="text" name="phoneNumber" placeholder='' onChange={this.onChange.bind(this)}>{ !!dbUser && <PhoneNumber user={dbUser} /> }</div>
+					<div contenteditable="true" spellcheck="false" className="align" type='number' name='lat' onChange={this.onChange.bind(this)}>{lat}</div>
+					<div contenteditable="true" spellcheck="false" className="align" type='number' name='lng' onChange={this.onChange.bind(this)}>{lng}</div>
+					<div contenteditable="true" spellcheck="false" className="align" type='number' name='radius' onChange={this.onChange.bind(this)}>{radius}</div>
 				</div>
 				<div className="warningForm">
 					{ !!error ? <p className="warning" style={{'color': 'red'}}>ERROR: {error}</p> : null }
 				</div>
-				<input className="submit" type='submit' name='submit' value='Update' onClick={this.onSubmit} />
+				<input className="submit" type='submit' name='submit' value='Update' onClick={this.onSubmit.bind(this)} />
 			</div>
 		</div>
       </div>
@@ -141,43 +162,33 @@ class SettingsPage extends Component {
 
 const DisplayName = ({ user }) => {
 	return (
-	  <div>
-		<input className="align" type="text" placeholder={user.displayName}></input>
-	  </div>
+			<p>{user.displayName}</p>
 	)
-  }
+}
 
-  const PhotoURL = ({ user }) => {
+const PhotoURL = ({ user }) => {
 	return (
-	  <div>
-		<input className="align" type="text" placeholder={user.photoUrl}></input>
-	  </div>
+	  <p>{user.photoUrl}</p>
 	)
-  }
+}
 
-  const Address = ({ user }) => {
+const Address = ({ user }) => {
 	return (
-	  <div>
-		<input className="align" type="text" placeholder={user.contactInfo.address}></input>
-	  </div>
+	  <p>{user.contactInfo.address}</p>
 	)
-  }
+}
 
-  const Email = ({ user }) => {
+const Email = ({ user }) => {
 	return (
-	  <div>
-		<input className="align" type="text" placeholder={user.contactInfo.email}></input>
-	  </div>
+	  <p>{user.contactInfo.email}</p>
 	)
-  }
+}
 
-  const PhoneNumber = ({ user }) => {
+const PhoneNumber = ({ user }) => {
 	return (
-	  <div>
-		<input className="align" type="text" placeholder={user.contactInfo.phoneNumber}></input>
-	  </div>
+	  <p>{user.contactInfo.phoneNumber}</p>
 	)
-  }
+}
 
 const mapStateToProps = (state) => ({
 	_geoloc: state.settingsState._geoloc,
