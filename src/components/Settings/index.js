@@ -19,7 +19,7 @@ class SettingsPage extends Component {
 			dbUser: this.props.dbUser,
 			
 			displayName: '',
-			photoURL: '',
+			photoUrl: '',
 			address: '',
 			email: '',
 			phoneNumber: ''
@@ -56,26 +56,27 @@ class SettingsPage extends Component {
 	onChange = (event) => {
 		event.preventDefault();
 
-		if(event.target.name === 'displayName') {
-			this.setState({ displayName: event.target.value});
-		} else if(event.target.name === 'photoURL') {
-			this.setState({ photoURL: event.target.value});
-		} else if(event.target.name === 'address') {
-			this.setState({ address: event.target.value});
-		} else if(event.target.name === 'email') {
-			this.setState({ email: event.target.value});
-		} else if(event.target.name === 'phoneNumber') {
-			this.setState({ phoneNumber: event.target.value});
+		if(event.target.id === 'displayName') {
+			this.setState({ displayName: event.target.textContent});
+		} else if(event.target.id === 'photoUrl') {
+			this.setState({ photoUrl: event.target.textContent});
+		} else if(event.target.id === 'address') {
+			this.setState({ address: event.target.textContent});
+		} else if(event.target.id === 'email') {
+			this.setState({ email: event.target.textContent});
+		} else if(event.target.id === 'phoneNumber') {
+			this.setState({ phoneNumber: event.target.textContent});
 		}
 
-		if (event.target.name === 'radius')
-			this.setState({ radius: event.target.value }, () => this.validateAll(event))
-		else if (event.target.name === 'lat')
-			this.setState({ _geoloc: {...this.state._geoloc, lat: event.target.value} }, () => this.validateAll(event))
-		else if(event.target.name === 'lng')
-			this.setState({ _geoloc: {...this.state._geoloc, lng: event.target.value} }, () => this.validateAll(event))
+		if (event.target.id === 'radius') {
+			this.setState({ radius: event.target.textContent }, () => this.validateAll(event));
+		} else if (event.target.id === 'lat') {
+			this.setState({ _geoloc: {...this.state._geoloc, lat: event.target.textContent} }, () => this.validateAll(event));
+		} else if(event.target.id === 'lng') {
+			this.setState({ _geoloc: {...this.state._geoloc, lng: event.target.textContent} }, () => this.validateAll(event));
+		}
 
-		if (event.target.name === 'radius') this.props.onSetRadius(this.state.radius)
+		if (event.target.id === 'radius') this.props.onSetRadius(this.state.radius)
 		else this.props.onSetGeoLoc(this.state._geoloc)
 	}
 
@@ -84,24 +85,43 @@ class SettingsPage extends Component {
 		if (this.isRadiusValid(this.state.radius) && this.isLatitudeValid(this.state._geoloc.lat) && this.isLongitudeValid(this.state._geoloc.lng)) {
 			// console.log(this.props.authUser)
 			const { _geoloc, radius } = this.state;
+			const { displayName } = this.state;
+			const { photoUrl } = this.state;
+			const { address } = this.state;
+			const { email } = this.state;
+			const { phoneNumber } = this.state;
 			this.props.onSetGeoLoc(this.state._geoloc);
 			this.props.onSetRadius(this.state.radius);
 			
-			console.log("name: "+this.state.displayName);
-
 			axios.post(`/api/users/${this.props.authUser.uid}`, {
 				_geoloc,
-				radius
+				radius,
+				displayName,
+				photoUrl,
+				address,
+				email,
+				phoneNumber
 			})
 			.then(response => console.log(response.data))
 			.catch(error => console.error(error))
 
 		}
 	}
+
+	clearFixLat() {
+		document.getElementById("lat").textContent = '';
+	}
+
+	clearFixLng() {
+		document.getElementById("lng").textContent = '';
+	}
+
+	clearFixRadius() {
+		document.getElementById("radius").textContent = '';
+	}
 	
 	componentDidMount() {
 		const { onSetDBUser } = this.props;
-		
 		this.props.user.getIdToken().then(token => {
 		  axios.get(
 			`/api/users/${this.props.user.uid}`,
@@ -140,14 +160,14 @@ class SettingsPage extends Component {
 					<p className="label">Radius</p>
 				</div>
 				<div className="columnRight">
-					<div contenteditable="true" spellcheck="false" className="align " type="text" name="displayName" onChange={this.onChange.bind(this)}>{ !!dbUser && <DisplayName user={dbUser} /> }</div>
-					<div contenteditable="true" spellcheck="false" className="align" type="text" name="photoURL" onChange={this.onChange.bind(this)}>{ !!dbUser && <PhotoURL user={dbUser} /> }</div>
-					<div contenteditable="true" spellcheck="false" className="align" type="text" name="address" onChange={this.onChange.bind(this)}>{ !!dbUser && <Address user={dbUser} /> }</div>
-					<div contenteditable="true" spellcheck="false" className="align" type="text" name="email" onChange={this.onChange.bind(this)}>{ !!dbUser && <Email user={dbUser} /> }</div>
-					<div contenteditable="true" spellcheck="false" className="align" type="text" name="phoneNumber" placeholder='' onChange={this.onChange.bind(this)}>{ !!dbUser && <PhoneNumber user={dbUser} /> }</div>
-					<div contenteditable="true" spellcheck="false" className="align" type='number' name='lat' onChange={this.onChange.bind(this)}>{lat}</div>
-					<div contenteditable="true" spellcheck="false" className="align" type='number' name='lng' onChange={this.onChange.bind(this)}>{lng}</div>
-					<div contenteditable="true" spellcheck="false" className="align" type='number' name='radius' onChange={this.onChange.bind(this)}>{radius}</div>
+					<div contenteditable="true" spellCheck="false" className="align" type="text" id="displayName" onInput={this.onChange.bind(this)}>{ !!dbUser && <DisplayName user={dbUser} /> }</div>
+					<div contenteditable="true" spellCheck="false" className="align" type="text" id="photoUrl" onInput={this.onChange.bind(this)}>{ !!dbUser && <PhotoUrl user={dbUser} /> }</div>
+					<div contenteditable="true" spellCheck="false" className="align" type="text" id="address" onInput={this.onChange.bind(this)}>{ !!dbUser && <Address user={dbUser} /> }</div>
+					<div contenteditable="true" spellCheck="false" className="align" type="text" id="email" onInput={this.onChange.bind(this)}>{ !!dbUser && <Email user={dbUser} /> }</div>
+					<div contenteditable="true" spellCheck="false" className="align" type="text" id="phoneNumber" onInput={this.onChange.bind(this)}>{ !!dbUser && <PhoneNumber user={dbUser} /> }</div>
+					<div contenteditable="true" spellCheck="false" className="align" type="text" id="lat" onFocus={this.clearFixLat.bind(this)} onInput={this.onChange.bind(this)}>{<Latitude latitude={lat}/>}</div>
+					<div contenteditable="true" spellCheck="false" className="align" type="text" id="lng" onFocus={this.clearFixLng.bind(this)} onInput={this.onChange.bind(this)}><p>{lng}</p></div>
+					<div contenteditable="true" spellCheck="false" className="align" type="text" id="radius" onFocus={this.clearFixRadius.bind(this)} onInput={this.onChange.bind(this)}><p>{radius}</p></div>
 				</div>
 				<div className="warningForm">
 					{ !!error ? <p className="warning" style={{'color': 'red'}}>ERROR: {error}</p> : null }
@@ -166,7 +186,7 @@ const DisplayName = ({ user }) => {
 	)
 }
 
-const PhotoURL = ({ user }) => {
+const PhotoUrl = ({ user }) => {
 	return (
 	  <p>{user.photoUrl}</p>
 	)
@@ -187,6 +207,12 @@ const Email = ({ user }) => {
 const PhoneNumber = ({ user }) => {
 	return (
 	  <p>{user.contactInfo.phoneNumber}</p>
+	)
+}
+
+const Latitude = ({latitude}) => {
+	return (
+		<p>{latitude}</p>
 	)
 }
 

@@ -57,7 +57,7 @@ p {
     color: rgb(172, 172, 172);
 }
 
-[contenteditable]:focus {
+[contentEditable]:focus {
     outline: 0px solid transparent;
     color: black;
 }
