@@ -4,23 +4,25 @@ import { compose } from 'recompose';
 import axios from 'axios';
 import defaultPhoto from '../../assets/default.png';
 import insertHere from '../../assets/insertHere.png';
-import './index.css';
 import withAuthorization from '../Session/withAuthorization';
+import PostItem from '../Common/PostItem';
+
+import './index.css';
 
 class HomePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dbUser: this.props.dbUser
+      dbUser: this.props.dbUser,
+      feedPosts: this.props.feedPosts
     }
   }
   
-  
   componentDidMount() {
-    const { onSetDBUser } = this.props;
+    const { onSetDBUser, onSetPosts, _geoloc, radius } = this.props;
 	
     this.props.user.getIdToken().then(token => {
-      // Get DB user and input into Redux store
+      // Get DB user and update Redux store
       axios.get(
         `/api/users/${this.props.user.uid}`,
         {headers: {token}}
@@ -29,11 +31,31 @@ class HomePage extends Component {
         this.setState({ dbUser: response.data })
         onSetDBUser(response.data)
       })
+
+      // Geo query posts and updated Redux store
+      axios.get(
+        `/api/posts/geo`,
+        {
+          headers: {token},
+          params: {
+            lat: _geoloc.lat,
+            lng: _geoloc.lng,
+            radius
+          }
+        }
+      )
+      .then(response => {
+        console.log('Got feed posts:', response.data);
+        this.setState({ feedPosts: response.data })
+        onSetPosts(response.data)
+      })
     })
   }
 
   render() {
-    const { dbUser } = this.state;
+    const { dbUser, feedPosts } = this.state;
+
+    console.log('Rendering feed posts:', feedPosts)
 
     return (
       <div>
@@ -42,7 +64,7 @@ class HomePage extends Component {
             <div className="profile">
               <div className="profileCard">
                 <img className="profilePhoto" src={defaultPhoto} alt="goodsForGoods.png"></img>
-                { !!dbUser && <UserList user={dbUser} /> }
+                { !!dbUser && <h5 className="userName">{dbUser.displayName}</h5> }
                 <h5 className="rating">-----rating is future sprint-----</h5>
               </div>
             </div>
@@ -63,7 +85,7 @@ class HomePage extends Component {
           </div>
           <div className="column rightSide">
             <div className="postFeed">
-              
+              {feedPosts.map((post,i) => <PostItem key={i} post={post}/>)}
             </div>
           </div>
         </div>
@@ -72,21 +94,17 @@ class HomePage extends Component {
   }
 }
 
-const UserList = ({ user }) => {
-  return (
-    <div>
-      <h5 className="userName">{user.displayName}</h5>
-    </div>
-  )
-}
-
 const mapStateToProps = (state) => ({
   user: state.sessionState.authUser,
-  dbUser: state.sessionState.dbUser
+  dbUser: state.sessionState.dbUser,
+  _geoloc: state.settingsState._geoloc,
+  radius: state.settingsState.radius,
+  feedPosts: state.postsState.feedPosts
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onSetDBUser: (user) => dispatch({ type: 'DB_USER_SET', user })
+  onSetDBUser: (user) => dispatch({ type: 'DB_USER_SET', user }),
+  onSetPosts: (feedPosts) => dispatch({ type: 'FEED_POSTS_SET', feedPosts })
 });
 
 export default compose(

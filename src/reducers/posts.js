@@ -1,15 +1,23 @@
 function postsReducer(state = {
-	posts: [],
-  }, action) {
-	switch(action.type) {
-	  case 'POSTS_SET' : {
-		return {
-		  ...state,
-		  posts: action.posts
+	feedPosts: [],
+	userPosts: [],
+}, action) {
+	switch (action.type) {
+		case 'FEED_POSTS_SET': {
+			return {
+				...state,
+				feedPosts: action.feedPosts
+			}
 		}
-	  }
-	  default : return state;
+		case 'USER_POSTS_SET': {
+			return {
+				...state,
+				feedPosts: action.userPosts
+			}
+		}
+		default:
+			return state;
 	}
-  }
-  
-  export default postsReducer;
+}
+
+export default postsReducer;

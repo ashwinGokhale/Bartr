@@ -14,7 +14,7 @@ class AccountPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      posts: this.props.posts
+      userPosts: this.props.userPosts
     }
   }
 
@@ -29,8 +29,8 @@ class AccountPage extends React.Component {
         {headers: {token}}
       )
       .then(response => {
-        // console.log('Got posts:', response.data);
-        this.setState({ posts: response.data })
+        console.log('Got user posts:', response.data);
+        this.setState({ userPosts: response.data })
         onSetPosts(response.data)
       })
     })
@@ -39,8 +39,9 @@ class AccountPage extends React.Component {
   
 
   render() {
-    const { user, posts } = this.props;
-    console.log('Rendering posts: ', posts)
+    const { user } = this.props;
+    const { userPosts } = this.state;
+    console.log('Rendering userPosts: ', userPosts)
     return (
       <div>
         <div>
@@ -62,22 +63,9 @@ class AccountPage extends React.Component {
               </div>
             </div>
             <div className="column centerCol">
-              {/* <div className="createPost">
-                <div className="postUploadAccount">
-                  <img className="insertHere" src={insertHere} alt="insertPictureHere.png"></img>
-                  <button className="uploadPhoto">Choose A Photo</button>
-                </div>
-                <div className="postInformation">
-                  <textarea className="titleAccount" placeholder="Add a title..."></textarea>
-                  <textarea className="descriptionAccount" placeholder="Add a description..."></textarea>
-                  <button className="createAccountPost">Create Post</button>
-                </div>
-              </div> */}
-    
               <div className="postFeed">
-                {posts.map((post,i) => <PostItem key={i} post={post}/>)}
+                {userPosts.map((post,i) => <PostItem key={i} post={post}/>)}
               </div>
-
             </div>
 
             <div className="column rightCol">
@@ -101,11 +89,11 @@ class AccountPage extends React.Component {
 
 const mapStateToProps = (state) => ({
   user: state.sessionState.authUser,
-  posts: state.postsState.posts,
+  userPosts: state.postsState.userPosts,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onSetPosts: (posts) => dispatch({ type: 'POSTS_SET', posts })
+  onSetPosts: (userPosts) => dispatch({ type: 'USER_POSTS_SET', userPosts })
 });
 
 export default compose(

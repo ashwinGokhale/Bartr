@@ -221,6 +221,7 @@ const mapStateToProps = (state) => ({
 	_geoloc: state.settingsState._geoloc,
 	radius: state.settingsState.radius,
 	user: state.sessionState.authUser,
+	authUser: state.sessionState.authUser,
 	dbUser: state.sessionState.dbUser
 });
 
