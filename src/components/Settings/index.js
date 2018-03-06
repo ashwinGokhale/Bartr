@@ -17,7 +17,7 @@ class SettingsPage extends Component {
 			radius: this.props.radius,
 			error: null,
 			dbUser: this.props.dbUser,
-			
+
 			displayName: '',
 			photoUrl: '',
 			address: '',
@@ -93,13 +93,7 @@ class SettingsPage extends Component {
 	onSubmit = (event) => {
 		event.preventDefault();
 		if (this.isRadiusValid(this.state.radius) && this.isLatitudeValid(this.state._geoloc.lat) && this.isLongitudeValid(this.state._geoloc.lng)) {
-			// console.log(this.props.authUser)
-			const { _geoloc, radius } = this.state;
-			const { displayName } = this.state;
-			const { photoUrl } = this.state;
-			const { address } = this.state;
-			const { email } = this.state;
-			const { phoneNumber } = this.state;
+			const { _geoloc, radius, displayName, photoUrl, address, email, phoneNumber } = this.state;
 			this.props.onSetGeoLoc(this.state._geoloc);
 			this.props.onSetRadius(this.state.radius);
 			
@@ -114,7 +108,6 @@ class SettingsPage extends Component {
 			})
 			.then(response => console.log(response.data))
 			.catch(error => console.error(error))
-
 		}
 	}
 
@@ -149,42 +142,40 @@ class SettingsPage extends Component {
 	}
 
   render() {
-		const { dbUser } = this.state;
-		console.log('State:', this.state)
-		const { radius, error } = this.state;
+		const { radius, error, dbUser } = this.state;
 		const { lat, lng } = this.state._geoloc;
     return (
       <div>
-		<div className="background">
-			<div className="settingsForm">
-				<h4>Account Settings</h4>
-				<hr></hr>
-				<div className="columnLeft">
-					<p className="label">Display Name</p>
-					<p className="label">Photo URL</p>
-					<p className="label">Address</p>
-					<p className="label">Email</p>
-					<p className="label">Phone Number</p>
-					<p className="label">Latitude</p>
-					<p className="label">Longitude</p>
-					<p className="label">Radius</p>
+				<div className="background">
+					<div className="settingsForm">
+						<h4>Account Settings</h4>
+						<hr></hr>
+						<div className="columnLeft">
+							<p className="label">Display Name</p>
+							<p className="label">Photo URL</p>
+							<p className="label">Address</p>
+							<p className="label">Email</p>
+							<p className="label">Phone Number</p>
+							<p className="label">Latitude</p>
+							<p className="label">Longitude</p>
+							<p className="label">Radius</p>
+						</div>
+						<div className="columnRight">
+							<div contenteditable="true" spellCheck="false" className="align" type="text" id="displayName" onInput={this.onChange.bind(this)}>{ !!dbUser && <DisplayName user={dbUser} /> }</div>
+							<div contenteditable="true" spellCheck="false" className="align" type="text" id="photoUrl" onInput={this.onChange.bind(this)}>{ !!dbUser && <PhotoUrl user={dbUser} /> }</div>
+							<div contenteditable="true" spellCheck="false" className="align" type="text" id="address" onInput={this.onChange.bind(this)}>{ !!dbUser && <Address user={dbUser} /> }</div>
+							<div contenteditable="true" spellCheck="false" className="align" type="text" id="email" onInput={this.onChange.bind(this)}>{ !!dbUser && <Email user={dbUser} /> }</div>
+							<div contenteditable="true" spellCheck="false" className="align" type="text" id="phoneNumber" onInput={this.onChange.bind(this)}>{ !!dbUser && <PhoneNumber user={dbUser} /> }</div>
+							<div contenteditable="true" spellCheck="false" className="align" type="text" id="lat" onFocus={this.clearFixLat.bind(this)} onInput={this.onChange.bind(this)}>{<Latitude latitude={lat}/>}</div>
+							<div contenteditable="true" spellCheck="false" className="align" type="text" id="lng" onFocus={this.clearFixLng.bind(this)} onInput={this.onChange.bind(this)}><p>{lng}</p></div>
+							<div contenteditable="true" spellCheck="false" className="align" type="text" id="radius" onFocus={this.clearFixRadius.bind(this)} onInput={this.onChange.bind(this)}><p>{radius}</p></div>
+						</div>
+						<div className="warningForm">
+							{ !!error ? <p className="warning" style={{'color': 'red'}}>ERROR: {error}</p> : null }
+						</div>
+						<input className="submit" type='submit' name='submit' value='Update' onClick={this.onSubmit.bind(this)} />
+					</div>
 				</div>
-				<div className="columnRight">
-					<div contenteditable="true" spellCheck="false" className="align" type="text" id="displayName" onInput={this.onChange.bind(this)}>{ !!dbUser && <DisplayName user={dbUser} /> }</div>
-					<div contenteditable="true" spellCheck="false" className="align" type="text" id="photoUrl" onInput={this.onChange.bind(this)}>{ !!dbUser && <PhotoUrl user={dbUser} /> }</div>
-					<div contenteditable="true" spellCheck="false" className="align" type="text" id="address" onInput={this.onChange.bind(this)}>{ !!dbUser && <Address user={dbUser} /> }</div>
-					<div contenteditable="true" spellCheck="false" className="align" type="text" id="email" onInput={this.onChange.bind(this)}>{ !!dbUser && <Email user={dbUser} /> }</div>
-					<div contenteditable="true" spellCheck="false" className="align" type="text" id="phoneNumber" onInput={this.onChange.bind(this)}>{ !!dbUser && <PhoneNumber user={dbUser} /> }</div>
-					<div contenteditable="true" spellCheck="false" className="align" type="text" id="lat" onFocus={this.clearFixLat.bind(this)} onInput={this.onChange.bind(this)}>{<Latitude latitude={lat}/>}</div>
-					<div contenteditable="true" spellCheck="false" className="align" type="text" id="lng" onFocus={this.clearFixLng.bind(this)} onInput={this.onChange.bind(this)}><p>{lng}</p></div>
-					<div contenteditable="true" spellCheck="false" className="align" type="text" id="radius" onFocus={this.clearFixRadius.bind(this)} onInput={this.onChange.bind(this)}><p>{radius}</p></div>
-				</div>
-				<div className="warningForm">
-					{ !!error ? <p className="warning" style={{'color': 'red'}}>ERROR: {error}</p> : null }
-				</div>
-				<input className="submit" type='submit' name='submit' value='Update' onClick={this.onSubmit.bind(this)} />
-			</div>
-		</div>
       </div>
     );
   }
@@ -229,7 +220,6 @@ const Latitude = ({latitude}) => {
 const mapStateToProps = (state) => ({
 	_geoloc: state.settingsState._geoloc,
 	radius: state.settingsState.radius,
-	authUser: state.sessionState.authUser,
 	user: state.sessionState.authUser,
 	dbUser: state.sessionState.dbUser
 });
