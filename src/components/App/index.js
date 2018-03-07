@@ -14,6 +14,7 @@ import HomePage from '../Home';
 import Chat from '../Chat';
 import AccountPage from '../Account';
 import SettingsPage from '../Settings';
+import CreatePostPage from '../CreatePost';
 import withAuthentication from '../Session/withAuthentication';
 import * as routes from '../../constants';
 
@@ -32,6 +33,7 @@ const App = () =>
       <Route exact path={routes.ACCOUNT} component={AccountPage} />
       <Route exact path={routes.SETTINGS} component={SettingsPage} />
       <Route exact path={routes.CHAT} component={Chat} />
+      <Route exact path={routes.CREATE_POST} component={CreatePostPage} />
       <hr/>
 
       <Footer/>

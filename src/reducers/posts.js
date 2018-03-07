@@ -12,7 +12,7 @@ function postsReducer(state = {
 		case 'USER_POSTS_SET': {
 			return {
 				...state,
-				feedPosts: action.userPosts
+				userPosts: action.userPosts
 			}
 		}
 		default:

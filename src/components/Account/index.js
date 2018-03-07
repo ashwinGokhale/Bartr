@@ -3,44 +3,24 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import axios from 'axios';
 import defaultPhoto from '../../assets/default.png';
-import insertHere from '../../assets/insertHere.png';
 import { PasswordForgetForm } from '../PasswordForget';
 import PasswordChangeForm from '../PasswordChange';
 import withAuthorization from '../Session/withAuthorization';
 import PostItem from '../Common/PostItem';
+import { fetchUserPosts } from '../../actions'
 import './account.css'
 
 class AccountPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      userPosts: this.props.userPosts
-    }
   }
 
-  componentDidMount = () => {
-    const { onSetPosts } = this.props;
-    // Get user's posts from DB
-    this.props.user.getIdToken().then(token => {
-      // Get DB user and input into Redux store
-      console.log(`Getting user posts w/ user id: ${this.props.user.uid}`)
-      axios.get(
-        `/api/posts/user/${this.props.user.uid}`,
-        {headers: {token}}
-      )
-      .then(response => {
-        console.log('Got user posts:', response.data);
-        this.setState({ userPosts: response.data })
-        onSetPosts(response.data)
-      })
-    })
+  componentDidMount = () => { 
+    this.props.fetchUserPosts()
   }
-  
-  
 
   render() {
-    const { user } = this.props;
-    const { userPosts } = this.state;
+    const { user, userPosts } = this.props;
     console.log('Rendering userPosts: ', userPosts)
     return (
       <div>
@@ -64,7 +44,7 @@ class AccountPage extends React.Component {
             </div>
             <div className="column centerCol">
               <div className="postFeed">
-                {userPosts.map((post,i) => <PostItem key={i} post={post}/>)}
+                {!!userPosts && userPosts.map((post,i) => <PostItem key={i} id={i} type="user" post={post}/>)}
               </div>
             </div>
 
@@ -92,11 +72,7 @@ const mapStateToProps = (state) => ({
   userPosts: state.postsState.userPosts,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  onSetPosts: (userPosts) => dispatch({ type: 'USER_POSTS_SET', userPosts })
-});
-
 export default compose(
   withAuthorization((authUser) => !!authUser),
-  connect(mapStateToProps, mapDispatchToProps)
+  connect(mapStateToProps, { fetchUserPosts })
 )(AccountPage);

@@ -1,6 +1,7 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import insertHere from '../../assets/insertHere.png';
 
-export default class CreatePost extends Component {
+export default class CreatePostPage extends Component {
 	render() {
 		return (
 			<div className="createPost">

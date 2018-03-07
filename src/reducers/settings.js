@@ -1,28 +1,36 @@
+import { LAT_SET, LNG_SET, RADIUS_SET } from '../actions'
+
 const INITIAL_STATE = {
-	// Lawson Building
-	_geoloc: {
-		lat: 40.427704, 
-		lng: -86.916959
-	},
-	radius: 5
+	// Cached geo location or Lawson Building
+	lat: localStorage.getItem('lat') || 40.427704, 
+	lng: localStorage.getItem('lng') || -86.916959,
+	radius: localStorage.getItem('radius') || 5
 }
 
 function settingsReducer(state = INITIAL_STATE, action) {
 	switch(action.type) {
-	  case 'GEOLOC_SET' : {
-		  console.log('About to change _geoloc to:', action._geoloc)
+		case LAT_SET : {
+			localStorage.setItem('lat', action.lat)
 			return {
 				...state,
-				_geoloc: action._geoloc
+				lat: action.lat
 			}
-	  }
-	  case 'RADIUS_SET' : {
+		}
+		case LNG_SET : {
+			localStorage.setItem('lng', action.lng)
+			return {
+				...state,
+				lng: action.lng
+			}
+		}
+		case RADIUS_SET : {
+			localStorage.setItem('radius', action.radius)
 			return {
 				...state,
 				radius: action.radius
 			}
-	  }
-	  default : return state;
+		}
+		default : return state;
 	}
 }
   
