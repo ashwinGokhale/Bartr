@@ -1,4 +1,4 @@
-import { LAT_SET, LNG_SET, RADIUS_SET } from '../actions'
+import { LAT_SET, LNG_SET, RADIUS_SET } from '../actions';
 
 const INITIAL_STATE = {
 	// Cached geo location or Lawson Building
