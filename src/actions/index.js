@@ -1,6 +1,5 @@
 import { auth } from '../firebase';
 import axios from 'axios';
-import store from '../store';
 
 // Post actions
 export const FEED_POSTS_SET = 'FEED_POSTS_SET';
@@ -35,20 +34,20 @@ export const onSetLng = (lng) => ({ type: LNG_SET, lng });
 
 // Post handlers
 export const fetchFeedPosts = () => {
-	return dispatch => {
+	return (dispatch, getState) => {
 		auth.currentUser.getIdToken().then(token => {
 			console.log(`Getting feed posts w/ user id: ${auth.currentUser.uid}`)
-			console.log(`Feed GET settings:`, store.getState().settingsState.lat,
-			store.getState().settingsState.lng,
-			store.getState().settingsState.radius)
+			console.log(`Feed GET settings:`, getState().settingsState.lat,
+			getState().settingsState.lng,
+			getState().settingsState.radius)
 			axios.get(
 				`/api/posts/geo`,
 				{
 				  headers: {token},
 				  params: {
-					lat: store.getState().settingsState.lat,
-					lng: store.getState().settingsState.lng,
-					radius: store.getState().settingsState.radius
+					lat: getState().settingsState.lat,
+					lng: getState().settingsState.lng,
+					radius: getState().settingsState.radius
 				  }
 				}
 			  )
@@ -94,6 +93,28 @@ export const fetchDBUser = () => {
 				dispatch(onSetLng(response.data.lng));
 				dispatch(onSetRadius(response.data.radius));
 			})
+		})
+	}
+}
+
+export const updateDBUser = (user) => {
+	return async dispatch => {
+		// Get DB user and update Redux store
+		auth.currentUser.getIdToken().then(token => {
+			console.log('Updating user:', auth.currentUser.uid, 'to:', user)
+			axios.put(
+				`/api/users/${auth.currentUser.uid}`, 
+				user,
+				{headers: {token}}
+			)
+			.then(response => {
+				dispatch(onSetDBUser(user))
+				dispatch(onSetLat(user.lat))
+				dispatch(onSetLng(user.lng))
+				dispatch(onSetRadius(user.radius))
+				console.log(response.data)
+			})
+			.catch(error => console.error(error))
 		})
 	}
 }
