@@ -22,13 +22,17 @@ export const onSetAuthUser = (authUser) => ({ type: AUTH_USER_SET, authUser });
 
 // Post handlers
 export const fetchFeedPosts = () => {
-	return (dispatch, getState) => {
-		auth.currentUser.getIdToken().then(token => {
+	return async (dispatch, getState) => {
+		try {
+			const token = await auth.currentUser.getIdToken()
 			console.log(`Getting feed posts w/ user id: ${auth.currentUser.uid}`)
-			console.log(`Feed GET settings:`, getState().sessionState.dbUser.lat,
-			getState().sessionState.dbUser.lng,
-			getState().sessionState.dbUser.radius)
-			axios.get(
+			console.log(
+				`Feed GET settings:`, 
+				getState().sessionState.dbUser.lat,
+				getState().sessionState.dbUser.lng,
+				getState().sessionState.dbUser.radius
+			)
+			const { data } = await axios.get(
 				`/api/posts/geo`,
 				{
 				  headers: {token},
@@ -39,65 +43,93 @@ export const fetchFeedPosts = () => {
 				  }
 				}
 			  )
-			  .then(response => {
-				console.log('Got feed posts:', response.data);
-				// this.setState({ feedPosts: response.data })
-				dispatch(onSetFeedPosts(response.data))
-			})
-		})
+			  
+			console.log('Got feed posts:', data);
+			dispatch(onSetFeedPosts(data))
+			
+		} catch (error) {
+			console.error(error);
+			return error;
+		}
+		
 	}
 }
 
 export const fetchUserPosts = () => {
-	return dispatch => {
-		auth.currentUser.getIdToken().then(token => {
+	return async dispatch => {
+		try {
+			const token = await auth.currentUser.getIdToken()
 			// Get DB user and input into Redux store
 			console.log(`Getting user posts w/ user id: ${auth.currentUser.uid}`)
-			axios.get(
-			  `/api/posts/user/${auth.currentUser.uid}`,
-			  {headers: {token}}
+			const { data } = await axios.get(
+				`/api/posts/user/${auth.currentUser.uid}`,
+				{headers: {token}}
 			)
-			.then(response => {
-			  console.log('Got user posts:', response.data);
-			  dispatch(onSetUserPosts(response.data))
-			})
-		})
+			console.log('Got user posts:', data);
+			dispatch(onSetUserPosts(data))
+			return data
+		} catch (error) {
+			console.error(error);
+			return error;
+		}
 	}
 }
 
 // Session handlers
+export const createUser = (user, token) => {
+	return async dispatch => {
+		try {
+			const response = await axios.post(`/api/users/${user.uid}`, user, {headers: {token}})
+			return response.data	
+		} catch (error) {
+			console.error(error)
+			return error
+		}
+	}
+}
+
+
 export const fetchDBUser = () => {
-	return dispatch => {
-		// Get DB user and update Redux store
-		auth.currentUser.getIdToken().then(token => {
-			axios.get(
-				`/api/users/${auth.currentUser.uid}`,
-				{headers: {token}}
-			)
-			.then(response => {
+	return async dispatch => {
+		if (!auth.currentUser)
+			dispatch(onSetDBUser(null))
+		else {
+			try {
+				// Get DB user and update Redux store
+				const token = await auth.currentUser.getIdToken()
+				const response = await axios.get(
+					`/api/users/${auth.currentUser.uid}`,
+					{headers: {token}}
+				)
 				console.log('Got DB User:', response.data);
 				dispatch(onSetDBUser(response.data));
-			})
-		})
+				return response.data	
+			} catch (error) {
+				console.error(error)
+				return error
+			}
+		}
 	}
 }
 
 export const updateDBUser = (user) => {
 	return async dispatch => {
-		// Get DB user and update Redux store
-		auth.currentUser.getIdToken().then(token => {
+		try {
+			// Get DB user and update Redux store
+			const token = await auth.currentUser.getIdToken()
 			console.log('Updating user:', auth.currentUser.uid, 'to:', user)
-			axios.put(
+			const response = await axios.put(
 				`/api/users/${auth.currentUser.uid}`, 
 				user,
 				{headers: {token}}
 			)
-			.then(response => {
-				dispatch(onSetDBUser(user))
-				console.log(response.data)
-			})
-			.catch(error => console.error(error))
-		})
+			dispatch(onSetDBUser(user))
+			console.log(response.data)
+			return response.data
+		} catch (error) {
+			console.error(error)
+			return error
+		}
 	}
 }
 
