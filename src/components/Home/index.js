@@ -51,7 +51,10 @@ class HomePage extends Component {
           </div>
           <div className="column rightSide">
             <div className="postFeed">
-              {!!feedPosts && feedPosts.map((post,i) => <PostItem key={i} id={i} type="feed" post={post}/>)}
+              {feedPosts.length ? 
+                feedPosts.map((post,i) => <PostItem key={i} id={i} type="feed" post={post}/>) :
+                <p>No Posts!</p>
+              }
             </div>
           </div>
         </div>

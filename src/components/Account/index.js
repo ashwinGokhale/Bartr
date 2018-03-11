@@ -44,7 +44,10 @@ class AccountPage extends React.Component {
             </div>
             <div className="column centerCol">
               <div className="postFeed">
-                {!!userPosts && userPosts.map((post,i) => <PostItem key={i} id={i} type="user" post={post}/>)}
+                {userPosts.length ?
+                  userPosts.map((post,i) => <PostItem key={i} id={i} type="user" post={post}/>) :
+                  <p>You have made no posts!</p>
+                }
               </div>
             </div>
 
