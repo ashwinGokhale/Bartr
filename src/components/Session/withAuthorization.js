@@ -4,7 +4,7 @@ import { compose } from 'recompose';
 import { withRouter } from 'react-router-dom';
 
 import { firebase } from '../../firebase';
-import { fetchDBUser } from '../../actions';
+import { setAuthUser, fetchDBUser } from '../../actions';
 import * as routes from '../../constants';
 
 const withAuthorization = (condition) => (Component) => {
@@ -14,6 +14,10 @@ const withAuthorization = (condition) => (Component) => {
       firebase.auth.onAuthStateChanged(authUser => {
         if (!condition(authUser))
           this.props.history.push(routes.LOGIN);
+        else {
+          this.props.setAuthUser(authUser);
+          this.props.fetchDBUser();
+        }
       });    
     }
   
@@ -28,7 +32,7 @@ const withAuthorization = (condition) => (Component) => {
   });
   return compose(
     withRouter,
-    connect(mapStateToProps, { fetchDBUser }),
+    connect(mapStateToProps, { setAuthUser, fetchDBUser }),
   )(WithAuthorization);
 }
 

@@ -17,7 +17,7 @@ const withAuthentication = (Component) => {
         }
       }
       else 
-        this.props.onSetAuthUser(null);
+        this.props.setAuthUser(null);
     }
 
     componentWillMount () {

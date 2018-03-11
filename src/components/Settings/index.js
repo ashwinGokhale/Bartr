@@ -57,12 +57,6 @@ class SettingsPage extends Component {
 	onChange = (event) => {
 		event.preventDefault();
 
-		// if (event.target.id === 'radius') 
-		// 	this.setState({ radius: event.target.value }, () => this.validateAll(event));
-		// else if (event.target.id === 'lat')
-		// 	this.setState({ lat: event.target.value }, () => this.validateAll(event));
-		// else if(event.target.id === 'lng') 
-		// 	this.setState({ lng: event.target.value }, () => this.validateAll(event));
 		if (event.target.id === 'radius' || event.target.id === 'lat' || event.target.id === 'lng') 
 			this.setState({ [event.target.id]: event.target.value }, () => this.validateAll(event));
 		else if(event.target.id === 'photoUrl' || event.target.id === 'displayName')
@@ -93,6 +87,7 @@ class SettingsPage extends Component {
 
 	render() {
 		console.log('Settings State:', this.state)
+		// TODO: Make settings page an HTML Form
 		return (
 			<div>
 				<div className="background">
