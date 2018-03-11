@@ -9,12 +9,6 @@ export const USER_POSTS_SET = 'USER_POSTS_SET';
 export const AUTH_USER_SET = 'AUTH_USER_SET';
 export const DB_USER_SET = 'DB_USER_SET';
 
-// Settings actions
-export const GEOLOC_SET = 'GEOLOC_SET';
-export const LAT_SET = 'LAT_SET';
-export const LNG_SET = 'LNG_SET';
-export const RADIUS_SET = 'RADIUS_SET';
-
 // Users actions
 export const USERS_SET = 'USERS_SET';
 
@@ -26,28 +20,22 @@ export const onSetUserPosts = (userPosts) => ({ type: USER_POSTS_SET, userPosts 
 export const onSetDBUser = (user) => ({ type: DB_USER_SET, dbUser: user });
 export const onSetAuthUser = (authUser) => ({ type: AUTH_USER_SET, authUser });
 
-// Settings creators
-export const onSetGeoloc = (_geoloc) => ({ type: GEOLOC_SET, _geoloc });
-export const onSetRadius = (radius) => ({ type: RADIUS_SET, radius });
-export const onSetLat = (lat) => ({ type: LAT_SET, lat });
-export const onSetLng = (lng) => ({ type: LNG_SET, lng });
-
 // Post handlers
 export const fetchFeedPosts = () => {
 	return (dispatch, getState) => {
 		auth.currentUser.getIdToken().then(token => {
 			console.log(`Getting feed posts w/ user id: ${auth.currentUser.uid}`)
-			console.log(`Feed GET settings:`, getState().settingsState.lat,
-			getState().settingsState.lng,
-			getState().settingsState.radius)
+			console.log(`Feed GET settings:`, getState().sessionState.dbUser.lat,
+			getState().sessionState.dbUser.lng,
+			getState().sessionState.dbUser.radius)
 			axios.get(
 				`/api/posts/geo`,
 				{
 				  headers: {token},
 				  params: {
-					lat: getState().settingsState.lat,
-					lng: getState().settingsState.lng,
-					radius: getState().settingsState.radius
+					lat: getState().sessionState.dbUser.lat,
+					lng: getState().sessionState.dbUser.lng,
+					radius: getState().sessionState.dbUser.radius
 				  }
 				}
 			  )
@@ -89,9 +77,6 @@ export const fetchDBUser = () => {
 			.then(response => {
 				console.log('Got DB User:', response.data);
 				dispatch(onSetDBUser(response.data));
-				dispatch(onSetLat(response.data.lat));
-				dispatch(onSetLng(response.data.lng));
-				dispatch(onSetRadius(response.data.radius));
 			})
 		})
 	}
@@ -109,9 +94,6 @@ export const updateDBUser = (user) => {
 			)
 			.then(response => {
 				dispatch(onSetDBUser(user))
-				dispatch(onSetLat(user.lat))
-				dispatch(onSetLng(user.lng))
-				dispatch(onSetRadius(user.radius))
 				console.log(response.data)
 			})
 			.catch(error => console.error(error))

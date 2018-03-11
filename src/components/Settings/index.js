@@ -4,7 +4,7 @@ import { compose } from 'recompose';
 import withAuthorization from '../Session/withAuthorization';
 import { authCondition } from '../../constants'
 import { auth } from '../../firebase';
-import { onSetLat, onSetLng, onSetRadius, updateDBUser } from '../../actions'
+import { updateDBUser } from '../../actions'
 import axios from 'axios';
 import './index.css'
 
@@ -18,12 +18,11 @@ class SettingsPage extends Component {
 			lng: this.props.lng,
 			radius: this.props.radius,
 			error: null,
-			dbUser: this.props.dbUser,
-			photoUrl: '',
-			displayName: '',
-			contactInfo: {		
+			// dbUser: this.props.dbUser,
+			photoUrl: this.props.photoUrl,
+			displayName: this.props.displayName,
+			contactInfo: this.props.contactInfo ||  {		
 				address: '',
-				email: '',
 				phoneNumber: ''
 			}
 		}
@@ -58,33 +57,18 @@ class SettingsPage extends Component {
 	onChange = (event) => {
 		event.preventDefault();
 
-		// if(event.target.id === 'displayName') {
-		// 	this.setState({ contactInfo: { ...this.state.contactInfo, [event.target.id]: event.target.value}});
-		// } else if(event.target.id === 'photoUrl') {
-		// 	this.setState({ photoUrl: event.target.value});
-		// } else if(event.target.id === 'address') {
-		// 	this.setState({ address: event.target.value});
-		// } else if(event.target.id === 'email') {
-		// 	this.setState({ email: event.target.value});
-		// } else if(event.target.id === 'phoneNumber') {
-		// 	this.setState({ phoneNumber: event.target.value});
-		// }
-
-		if (event.target.id === 'radius') {
-			this.setState({ radius: event.target.value }, () => this.validateAll(event));
-		} else if (event.target.id === 'lat') {
-			this.setState({ lat: event.target.value }, () => this.validateAll(event));
-		} else if(event.target.id === 'lng') {
-			this.setState({ lng: event.target.value }, () => this.validateAll(event));
-		} else if(event.target.id === 'phoneNumber' || event.target.id === 'displayName') {
+		// if (event.target.id === 'radius') 
+		// 	this.setState({ radius: event.target.value }, () => this.validateAll(event));
+		// else if (event.target.id === 'lat')
+		// 	this.setState({ lat: event.target.value }, () => this.validateAll(event));
+		// else if(event.target.id === 'lng') 
+		// 	this.setState({ lng: event.target.value }, () => this.validateAll(event));
+		if (event.target.id === 'radius' || event.target.id === 'lat' || event.target.id === 'lng') 
+			this.setState({ [event.target.id]: event.target.value }, () => this.validateAll(event));
+		else if(event.target.id === 'photoUrl' || event.target.id === 'displayName')
 			this.setState({ [event.target.id]: event.target.value});
-		} else {
+		else
 			this.setState({ contactInfo: { ...this.state.contactInfo, [event.target.id]: event.target.value}});
-		}
-
-		if (event.target.id === 'radius') this.props.onSetRadius(this.state.radius)
-		else if (event.target.id === 'lat') this.props.onSetLat(this.state.lat)
-		else if (event.target.id === 'lng') this.props.onSetLng(this.state.lng)
 	}
 
 	onSubmit = (event) => {
@@ -92,9 +76,6 @@ class SettingsPage extends Component {
 		if (this.isRadiusValid(this.state.radius) && this.isLatitudeValid(this.state.lat) && this.isLongitudeValid(this.state.lng)) {
 			const { lat, lng, radius, displayName, photoUrl, contactInfo: { address , email, phoneNumber }} = this.state;
 			const { dbUser } = this.props;
-			this.props.onSetLat(this.state.lat);
-			this.props.onSetLng(this.state.lng);
-			this.props.onSetRadius(this.state.radius);
 			this.props.updateDBUser({
 				lat: lat || dbUser.lat,
 				lng: lng || dbUser.lng,
@@ -150,16 +131,11 @@ class SettingsPage extends Component {
 
 
 const mapStateToProps = (state) => ({
-	...state.settingsState,
-	// lat: state.settingsState.lat,
-	// lng: state.settingsState.lng,
-	// radius: state.settingsState.radius,
-	user: state.sessionState.authUser,
-	authUser: state.sessionState.authUser,
+	...state.sessionState.dbUser,
 	dbUser: state.sessionState.dbUser
 });
 
 export default compose(
   	withAuthorization(authCondition),
-	connect(mapStateToProps, { onSetLat, onSetLng, onSetRadius, updateDBUser })
+	connect(mapStateToProps, { updateDBUser })
 )(SettingsPage);
