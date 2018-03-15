@@ -7,6 +7,7 @@ export const ACCOUNT = '/account';
 export const SETTINGS = '/settings';
 export const CHAT = '/chat';
 export const CREATE_POST = '/post/create';
+export const SUPPORT = '/support';
 export const authCondition = (authUser) => !!authUser;
 export default {
 	LANDING,
@@ -18,5 +19,7 @@ export default {
 	ACCOUNT,
 	SETTINGS,
 	CREATE_POST,
+	SUPPORT,
 	authCondition
+
 }
