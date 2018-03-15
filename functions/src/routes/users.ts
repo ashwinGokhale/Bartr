@@ -36,52 +36,90 @@ router.get('/:uid', async (req, res) => {
 
 
 // Create / update a post
-router.post('/:uid', (req, res) => {
-	firebase.firestore().doc(`/users/${req.params.uid}`).get()
-		.then(data => {
-			// Create new user
-			if (!data.exists) {
-				if (!req.params.uid) res.status(400).send('User must have a uid')
-				else if (!req.body.photoUrl) res.status(400).send('User must have a photo url')
-				else if (!req.body.email) res.status(400).send('User must have a description')
-				else if (!req.body.displayName) res.status(400).send('User must have a display name')
-				else {
-					data.ref.set({
-						uid: req.params.uid,
-						photoUrl: req.body.photoUrl,
-						displayName: req.body.displayName,
-						contactInfo: {
-							address: req.body.address || '',
-							email: req.body.email,
-							phoneNumber: req.body.phoneNumber || ''
-						},
-						_geoloc: req.body._geoloc || { lat: 0, lng: 0 },
-						radius: 5
-					})
-					.then(newUser => res.status(200).send(`User: ${req.params.uid} created at: ${newUser.writeTime}`))
-					.catch(error => res.status(400).send(error))
+router.post('/:uid', async (req, res) => {
+	const userToken: string = req.headers.token as string;
+	if (userToken) {
+		try {
+			const tok = await firebase.auth().verifyIdToken(userToken, true)
+			if (tok.uid === req.params.uid) {		
+				const data = await firebase.firestore().doc(`/users/${req.params.uid}`).get()
+				if (!data.exists) {
+					if (!req.params.uid) res.status(400).send('User must have a uid')
+					else if (!req.body.photoUrl) res.status(400).send('User must have a photo url')
+					else if (!req.body.email) res.status(400).send('User must have a description')
+					else if (!req.body.displayName) res.status(400).send('User must have a display name')
+					else {
+						const newUser = await data.ref.set({
+							uid: req.params.uid,
+							photoUrl: req.body.photoUrl,
+							displayName: req.body.displayName,
+							contactInfo: {
+								address: req.body.address || '',
+								email: req.body.email,
+								phoneNumber: req.body.phoneNumber || ''
+							},
+							lat: 0, 
+							lng: 0 ,
+							radius: 5
+						})
+						res.status(200).send(`User: ${req.params.uid} created at: ${newUser.writeTime}`)
+					}
 				}
+				else res.status(400).send(`User: ${req.params.uid} already exits`)
 			}
-			
-			// Update a user
-			else {
-				const originalUser = data.data()
-				data.ref.set({
-					photoUrl: req.body.photoUrl || originalUser.photoUrl,
-					displayName: req.body.displayName || originalUser.displayName,
-					contactInfo: {
-						address: req.body.address || originalUser.contactInfo.address,
-						email: req.body.email || originalUser.contactInfo.email,
-						phoneNumber: req.body.phoneNumber || originalUser.contactInfo.phoneNumber
-					},
-					_geoloc: req.body._geoloc || originalUser._geoloc,
-					radius: (req.body.radius && req.body.radius >= 5) ? req.body.radius : originalUser.radius
-				}, { merge: true })
-				.then(newUser => res.status(200).send(`User: ${req.params.uid} created at: ${newUser.writeTime}`))
-				.catch(error => res.status(400).send(error))
-			}
-		})
+			else
+				res.status(401).send('Unauthorized')
+		} catch (error) {
+			res.status(400).send(error);
+		}
+	}
+	else 
+		res.status(401).send('Unauthorized')
 });
+
+router.put('/:uid', async (req, res) => {
+	const userToken: string = req.headers.token as string;
+	if (userToken) {
+		try {
+			const tok = await firebase.auth().verifyIdToken(userToken, true)
+			if (tok.uid === req.params.uid) {		
+				let userBuilder = {};
+				let contactBuilder = {};
+
+				// Build properties of user to update
+				Object.assign(
+					userBuilder,
+					req.body.photoUrl && { photoUrl: req.body.photoUrl },
+					req.body.displayName && { displayName: req.body.displayName },
+					req.body.lat && { lat: req.body.lat },
+					req.body.lng && { lng: req.body.lng },
+					req.body.radius && { radius: req.body.radius }
+				)
+				// Build contact info to update
+				Object.assign(
+					contactBuilder,
+					req.body.contactInfo.address && { address: req.body.contactInfo.address },
+					req.body.contactInfo.phoneNumber && { phoneNumber: req.body.contactInfo.phoneNumber },
+				)
+
+				if (Object.keys(contactBuilder).length)
+					Object.assign(userBuilder, {contactInfo: contactBuilder})
+
+				const userSnap = await firebase.firestore().doc(`/users/${req.params.uid}`).set(
+					userBuilder,
+					{merge: true}
+				)
+				res.status(200).send(`User: ${req.params.uid} updated at: ${userSnap.writeTime}`)
+			}
+			else
+				res.status(401).send('Unauthorized')
+		} catch (error) {
+			res.status(400).send(error);
+		}
+	}
+	else 
+		res.status(401).send('Unauthorized')
+})
 
 router.delete('/:uid', async (req, res) => {
 	const userToken: string = req.headers.token as string;

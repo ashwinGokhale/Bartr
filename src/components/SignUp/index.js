@@ -1,19 +1,28 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import axios from 'axios';
 
 import { auth } from '../../firebase';
+import { setAuthUser, createUser } from '../../actions'
 import * as routes from '../../constants';
 import './index.css';
 
-const SignUpPage = ({ history }) =>
-  <div className="signUpPageBackground">
-    <SignUpForm history={history} />
-  </div>
+class SignUpPage extends Component {
+  constructor(props) {
+    super(props);
+  }
 
-const updateByPropertyName = (propertyName, value) => () => ({
-  [propertyName]: value,
-});
+  render() {
+    return (
+      <div className="signUpPageBackground">
+        <SignUpForm {...this.props} />
+      </div>
+    )
+  }
+  
+}
 
 const INITIAL_STATE = {
   displayName: '',
@@ -26,39 +35,32 @@ const INITIAL_STATE = {
 class SignUpForm extends Component {
   constructor(props) {
     super(props);
-
     this.state = { ...INITIAL_STATE };
   }
 
-  onSubmit = (event) => {
+  onSubmit = async (event) => {
+    event.preventDefault();
     const { displayName, email, passwordOne } = this.state;
     const { history } = this.props;
-
-    auth.createUserWithEmailAndPassword(email, passwordOne)
-      .then(authUser => {
-        // Create user in database
-        axios.post(`/api/users/${authUser.uid}`, {
-          uid: authUser.uid,
-          displayName,
-          photoUrl: authUser.photoURL || 'none',
-          email
-        })
-          // .then(response => response.data)
-          .then(() => {
-            this.setState(() => ({ ...INITIAL_STATE }));
-            history.push(routes.HOME);
-          })
-          .catch(error => {
-            console.log(error)
-            this.setState(updateByPropertyName('error', error));
-          });
-
-      })
-      .catch(error => {
-        this.setState(updateByPropertyName('error', error));
-      });
-
-    event.preventDefault();
+    try {
+      const authUser = await auth.createUserWithEmailAndPassword(email, passwordOne)
+      const token = await auth.currentUser.getIdToken();
+      const data = await this.props.createUser(
+        {
+            uid: authUser.uid,
+            displayName,
+            photoUrl: authUser.photoURL || 'none',
+            email
+        },
+        token
+      )
+      console.log(data)
+      this.setState(() => ({ ...INITIAL_STATE }));
+      history.push(routes.HOME);
+    } catch (error) {
+      console.error(error)
+      this.setState( {error: error } );
+    }
   }
 
   render() {
@@ -77,25 +79,25 @@ class SignUpForm extends Component {
           <div className="signUpInfo">
             <input
               value={displayName}
-              onChange={event => this.setState(updateByPropertyName('displayName', event.target.value))}
+              onChange={event => this.setState({ displayName: event.target.value})}
               type="text"
               placeholder="Full Name"
             />
             <input
               value={email}
-              onChange={event => this.setState(updateByPropertyName('email', event.target.value))}
+              onChange={event => this.setState( {email: event.target.value} )}
               type="text"
               placeholder="Email Address"
             />
             <input
               value={passwordOne}
-              onChange={event => this.setState(updateByPropertyName('passwordOne', event.target.value))}
+              onChange={event => this.setState( {passwordOne: event.target.value} )}
               type="password"
               placeholder="Password"
             />
             <input
               value={passwordTwo}
-              onChange={event => this.setState(updateByPropertyName('passwordTwo', event.target.value))}
+              onChange={event => this.setState( {passwordTwo: event.target.value} )}
               type="password"
               placeholder="Confirm Password"
             />
@@ -113,17 +115,19 @@ class SignUpForm extends Component {
 }
 
 const SignUpLink = () =>
-  <p>
+  <div>
     <div>
       Don't have an account?
       {' '}
       <Link className="formats" to={routes.SIGN_UP}>Sign Up</Link>
     </div>
-  </p>
+  </div>
 
-export default withRouter(SignUpPage);
+// export default withRouter(SignUpPage);
+// connect(null, { createUser })(SignUpForm)
 
-export {
-  SignUpForm,
-  SignUpLink,
-};
+export default compose(
+  withRouter,
+  connect(null, { createUser }),
+)(SignUpPage);
+

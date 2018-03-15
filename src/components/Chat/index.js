@@ -77,5 +77,3 @@ class Chat extends Component{
 export default compose (
     withAuthorization((authUser) => !!authUser)
 )(Chat);
-
-// export default Chat;

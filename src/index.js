@@ -5,6 +5,8 @@ import App from './components/App';
 import store from './store';
 import './index.css';
 
+console.log('Initial Store:', store.getState());
+
 ReactDOM.render(
   <Provider store={store}>
     <App />

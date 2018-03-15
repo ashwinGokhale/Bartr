@@ -12,6 +12,7 @@ const NavigationAuth = () =>
     <Link to={routes.ACCOUNT}><button className="navButton">Account</button></Link>
     <Link to={routes.CHAT}><button className="navButton">Chat</button></Link>
     <Link to={routes.SETTINGS}><button className="navButton">Settings</button></Link>
+    {/* <Link to={routes.CREATE_POST}><button className="navButton">+</button></Link> */}
     <SignOutButton />
   </div>
 
