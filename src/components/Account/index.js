@@ -32,7 +32,7 @@ class AccountPage extends React.Component {
                   <img className="profilePhoto" src={defaultPhoto} alt="goodsForGoods.png"></img>
                   <h3 className="accountName">{user.email}</h3>
                   <h5 className="rating">-----rating is future sprint-----</h5>
-                  <a href="https://docs.google.com/forms/d/e/1FAIpQLScDEeZwyH-fQiDNSUggxKMZFNPm03H9cF3IaI5uwzR7MeECkA/viewform?usp=sf_link"><button className="reportUser">report</button></a>
+                  <a href="https://docs.google.com/forms/d/e/1FAIpQLScDEeZwyH-fQiDNSUggxKMZFNPm03H9cF3IaI5uwzR7MeECkA/viewform?usp=sf_link" target="_blank"><button className="reportUser">report</button></a>
 
                 </div>
               </div>
