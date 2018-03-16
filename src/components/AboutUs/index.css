@@ -7,3 +7,21 @@
     width: 100%;
     height: 100%-32px;
 }
+
+.headerAbout {
+    width: 60%;
+    height: 15%;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 48px;
+    font-weight: bold;
+    text-align: center;
+    margin: auto;
+    padding-top: 3%;
+}
+
+.textBoxAbout {
+    width: 60%;
+    height: 75%-32px;
+    text-align: center;
+    margin: auto;
+}

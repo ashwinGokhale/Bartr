@@ -33,7 +33,7 @@ class TermsPage extends Component {
                     You agree not to use the services: 
                 </h2>
 
-                <h2> To abuse, harass, threaten, impersonate or intimidate any person. To post any content that is obscene
+                <h2> To abuse, harass, threaten, impersonate or intimidate any person. To post any content that is obscene,
                     pornographic, abusive, offensive, profane, or that infringes any rights of a person. For any purpose that is not 
                     permitted under the laws of the jurisdiction where you use the services. To post any solicitation designed to obtain
                     passwords, accounts, or any other private information of a Bartr user. To generate any spam to any user or location
