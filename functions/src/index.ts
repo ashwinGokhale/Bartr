@@ -39,17 +39,17 @@ app.use('/users', users);
 
 
 // Update the search postsIndex every time a blog post is written.
-// exports.postCreated = functions.firestore.document('/posts/{postId}').onCreate(event => {
-//   // Get the note document
-//   const post = event.data.data();
+exports.postCreated = functions.firestore.document('/posts/{postId}').onCreate(event => {
+   // Get the note document
+   const post = event.data.data();
 
-//   // Add an 'objectID' field which Algolia requires
-//   post.objectID = event.params.postId;
+   // Add an 'objectID' field which Algolia requires
+   post.objectID = event.params.postId;
 
-//   console.log('Saving:', post, 'to Algolia');
+   console.log('Saving:', post, 'to Algolia');
 
-//   // Write to the algolia postsIndex
-//   return postsIndex.saveObject(post);
-// });
+   // Write to the algolia postsIndex
+   return postsIndex.saveObject(post);
+ });
 
 exports.api = functions.https.onRequest(express().use('/api', app));
