@@ -25,7 +25,7 @@ class TermsPage extends Component {
 
     return (
       <div>
-        <div className="textfield">
+        <div className="textfieldTerms">
             <div className="headerTerms">--- Terms of Use ---</div>
             <div className="textBoxTerms">
                 <h2> As a condition of use, you promise not to use the services for any purpose that

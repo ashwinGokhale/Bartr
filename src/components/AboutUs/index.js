@@ -25,7 +25,7 @@ class AboutUsPage extends Component {
 
     return (
       <div>
-      <div className="textfield">
+        <div className="textfieldAbout">
           <div className="headerAbout"> About Us </div>
           <div className="textBoxAbout">
               <h2> Founded in 2018, Bartr was originally intended to serve customers of the West Lafayette, Indiana area. Bartr focuses on trading and bartering 
@@ -35,8 +35,8 @@ class AboutUsPage extends Component {
                   host our own support team with 24/7 service to help users with any questions or concerns they may have. 
               </h2>
           </div>
+        </div>
       </div>
-    </div>
     );
   }
 }
