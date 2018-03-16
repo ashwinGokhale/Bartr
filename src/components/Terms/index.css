@@ -1,0 +1,9 @@
+
+.textfieldTerms {
+    position: absolute;
+    top: 60px;
+    bottom: 32px;
+    background-color: rgb(238, 237, 237);
+    width: 100%;
+    height: 100%-32px;
+}
