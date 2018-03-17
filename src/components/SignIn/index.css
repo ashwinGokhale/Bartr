@@ -72,6 +72,12 @@
     width: 300px;
 }
 
+.textBoxPass {
+    font-size: 16pt;
+    height: 30px;
+    width: 300px;
+}
+
 .loginHeader {
     text-align: center;
     font-family: Arial, Helvetica, sans-serif;
