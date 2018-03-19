@@ -104,13 +104,13 @@ class SettingsPage extends Component {
 							<p className="labels">Radius</p>
 						</div>
 						<div className="columnRight">
-							<input className="align" type="text" id="displayName" onChange={this.onChange} placeholder={this.state.displayName}/><br/>
-							<input className="align" type="url" id="photoUrl" onChange={this.onChange} placeholder={this.state.photoUrl}/><br/>
-							<input className="align" type="text" id="address" onChange={this.onChange} placeholder={this.state.address}/><br/>
-							<input className="align" type="tel" id="phoneNumber" onChange={this.onChange} placeholder={this.state.phoneNumber}/><br/>
-							<input className="align" type="number" id="lat" onChange={this.onChange} placeholder={this.state.lat}/><br/>
-							<input className="align" type="number" id="lng" onChange={this.onChange} placeolder={this.state.lng}/><br/>
-							<input className="align" type="number" id="radius" onChange={this.onChange} placeholder={this.state.radius}/>
+							<input className="align" type="text" id="displayName" onChange={this.onChange} value={this.state.displayName}/><br/>
+							<input className="align" type="url" id="photoUrl" onChange={this.onChange} value={this.state.photoUrl}/><br/>
+							<input className="align" type="text" id="address" onChange={this.onChange} value={this.state.contactInfo.address}/><br/>
+							<input className="align" type="tel" id="phoneNumber" onChange={this.onChange} value={this.state.contactInfo.phoneNumber}/><br/>
+							<input className="align" type="number" id="lat" onChange={this.onChange} value={this.state.lat}/><br/>
+							<input className="align" type="number" id="lng" onChange={this.onChange} value={this.state.lng}/><br/>
+							<input className="align" type="number" id="radius" onChange={this.onChange} value={this.state.radius}/>
 						</div>
 						<div className="warningForm">
 							{ !!this.state.error ? <p className="warning" style={{'color': 'red'}}>ERROR: {this.state.error}</p> : null }

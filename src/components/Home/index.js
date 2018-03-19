@@ -29,7 +29,7 @@ class HomePage extends Component {
           <div className="column leftSide">
             <div className="profile">
               <div className="profileCard">
-                <img className="profilePhoto" src={defaultPhoto} alt="goodsForGoods.png"></img>
+                <img className="profilePhoto" src={dbUser.photoUrl} alt={defaultPhoto}></img>
                 { !!dbUser && <h5 className="userName">{dbUser.displayName}</h5> }
                 <h5 className="rating">-----rating is future sprint-----</h5>
               </div>
