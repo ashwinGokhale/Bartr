@@ -12,6 +12,7 @@ Exchange goods and services with people in your area
 1. `./node_modules/.bin/firebase login`
 2. `./node_modules/.bin/firebase use --add`
     * Choose the "Bartr" project
+3. `firebase functions:config:get > .runtimeconfig.json`
 
 ## Frontend Usage
 
@@ -26,6 +27,7 @@ Exchange goods and services with people in your area
 3. `yarn watch`
 4. Open another terminal window
 5. `yarn serve`
+    * Run both with: `yarn watchServe`
 
 ## Backend Unit Test
 

@@ -81,10 +81,9 @@ router.put('/:uid', async (req, res) => {
 	const userToken: string = req.headers.token as string;
 	if (userToken) {
 		try {
-			const tok = await firebase.auth().verifyIdToken(userToken, true)
+			const tok = await firebase.auth().verifyIdToken(userToken)
 			if (tok.uid === req.params.uid) {		
 				let userBuilder = {};
-				let contactBuilder = {};
 
 				// Build properties of user to update
 				Object.assign(
@@ -96,14 +95,17 @@ router.put('/:uid', async (req, res) => {
 					req.body.radius && { radius: req.body.radius }
 				)
 				// Build contact info to update
-				Object.assign(
-					contactBuilder,
-					req.body.contactInfo.address && { address: req.body.contactInfo.address },
-					req.body.contactInfo.phoneNumber && { phoneNumber: req.body.contactInfo.phoneNumber },
-				)
-
-				if (Object.keys(contactBuilder).length)
-					Object.assign(userBuilder, {contactInfo: contactBuilder})
+				if (req.body.contactInfo) {
+					let contactBuilder = {};
+					Object.assign(
+						contactBuilder,
+						req.body.contactInfo.address && { address: req.body.contactInfo.address },
+						req.body.contactInfo.phoneNumber && { phoneNumber: req.body.contactInfo.phoneNumber },
+					)
+	
+					if (Object.keys(contactBuilder).length)
+						Object.assign(userBuilder, {contactInfo: contactBuilder})
+				}
 
 				const userSnap = await firebase.firestore().doc(`/users/${req.params.uid}`).set(
 					userBuilder,
@@ -114,7 +116,8 @@ router.put('/:uid', async (req, res) => {
 			else
 				res.status(401).send('Unauthorized')
 		} catch (error) {
-			res.status(400).send(error);
+			console.error(error);
+			res.status(400).send(JSON.stringify(error));
 		}
 	}
 	else 

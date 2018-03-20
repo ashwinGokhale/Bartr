@@ -11,6 +11,7 @@
     width: 100%;
     position: fixed;
     border-bottom: solid white 0.25px;
+    top: 0;
 }
 
 .logo {

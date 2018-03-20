@@ -1,6 +1,10 @@
 import * as express from 'express';
+import * as functions from 'firebase-functions';
 import * as firebase from 'firebase-admin';
 import * as algoliasearch from 'algoliasearch';
+import * as googleStorage from '@google-cloud/storage';
+import * as Multer from 'multer';
+import * as gmaps from '@google/maps'
 export const router = express.Router();
 
 const algolia = algoliasearch(
@@ -8,7 +12,25 @@ const algolia = algoliasearch(
 	'23a58b75df085d3635a653ba0b54c27f' // functions.config().algolia.key
 );
 
+var googleMapsClient = gmaps.createClient({
+	key: 'AIzaSyCS0wuKGReGQWSfs-YZY-YTdMpyvLgU5Ss'
+});
+
 const postsIndex = algolia.initIndex('posts');
+
+const storage = googleStorage({
+	projectId: functions.config().firebase.projectId,
+	keyFilename: '../serviceaccount.json'
+});
+  
+const bucket = storage.bucket(functions.config().firebase.storageBucket);
+
+const multer = Multer({
+	storage: Multer.memoryStorage(),
+	limits: {
+		fileSize: 5 * 1024 * 1024 // no larger than 5mb, you can change as needed.
+	}
+});
 
 // Get post by id
 router.get("/geo", async (req, res) => {
@@ -71,22 +93,20 @@ router.get("/", async (req, res) => {
 router.post('/', async (req, res) => {
 	const userToken: string = req.headers.token as string;
 	if (!req.body.title) res.status(400).send('Post must have a title')
-	else if (!req.body.title) res.status(400).send('Post must have a picture')
-	else if (!req.body.picture) res.status(400).send('Post must have a title')
+	else if (!req.body.photos) res.status(400).send('Post must have a picture')
 	else if (!req.body.description) res.status(400).send('Post must have a description')
-	else if (!req.body.userId) res.status(400).send('Post must have a user id')
 	else if (!req.body._geoloc) res.status(400).send('Post must have a Geo location')
 	else if (!userToken) res.status(401).send('Unauthorized')
 	else {
 		try {
-			const tok = await firebase.auth().verifyIdToken(userToken, true);
+			const tok = await firebase.auth().verifyIdToken(userToken);
 			const newPost = await firebase.firestore().collection('/posts').add({
 				title: req.body.title,
 				picture: req.body.picture,
 				description: req.body.description,
 				tags: req.body.tags,
 				state: 'PENDING',
-				userId: req.body.userId,
+				userId: tok.uid,
 				createdAt: new Date(),
 				lastModified: new Date(),
 				_geoloc: req.body._geoloc
@@ -129,4 +149,19 @@ router.delete('/:postId', async (req, res) => {
 	}
 	else 
 		res.status(401).send('Unauthorized')
+})
+
+router.post('/test', multer.any(), async (req, res) => {
+	console.log(functions.config());
+	console.log('Body:', req.body);
+	if (req.body.address) {
+		googleMapsClient.geocode({address: req.body.address}, (err, response) => {
+			if (!err) {
+			  console.log(response.json.results[0].geometry.location);
+			}
+			else 
+				console.error(err);
+		});
+	}
+	res.send('good')
 })

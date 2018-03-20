@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import axios from 'axios';
 import defaultPhoto from '../../assets/default.png';
-import { PasswordForgetForm } from '../PasswordForget';
-import PasswordChangeForm from '../PasswordChange';
+// import { PasswordForgetForm } from '../PasswordForget';
+// import PasswordChangeForm from '../PasswordChange';
 import withAuthorization from '../Session/withAuthorization';
 import PostItem from '../Common/PostItem';
 import { fetchUserPosts } from '../../actions'

@@ -149,14 +149,6 @@
     background-color: rgb(90, 114, 141);
 }
 
-.createPost {
-    background-color: rgb(238, 237, 237);
-    height: 30%;
-    width: 100% - 5px;
-    border-left: white solid 1px;
-    border-bottom: rgb(238, 237, 237) 1px;
-}
-
 .postFeed {
     background-color: rgb(238, 237, 237);
     height: 70%;
@@ -202,17 +194,9 @@ h5 {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-.postUploadAccount {
-    height: 100%;
-    width: 25%;
-    float: left;
-}
 
-.postInformation {
-    height: 100%;
-    width: 75%;
-    float: left;
-}
+
+
 
 .postDescription {
     height: 77%;
@@ -226,59 +210,10 @@ h5 {
     font-size: 15px;
 }
 
-.titleAccount {
-    width: 88%;
-    height: 13%;
-    margin-top: 4.4%;
-    margin-left: 3%;
-    margin-bottom: 1%;
-    font-size: 20px;
-}
-
-.descriptionAccount {
-    width: 88%;
-    height: 34%;
-    margin-left: 3%;
-    margin-bottom: 1.5%;
-    vertical-align: text-top;
-    font-size: 15px;
-}
-
 textarea {
     resize: none;
     border: rgb(153, 153, 153) solid 1.5px;
     font-family: Arial, Helvetica, sans-serif;
-    border-radius: 0.5em 0.5em 0.5em 0.5em;
-}
-
-.insertHere {
-    height: 55%;
-    width: 65%;
-    border: rgb(116, 116, 116) solid 1.5px;
-    margin-left: 23%;
-    margin-top: 13%;
-    display: block;
-    border-radius: 0.5em 0.5em 0.5em 0.5em;
-}
-
-.uploadPhoto {
-    background-color: rgb(78, 138, 205);
-    color: white;
-    border: gray solid 1px;
-    width: 65%;
-    height: 13%;
-    margin-left: 23%;
-    margin-top: 5%;
-    border-radius: 0.5em 0.5em 0.5em 0.5em;
-}
-
-.createAccountPost {
-    background-color: rgb(78, 138, 205);
-    color: white;
-    border: gray solid 1px;
-    width: 89%;
-    height: 13%;
-    margin-left: 3%;
     border-radius: 0.5em 0.5em 0.5em 0.5em;
 }
 

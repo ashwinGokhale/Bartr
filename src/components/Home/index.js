@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import defaultPhoto from '../../assets/default.png';
-import insertHere from '../../assets/insertHere.png';
 import withAuthorization from '../Session/withAuthorization';
 import PostItem from '../Common/PostItem';
 import { fetchFeedPosts, fetchDBUser } from '../../actions';

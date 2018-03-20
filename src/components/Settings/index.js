@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import withAuthorization from '../Session/withAuthorization';
-import { authCondition } from '../../constants'
-import { auth } from '../../firebase';
-import { updateDBUser } from '../../actions'
-import axios from 'axios';
+import { authCondition } from '../../constants';
+import { updateDBUser } from '../../actions';
 import './index.css'
 
 class SettingsPage extends Component {
@@ -68,7 +66,7 @@ class SettingsPage extends Component {
 	onSubmit = (event) => {
 		event.preventDefault();
 		if (this.isRadiusValid(this.state.radius) && this.isLatitudeValid(this.state.lat) && this.isLongitudeValid(this.state.lng)) {
-			const { lat, lng, radius, displayName, photoUrl, contactInfo: { address , email, phoneNumber }} = this.state;
+			const { lat, lng, radius, displayName, photoUrl, contactInfo: { address , phoneNumber }} = this.state;
 			const { dbUser } = this.props;
 			this.props.updateDBUser({
 				lat: lat || dbUser.lat,

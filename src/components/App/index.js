@@ -22,21 +22,24 @@ import './index.css';
 
 const App = () =>
   <Router>
-    <div className="app">
+    <div>
       <Navigation />
+      <div className="app">
+        {/* <Navigation /> */}
 
-      <Route exact path={routes.LANDING} component={LandingPage} />
-      <Route exact path={routes.SIGN_UP} component={SignUpPage} />
-      <Route exact path={routes.LOGIN} component={SignInPage} />
-      <Route exact path={routes.PASSWORD_FORGET} component={PasswordForgetPage} />
-      <Route exact path={routes.HOME} component={HomePage} />
-      <Route exact path={routes.ACCOUNT} component={AccountPage} />
-      <Route exact path={routes.SETTINGS} component={SettingsPage} />
-      <Route exact path={routes.CHAT} component={Chat} />
-      <Route exact path={routes.CREATE_POST} component={CreatePostPage} />
-      <hr/>
+        <Route exact path={routes.LANDING} component={LandingPage} />
+        <Route exact path={routes.SIGN_UP} component={SignUpPage} />
+        <Route exact path={routes.LOGIN} component={SignInPage} />
+        <Route exact path={routes.PASSWORD_FORGET} component={PasswordForgetPage} />
+        <Route exact path={routes.HOME} component={HomePage} />
+        <Route exact path={routes.ACCOUNT} component={AccountPage} />
+        <Route exact path={routes.SETTINGS} component={SettingsPage} />
+        <Route exact path={routes.CHAT} component={Chat} />
+        <Route exact path={routes.CREATE_POST} component={CreatePostPage} />
+        <hr/>
 
-      <Footer/>
+        <Footer/>
+      </div>
     </div>
   </Router>
 
