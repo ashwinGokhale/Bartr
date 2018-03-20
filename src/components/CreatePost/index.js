@@ -17,7 +17,6 @@ class CreatePostPage extends Component {
 			description: '',
 			title: '',
 			lat: 0,
-			lat: 0,
 			radius: 0,
 			photos: [],
 			currentLocation: true,
@@ -38,11 +37,13 @@ class CreatePostPage extends Component {
 
 	onSubmit = async (e) => {
 		e.preventDefault();
+		this.setState({error: null})
 		if (!this.state.description.length)
 			return this.setState({ error: 'Post must have a description' })
 		if (!this.state.title.length)
 			return this.setState({ error: 'Post must have a title' })
 		
+		console.log('State:', this.state);
 		let data = new FormData();
 		let position;
 
@@ -71,13 +72,17 @@ class CreatePostPage extends Component {
 		}
 
 		try {
-			data.append('photos', this.state.photos);
+			for (let i = 0; i < this.state.photos.length; i++) {
+				data.append("photos", this.state.photos[i], this.state.photos[i]['name']);
+			}
+			
 			data.append('tags', this.state.tags.map(tag => tag.text));
 			data.append('title', this.state.title);
 			data.append('description', this.state.description);
 			const resp = await axios.post('/api/posts/test', data, {
 				headers: {
-					'content-type': 'multipart/form-data'
+					'content-type': 'multipart/form-data',
+					
 				}
 			})
 			console.log(resp.data)	
@@ -160,7 +165,8 @@ class CreatePostPage extends Component {
 
 const mapStateToProps = (state) => ({
 	...state.sessionState.dbUser,
-	dbUser: state.sessionState.dbUser
+	dbUser: state.sessionState.dbUser,
+	authUser: state.sessionState.authUser
 });
 
 export default compose(

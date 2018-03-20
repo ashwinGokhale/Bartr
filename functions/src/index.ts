@@ -19,8 +19,8 @@ firebase.initializeApp({
 
 // firebase.initializeApp(functions.config().firebase);
 const algolia = algoliasearch(
-  'JAGNN9QV1Z', // functions.config().algolia.app,
-  '23a58b75df085d3635a653ba0b54c27f' // functions.config().algolia.key
+  functions.config().algolia.app,
+  functions.config().algolia.key
 );
 const postsIndex = algolia.initIndex('posts');
 

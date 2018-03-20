@@ -4,26 +4,23 @@ import * as firebase from 'firebase-admin';
 import * as algoliasearch from 'algoliasearch';
 import * as googleStorage from '@google-cloud/storage';
 import * as Multer from 'multer';
-import * as gmaps from '@google/maps'
+import axios from 'axios';
+import { uploadImageToStorage } from '../utils'
 export const router = express.Router();
 
 const algolia = algoliasearch(
-	'JAGNN9QV1Z', // functions.config().algolia.app,
-	'23a58b75df085d3635a653ba0b54c27f' // functions.config().algolia.key
+	functions.config().algolia.app,
+	functions.config().algolia.key
 );
-
-var googleMapsClient = gmaps.createClient({
-	key: 'AIzaSyCS0wuKGReGQWSfs-YZY-YTdMpyvLgU5Ss'
-});
 
 const postsIndex = algolia.initIndex('posts');
 
-const storage = googleStorage({
-	projectId: functions.config().firebase.projectId,
-	keyFilename: '../serviceaccount.json'
-});
+// const storage = googleStorage({
+// 	projectId: functions.config().firebase.projectId,
+// 	keyFilename: '../serviceaccount.json'
+// });
   
-const bucket = storage.bucket(functions.config().firebase.storageBucket);
+// const bucket = storage.bucket(functions.config().firebase.storageBucket);
 
 const multer = Multer({
 	storage: Multer.memoryStorage(),
@@ -95,11 +92,11 @@ router.post('/', async (req, res) => {
 	if (!req.body.title) res.status(400).send('Post must have a title')
 	else if (!req.body.photos) res.status(400).send('Post must have a picture')
 	else if (!req.body.description) res.status(400).send('Post must have a description')
-	else if (!req.body._geoloc) res.status(400).send('Post must have a Geo location')
+	else if (!req.body._geoloc && !req.body.address) res.status(400).send('Post must have a Geo location or Address')
 	else if (!userToken) res.status(401).send('Unauthorized')
 	else {
 		try {
-			const tok = await firebase.auth().verifyIdToken(userToken);
+			const tok = await firebase.auth().verifyIdToken(userToken, true);
 			const newPost = await firebase.firestore().collection('/posts').add({
 				title: req.body.title,
 				picture: req.body.picture,
@@ -151,17 +148,35 @@ router.delete('/:postId', async (req, res) => {
 		res.status(401).send('Unauthorized')
 })
 
-router.post('/test', multer.any(), async (req, res) => {
-	console.log(functions.config());
+router.post('/test', multer.array('photos', 12), async (req, res, next) => {
+	const files = req.files as Express.Multer.File[];
 	console.log('Body:', req.body);
+	console.log('Files:', files);
 	if (req.body.address) {
-		googleMapsClient.geocode({address: req.body.address}, (err, response) => {
-			if (!err) {
-			  console.log(response.json.results[0].geometry.location);
+		axios.get(
+			'https://maps.googleapis.com/maps/api/geocode/json',
+			{
+				params: {
+					address: req.body.address,
+					key: functions.config().gmaps.key
+				}
 			}
-			else 
-				console.error(err);
-		});
+		)
+		.then(resp => {
+			if (resp.data.results.length)
+				console.log(resp.data.results[0].geometry.location)
+		})
+		.catch(err => console.error(err))
 	}
-	res.send('good')
+
+	
+	try {
+		const photoUrls = await Promise.all(files.map((file: Express.Multer.File) => uploadImageToStorage(file, 'dahplNWeJUMwFIkwLYZKOL3vfb52')))
+		res.send('good')
+	} catch (error) {
+		console.error(error);
+		res.send(JSON.stringify(error))
+	}
+	
+	
 })
