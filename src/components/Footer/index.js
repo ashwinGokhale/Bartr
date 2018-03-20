@@ -1,3 +1,6 @@
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import * as routes from '../../constants';
 import React, { Component } from 'react'
 import "./index.css"
 
@@ -5,15 +8,10 @@ export default class Footer extends Component {
   render() {
 	return (
 		<div className="center">
-			<a className="spacing">How It Works</a>
-			<a className="spacing">Team</a>
-			<a className="spacing">Values</a>
-			<a className="spacing">Blog</a>
-			<a className="spacing">Help</a>
-			<a className="spacing">Invite Friends</a>
-			<a className="spacing">Terms</a>
-			<a className="spacing">Privacy</a>
-			<a className="spacing">Contact</a>
+			<Link to={routes.ABOUTUS} style={{ textDecoration: 'none' }}><a className="spacing" id="aboutLink">About Us</a></Link>
+			<Link to={routes.SUPPORT} style={{ textDecoration: 'none' }}><a className="spacing" id="supportLink">Support</a></Link>
+			<Link to={routes.TERMS} style={{ textDecoration: 'none' }}><a className="spacing" id="termsLink">Terms of Use</a></Link>
+			<a className="contactButton" href="mailto:BartrTradeHelp@gmail.com">Contact</a>
 		</div>
 	)
   }

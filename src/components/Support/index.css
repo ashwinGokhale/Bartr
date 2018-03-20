@@ -1,0 +1,38 @@
+.textfieldSupport {
+    position: absolute;
+    top: 60px;
+    bottom: 32px;
+    background-color: rgb(238, 237, 237);
+    width: 100%;
+    height: 100%-32px;
+}
+
+.headerSupport {
+    width: 60%;
+    height: 15%;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 48px;
+    font-weight: bold;
+    text-align: center;
+    margin: auto;
+    padding-top: 3%;
+}
+
+.textBoxSupport {
+    width: 60%;
+    height: 75%-32px;
+    text-align: center;
+    margin: auto;
+}
+
+.FAQ {
+    text-align: left;
+    margin: left;
+}
+
+.answerText {
+    text-align: left;
+    margin: left;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 18px;
+}

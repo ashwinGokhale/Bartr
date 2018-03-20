@@ -34,16 +34,13 @@ hr {
     height: 5%;
 }
 
-p {
+.labels {
+    color: rgb(90, 114, 141);
     right: 10px;
     line-height: 20px;
     margin: 0;
-    margin-bottom: 12%;
+    margin-bottom: 13%;
     padding-right: 5%;
-}
-
-.label {
-    color: rgb(90, 114, 141);
 }
 
 .align {
@@ -57,24 +54,6 @@ p {
     color: rgb(172, 172, 172);
     overflow-x: scroll;
     overflow-y: hidden;
-}
-
-[contenteditable="true"].align {
-    white-space: nowrap;
-    overflow: hidden;
-} 
-[contenteditable="true"].align br {
-    display:none;
-
-}
-[contenteditable="true"].align * {
-    display:inline;
-    white-space:nowrap;
-}
-
-[contentEditable]:focus {
-    outline: 0px solid transparent;
-    color: black;
 }
 
 .columnLeft {
