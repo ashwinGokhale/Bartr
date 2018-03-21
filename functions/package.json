@@ -37,6 +37,7 @@
     "sinon": "^4.3.0",
     "sinon-chai": "^2.14.0",
     "supertest": "^3.0.0",
+    "util": "^0.10.3",
     "uuid": "^3.2.1"
   },
   "devDependencies": {

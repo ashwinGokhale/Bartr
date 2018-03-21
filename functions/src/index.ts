@@ -8,7 +8,7 @@ import { router as users } from './routes/users';
 import * as functions from 'firebase-functions';
 import * as firebase from 'firebase-admin';
 import * as algoliasearch from 'algoliasearch';
-const serviceAccount = require('../serviceaccount.json')
+const serviceAccount = require('../serviceaccount.json');
 
 // Initialize app and dependencies
 export const app = express();
@@ -17,7 +17,6 @@ firebase.initializeApp({
   databaseURL: "https://bartr-b1856.firebaseio.com",
 });
 
-// firebase.initializeApp(functions.config().firebase);
 const algolia = algoliasearch(
   functions.config().algolia.app,
   functions.config().algolia.key
@@ -31,7 +30,7 @@ app.use(cookieParser());
 app.use(cors());
 
 app.get('/', (req, res) => {
-  res.send('This API Home Page')
+  res.send('This API Home Page');
 });
 
 app.use('/posts', posts);

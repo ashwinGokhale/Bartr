@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import withAuthorization from '../Session/withAuthorization';
 import { authCondition } from '../../constants';
-import { updateDBUser } from '../../actions';
+import { createPost } from '../../actions';
 import axios from 'axios';
 import insertHere from '../../assets/insertHere.png';
 import './index.css'
@@ -79,13 +79,15 @@ class CreatePostPage extends Component {
 			data.append('tags', this.state.tags.map(tag => tag.text));
 			data.append('title', this.state.title);
 			data.append('description', this.state.description);
-			const resp = await axios.post('/api/posts/test', data, {
-				headers: {
-					'content-type': 'multipart/form-data',
+			const resp = this.props.createPost(data)
+			console.log(resp);
+			// const resp = await axios.post('/api/posts/test', data, {
+			// 	headers: {
+			// 		'content-type': 'multipart/form-data',
 					
-				}
-			})
-			console.log(resp.data)	
+			// 	}
+			// })
+			// console.log(resp.data)	
 		} catch (error) {
 			console.error(error)
 			this.setState({ error: JSON.stringify(error) })
@@ -165,11 +167,10 @@ class CreatePostPage extends Component {
 
 const mapStateToProps = (state) => ({
 	...state.sessionState.dbUser,
-	dbUser: state.sessionState.dbUser,
-	authUser: state.sessionState.authUser
+	dbUser: state.sessionState.dbUser
 });
 
 export default compose(
   	withAuthorization(authCondition),
-	connect(mapStateToProps, { updateDBUser })
+	connect(mapStateToProps, { createPost })
 )(CreatePostPage);

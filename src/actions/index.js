@@ -67,7 +67,30 @@ export const fetchUserPosts = () => {
 			)
 			console.log('Got user posts:', data);
 			dispatch(onSetUserPosts(data))
-			return data
+			return data;
+		} catch (error) {
+			console.error(error);
+			return error;
+		}
+	}
+}
+
+export const createPost = (post) => {
+	return async dispatch => {
+		try {
+			const token = await auth.currentUser.getIdToken()
+			// Get DB user and input into Redux store
+			console.log(`Creating user posts w/ user id: ${auth.currentUser.uid}`)
+			const { data } = await axios.post('/api/posts/test', post, {
+				headers: {
+					'content-type': 'multipart/form-data',
+					token
+				}
+			})
+
+			console.log('Created user post:', data);
+			fetchUserPosts();
+			return data;
 		} catch (error) {
 			console.error(error);
 			return error;

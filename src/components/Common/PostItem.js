@@ -23,7 +23,7 @@ export default class PostItem extends Component {
 				{/* <button onClick={this.onClick}>X</button> */}
 				<div className="postInfo">
 					<div className="postPicture">
-						<img className="itemPicture" src={post.picture}></img>
+						<img className="itemPicture" src={post.photoUrls[0]}></img>
 					</div>
 					<div className="postDescription">
 						<ul className="descriptionDetails">
