@@ -51,4 +51,15 @@ exports.postCreated = functions.firestore.document('/posts/{postId}').onCreate(e
    return postsIndex.saveObject(post);
  });
 
+// Update the search postsIndex every time a blog post is written.
+exports.postDeleted = functions.firestore.document('/posts/{postId}').onDelete(event => {
+  // Get the note document
+  // const post = event.data.data();
+
+  console.log('Deleting:', event.params.postId, 'from Algolia');
+  
+  // Delete post from Algolia
+  return postsIndex.deleteObject(event.params.postId);
+});
+
 exports.api = functions.https.onRequest(express().use('/api', app));

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import SignOutButton from '../SignOut';
+import { SignOutButton } from '../Common';
 import * as routes from '../../constants';
 import logo from '../../assets/bartrLogo.png';
 import './index.css'
@@ -12,7 +12,6 @@ const NavigationAuth = () =>
     <Link to={routes.ACCOUNT}><button className="navButton">Account</button></Link>
     <Link to={routes.CHAT}><button className="navButton">Chat</button></Link>
     <Link to={routes.SETTINGS}><button className="navButton">Settings</button></Link>
-    {/* <Link to={routes.CREATE_POST}><button className="navButton">+</button></Link> */}
     <SignOutButton />
   </div>
 

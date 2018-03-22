@@ -1,17 +1,18 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { compose } from 'recompose';
+import { authCondition } from '../../constants';
+import { deletePost } from '../../actions';
 
-export default class PostItem extends Component {
-	constructor(props) {
-		super(props);
-	}
-
+class PostItem extends Component {
 	onClick = (e) => {
-		e.preventDefault();
+		this.props.deletePost(this.props.post.postId);
 	}
 	
 	// TODO: Add ability for posts to display more pictures
 	render() {
 		const { post, type } = this.props;
+		console.log('Post item:', post);
 		return (
 			<div className="placeHolder">
 				<div className="postTitle">
@@ -20,10 +21,9 @@ export default class PostItem extends Component {
 				{
 					type === 'user' ? <button onClick={this.onClick}>X</button> : null
 				}
-				{/* <button onClick={this.onClick}>X</button> */}
 				<div className="postInfo">
 					<div className="postPicture">
-						<img className="itemPicture" src={post.photoUrls[0]}></img>
+						<img className="itemPicture" alt="itemPicture" src={post.photoUrls[0]}></img>
 					</div>
 					<div className="postDescription">
 						<ul className="descriptionDetails">
@@ -35,3 +35,7 @@ export default class PostItem extends Component {
 		)
 	}
 }
+
+export default compose(
+	connect(null, { deletePost })
+)(PostItem);

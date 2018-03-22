@@ -16,7 +16,10 @@ function sessionReducer(state = {
       localStorage.setItem('dbUser', JSON.stringify(action.dbUser))
       return {
         ...state,
-        dbUser: action.dbUser
+        dbUser: {
+          ...state.dbUser,
+          ...action.dbUser
+        }
       }
     }
     default : return state;

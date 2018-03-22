@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { WithContext as ReactTags } from 'react-tag-input';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import withAuthorization from '../Session/withAuthorization';
 import { authCondition } from '../../constants';
-import { createPost } from '../../actions';
+import { updateDBUser, createPost } from '../../actions';
 import axios from 'axios';
 import insertHere from '../../assets/insertHere.png';
 import './index.css'
@@ -16,14 +17,19 @@ class CreatePostPage extends Component {
 			tags: [],
 			description: '',
 			title: '',
-			lat: 0,
-			radius: 0,
 			photos: [],
 			currentLocation: true,
 			address: '',
-			error: null
+			type: '',
+			error: this.props.userPostsError
 		}
 	}
+
+	componentWillReceiveProps(nextProps) {
+		if(JSON.stringify(this.props.userPostsError) !== JSON.stringify(nextProps.userPostsError))
+			this.setState({ error: nextProps.userPostsError })
+	} 
+	
 
 	onChange = (e) => {
 		e.preventDefault();
@@ -42,6 +48,10 @@ class CreatePostPage extends Component {
 			return this.setState({ error: 'Post must have a description' })
 		if (!this.state.title.length)
 			return this.setState({ error: 'Post must have a title' })
+		if (!this.state.photos.length)
+			return this.setState({ error: 'Post must have a photo' })
+		if (!this.state.type.length)
+			return this.setState({ error: 'Post must be either a good or service' })
 		
 		console.log('State:', this.state);
 		let data = new FormData();
@@ -52,16 +62,21 @@ class CreatePostPage extends Component {
 				return this.setState({ error: 'Please give permission to use your current location' })
 			
 			try {
-				position = await this.getCurrentPosition();
+				position = await this.getCurrentPosition({
+					enableHighAccuracy: true,
+					timeout: 5000,
+					maximumAge: 0
+				  });
 				const { latitude, longitude } = position.coords;
-				data.append('_geoloc', {
-					lat: latitude,
-					lng: longitude
-				});
+				data.append('lat', latitude);
+				data.append('lng', longitude);
+				console.log('Current Location: ', latitude, longitude);
 				this.props.updateDBUser({lat: latitude, lng: longitude})
 			} catch (error) {
-				console.error(error)
-				return this.setState({error: 'Current location error'})
+				console.error('Error:', error);
+				this.setState({error: 'Could not resolve current location. Falling back to default location'});
+				data.append('lat', this.props.lat);
+				data.append('lng', this.props.lng);
 			}
 		}
 		else {
@@ -72,22 +87,14 @@ class CreatePostPage extends Component {
 		}
 
 		try {
-			for (let i = 0; i < this.state.photos.length; i++) {
+			for (let i = 0; i < this.state.photos.length; i++)
 				data.append("photos", this.state.photos[i], this.state.photos[i]['name']);
-			}
 			
-			data.append('tags', this.state.tags.map(tag => tag.text));
+			data.append('tags', JSON.stringify(this.state.tags.map(tag => tag.text)));
 			data.append('title', this.state.title);
 			data.append('description', this.state.description);
-			const resp = this.props.createPost(data)
-			console.log(resp);
-			// const resp = await axios.post('/api/posts/test', data, {
-			// 	headers: {
-			// 		'content-type': 'multipart/form-data',
-					
-			// 	}
-			// })
-			// console.log(resp.data)	
+			data.append('type', this.state.type);
+			this.props.createPost(data);
 		} catch (error) {
 			console.error(error)
 			this.setState({ error: JSON.stringify(error) })
@@ -121,8 +128,6 @@ class CreatePostPage extends Component {
     }
 	
 	render() {
-		
-		// TODO: Add uploading of multiple photos
 		return (
 			<form onSubmit={this.onSubmit} encType="multipart/form-data" className="createPost">
 				<div className="postUploadAccount">
@@ -146,6 +151,13 @@ class CreatePostPage extends Component {
 					<textarea className="descriptionAccount" cols="86" rows ="10" placeholder="Add a description..." id="description" onChange={this.onChange} />
 					<br/>
 
+					<label>Good</label>
+					<input type="radio" name="postType" onChange={(e) => {this.setState({type: 'good'})}} />
+					<label>Service</label>
+					<input type="radio" name="postType" onChange={(e) => {this.setState({type: 'service'})}} />
+					<br/>
+					<br/>
+
 					<label>Current Location</label>
 					<input type="radio" name="location" onChange={(e) => {this.setState({currentLocation: true})}} />
 					<label>Address</label>
@@ -167,10 +179,10 @@ class CreatePostPage extends Component {
 
 const mapStateToProps = (state) => ({
 	...state.sessionState.dbUser,
-	dbUser: state.sessionState.dbUser
+	userPostsError: state.postsState.userPostsError
 });
 
 export default compose(
   	withAuthorization(authCondition),
-	connect(mapStateToProps, { createPost })
+	connect(mapStateToProps, { updateDBUser, createPost })
 )(CreatePostPage);

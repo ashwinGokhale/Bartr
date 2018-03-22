@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import { Link } from 'react-router-dom';
+import { CREATE_POST } from '../../constants';
 import defaultPhoto from '../../assets/default.png';
 // import { PasswordForgetForm } from '../PasswordForget';
 // import PasswordChangeForm from '../PasswordChange';
@@ -35,6 +37,7 @@ class AccountPage extends React.Component {
 
                 </div>
               </div>
+              <Link to={CREATE_POST}>Create Post</Link>
               <div className="bios">
                 <div className="biosCard">
                   <center><h4>About Me</h4></center>
@@ -44,8 +47,10 @@ class AccountPage extends React.Component {
             </div>
             <div className="column centerCol">
               <div className="postFeed">
-                {userPosts.length ?
-                  userPosts.map((post,i) => <PostItem key={i} id={i} type="user" post={post}/>) :
+                {
+                  userPosts &&
+                  userPosts.length ?
+                  userPosts.map((post,i) => <PostItem key={i} id={post.postId} type="user" post={post}/>) :
                   <p>You have made no posts!</p>
                 }
               </div>

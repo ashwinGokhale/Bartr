@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import { Link } from 'react-router-dom';
+import { CREATE_POST } from '../../constants';
 import defaultPhoto from '../../assets/default.png';
 import withAuthorization from '../Session/withAuthorization';
 import PostItem from '../Common/PostItem';
@@ -33,6 +35,9 @@ class HomePage extends Component {
                 <h5 className="rating">-----rating is future sprint-----</h5>
               </div>
             </div>
+            
+            <Link to={CREATE_POST}>Create Post</Link>
+            
             <div className="filters">
               <div className="filtersCard">
                 <h4>Filters</h4>
@@ -50,7 +55,9 @@ class HomePage extends Component {
           </div>
           <div className="column rightSide">
             <div className="postFeed">
-              {feedPosts.length ? 
+              {
+                feedPosts &&
+                feedPosts.length ? 
                 feedPosts.map((post,i) => <PostItem key={i} id={i} type="feed" post={post}/>) :
                 <p>No Posts!</p>
               }
