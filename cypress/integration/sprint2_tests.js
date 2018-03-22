@@ -6,7 +6,7 @@ describe('Sprint 2 Front end testing', function () {
 
         /* Go to login page */
         cy.visit('localhost:3000/login')
-
+        cy.wait(2000)
         /* Login with email and password */
         cy.get('input.textBox').first().type('b.omalley95@yahoo.com')
         cy.get('input.textBoxPass').type('password')
@@ -14,11 +14,15 @@ describe('Sprint 2 Front end testing', function () {
         cy.get('button.signInButton').click();
 
         /* wait for home page to load */
-        cy.wait(2000)
+        cy.wait(3000)
+
+        cy.visit('localhost:3000/aboutUs')
+
+        cy.wait(3000)
 
         /* go to support page from footer link */
-        cy.get('a#supportLink.spacing').click()
-
+        cy.get('a#supportLink.spacing').click({force: true})
+        cy.wait(3000)
         cy.url()
             .should('eq', 'http://localhost:3000/support')
 
@@ -28,6 +32,7 @@ describe('Sprint 2 Front end testing', function () {
 
         /* Go to login page */
         cy.visit('localhost:3000/login')
+        cy.wait(3000)
 
         /* Login with email and password */
         cy.get('input.textBox').first().type('b.omalley95@yahoo.com')
@@ -37,6 +42,7 @@ describe('Sprint 2 Front end testing', function () {
 
         /* wait for home page to load */
         cy.wait(2000)
+        cy.visit('localhost:3000/aboutUs')
 
         /* go to support page */
         cy.visit('http://localhost:3000/support')
@@ -53,6 +59,7 @@ describe('Sprint 2 Front end testing', function () {
 
         /* Go to login page */
         cy.visit('localhost:3000/login')
+        cy.wait(3000)
 
         /* Login with email and password */
         cy.get('input.textBox').first().type('b.omalley95@yahoo.com')
@@ -62,9 +69,12 @@ describe('Sprint 2 Front end testing', function () {
 
         /* wait for home page to load */
         cy.wait(2000)
+        cy.visit('localhost:3000/terms')
+        cy.wait(2000)
 
         /* go to About Us page from footer link */
-        cy.get('a#aboutLink.spacing').click()
+        cy.get('a#aboutLink.spacing').click({force: true})
+        cy.wait(3000)
 
         cy.url()
             .should('eq', 'http://localhost:3000/aboutUs')
@@ -75,6 +85,7 @@ describe('Sprint 2 Front end testing', function () {
 
         /* Go to login page */
         cy.visit('localhost:3000/login')
+        cy.wait(3000)
 
         /* Login with email and password */
         cy.get('input.textBox').first().type('b.omalley95@yahoo.com')
@@ -84,9 +95,11 @@ describe('Sprint 2 Front end testing', function () {
 
         /* wait for home page to load */
         cy.wait(2000)
+        cy.visit('localhost:3000/aboutUs')
 
         /* go to Terms of Use page from footer link */
         cy.get('a#termsLink.spacing').click()
+        cy.wait(3000)
 
         cy.url()
             .should('eq', 'http://localhost:3000/terms')
@@ -98,6 +111,7 @@ describe('Sprint 2 Front end testing', function () {
         
         /* Go to login page */
         cy.visit('localhost:3000/login')
+        cy.wait(3000)
 
         /* Login with email and password */
         cy.get('input.textBox').first().type('b.omalley95@yahoo.com')
@@ -110,6 +124,7 @@ describe('Sprint 2 Front end testing', function () {
 
         /* Go to account page */
         cy.visit('localhost:3000/account')
+        cy.wait(3000)
 
         /* Click report user button */
         cy.get('button.reportUser').click()
