@@ -11,6 +11,7 @@ var should = require('chai').should();
 var expect = require('chai').expect;
 var api = supertest('http://localhost:5000');
 
+
 describe('----Firestore Unit Tests---- \n\n', function(){
     var db;
     before(() => {
@@ -21,10 +22,10 @@ describe('----Firestore Unit Tests---- \n\n', function(){
             projectId: "bartr-b1856",
             storageBucket: "bartr-b1856.appspot.com",
             messagingSenderId: "952082363953"
-        }
+        };
         var app = firebase.initializeApp(config);
         db = firebase.firestore(app);
-    })
+    });
 
     
     describe("\n--Posts Collection--\n", () => {
@@ -61,8 +62,8 @@ describe('----Firestore Unit Tests---- \n\n', function(){
                 console.log("Test document updated successfully");
             }).catch(function(error){
                 console.error("Error updating document: ", error);
-            })
-        })
+            });
+        });
 
         it("should delete the test post", () => {
             return output = db.collection("/posts").doc("Test")
@@ -71,36 +72,36 @@ describe('----Firestore Unit Tests---- \n\n', function(){
                 console.log("Test document successfully removed");
             }).catch(function(error){
                 console.error("Error removing document: ", error);
-            })
-        })
+            });
+        });
     });    
 
     describe("\n\n\n--Test Endpoints--\n", () => {
         it('Should test / the landing page endpoint and return a 200 response', function(done){
             api.get('/')
-            .expect(200, done)
-        })
+            .expect(200, done);
+        });
         it('Should test /post endpoint and return a 200 response', function(done){
             api.get('/posts')
-            .expect(200, done)
-        })
+            .expect(200, done);
+        });
         it('Should test /login endopoint and return a 200 response', function(done){
             api.get('/login')
-            .expect(200, done)
-        })
+            .expect(200, done);
+        });
         it('Should test /signup endopoint and return a 200 response', function(done){
             api.get('/signup')
-            .expect(200, done)
-        })
+            .expect(200, done);
+        });
         it('Should test /pw-forget endopoint and return a 200 response', function(done){
             api.get('/pw-forget')
-            .expect(200, done)
-        })
+            .expect(200, done);
+        });
         it('Should test /chat endopoint and return a 200 response', function(done){
             api.get('/chat')
-            .expect(200, done)
-        })
-    })
-})
+            .expect(200, done);
+        });
+    });
+});
 
 

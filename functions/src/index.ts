@@ -11,7 +11,6 @@ import * as algoliasearch from 'algoliasearch';
 const serviceAccount = require('../serviceaccount.json');
 
 // Initialize app and dependencies
-export const app = express();
 firebase.initializeApp({
   credential: firebase.credential.cert(serviceAccount),
   databaseURL: "https://bartr-b1856.firebaseio.com",
@@ -22,6 +21,8 @@ const algolia = algoliasearch(
   functions.config().algolia.key
 );
 const postsIndex = algolia.initIndex('posts');
+
+export const app = express();
 
 app.use(logger('dev'));
 app.use(bodyParser.json());

@@ -46,6 +46,11 @@ router.get("/geo", async (req, res) => {
 	}
 });
 
+router.get('/test', async (req, res) => {
+	console.log('Headers:', req.headers);
+	res.send('good');
+});
+
 // Get all posts by user
 router.get('/user/:uid', async (req, res) =>  {
 	const userToken: string = req.headers.token as string;
@@ -77,36 +82,6 @@ router.get("/", async (req, res) => {
 	else 
 		res.status(401).send('Unauthorized');
 });
-
-// // Create / update a post
-// router.post('/', async (req, res) => {
-// 	const userToken: string = req.headers.token as string;
-// 	if (!req.body.title) res.status(400).send('Post must have a title');
-// 	else if (!req.body.photos) res.status(400).send('Post must have a picture');
-// 	else if (!req.body.description) res.status(400).send('Post must have a description');
-// 	else if (!req.body._geoloc && !req.body.address) res.status(400).send('Post must have a Geo location or Address');
-// 	else if (!userToken) res.status(401).send('Unauthorized');
-// 	else {
-// 		try {
-// 			const tok = await firebase.auth().verifyIdToken(userToken, true);
-// 			const newPost = await firebase.firestore().collection('/posts').add({
-// 				title: req.body.title,
-// 				picture: req.body.picture,
-// 				description: req.body.description,
-// 				tags: req.body.tags,
-// 				state: 'PENDING',
-// 				userId: tok.uid,
-// 				createdAt: new Date(),
-// 				lastModified: new Date(),
-// 				_geoloc: req.body._geoloc
-// 			});
-// 			res.status(200).send('Created: ' + newPost.id);
-// 		} catch (err) {
-// 			console.error('Error:', err);
-// 			res.status(400).send(err);
-// 		}
-// 	}
-// });
 
 // Get post by id
 router.get('/:postId', async (req, res) => {
@@ -146,6 +121,7 @@ router.delete('/:postId', async (req, res) => {
 		res.status(401).send('Unauthorized');
 });
 
+// Create post route
 router.post('/', multer.array('photos', 12), async (req, res, next) => {
 	const files = req.files as Express.Multer.File[];
 	const userToken: string = req.headers.token as string;
