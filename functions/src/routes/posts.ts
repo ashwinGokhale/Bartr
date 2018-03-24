@@ -169,7 +169,7 @@ router.post('/', multer.array('photos', 12), async (req, res, next) => {
 			{ photoUrls },
 			{ title: req.body.title },
 			{ description: req.body.description },
-			{ tags: req.body.tags ? req.body.tags : req.body.title },
+			{ tags: JSON.parse(req.body.tags) ? JSON.parse(req.body.tags) : req.body.title },
 			{ state: 'PENDING' },
 			{ postId: newPostRef.id },
 			{ userId: tok.uid }, 
