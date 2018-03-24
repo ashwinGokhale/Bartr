@@ -8,7 +8,6 @@ const storage = googleStorage({
 });
 
 const bucket = storage.bucket(functions.config().firebase.storageBucket);
-bucket.makePublic();
 
 export const uploadImageToStorage = (file: Express.Multer.File, id: string) => 
 	new Promise<string>((resolve, reject) => {
@@ -41,12 +40,12 @@ export const uploadImageToStorage = (file: Express.Multer.File, id: string) =>
 		}
 	});
 
-export const deletePostfromStorage = (postId: string) => {
+export const deletePostfromStorage = (postId: string) => 
 	bucket.deleteFiles({
 		prefix: `posts/${postId}/`
 	})
-	.catch(error => console.error(error));
-};
+	.then(value => null)
+	.catch(error => error);
 
 export const successRes = (res, responseData) => res.json({ responseData });
 

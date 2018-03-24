@@ -110,7 +110,8 @@ router.delete('/:postId', async (req, res) => {
 				res.status(401).send('Unauthorized');
 			else {
 				const val = await firebase.firestore().doc(`/posts/${req.params.postId}`).delete();
-				await utils.deletePostfromStorage(req.params.postId);
+				const err = await utils.deletePostfromStorage(req.params.postId);
+				
 				res.status(200).send(`Post: ${req.params.postId} deleted at: ${val.writeTime}`);
 			}
 		} catch (error) {
@@ -137,8 +138,8 @@ router.post('/', multer.array('photos', 12), async (req, res, next) => {
 	try {
 		const tok = await utils.getIDToken(userToken);
 		if (!tok) return utils.errorRes(res, 401, 'Invalid token');
-		let lat = req.body.lat; 
-		let lng = req.body.lng;
+		let lat = parseInt(req.body.lat, 10);
+		let lng = parseInt(req.body.lng, 10);
 		if (req.body.address) {
 			const { data } = await axios.get(
 				'https://maps.googleapis.com/maps/api/geocode/json',
@@ -155,8 +156,8 @@ router.post('/', multer.array('photos', 12), async (req, res, next) => {
 			lng = data.results[0].geometry.location.lng;
 		}
 
-		if (!lat) return utils.errorRes(res, 400, 'Invalid Latitude: ' + lat);
-		if (!lng) return utils.errorRes(res, 400, 'Invalid Longitude: ' + lng);
+		if (!lat) return utils.errorRes(res, 400, 'Invalid Latitude: ' + req.body.lat);
+		if (!lng) return utils.errorRes(res, 400, 'Invalid Longitude: ' + req.body.lng);
 
 		const newPostRef = await firebase.firestore().collection('/posts').doc();
 		const photoUrls = await Promise.all(files.map((file: Express.Multer.File) => utils.uploadImageToStorage(file, newPostRef.id)));
