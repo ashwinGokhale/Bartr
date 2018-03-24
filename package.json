@@ -9,6 +9,7 @@
   "author": "Ashwin Gokhale",
   "license": "MIT",
   "dependencies": {
+    "algoliasearch": "^3.24.11",
     "axios": "^0.17.1",
     "bootstrap": "^4.0.0",
     "firebase": "^4.9.1",
