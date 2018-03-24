@@ -46,9 +46,12 @@ class NavigationHeader extends Component {
   }
 
   doSearch(){
-      index.search({query:''}).then(res =>{
-        console.log(res);
-      })
+      index.search({
+        query:'',
+        tags:['computer']
+      }).then(res => {
+        console.log(res)
+      });
   }
 
   render() {
