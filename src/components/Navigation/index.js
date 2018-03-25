@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import { Link } from 'react-router-dom';
+import { compose } from 'recompose';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { SignOutButton } from '../Common';
 import * as routes from '../../constants';
@@ -46,12 +47,14 @@ class NavigationHeader extends Component {
   }
 
   doSearch(){
-      index.search({
-        query:'',
-        tags:['computer']
-      }).then(res => {
-        console.log(res)
-      });
+    const {
+      history,
+    } = this.props;
+    this.props.history.push({
+      pathname: routes.DISPLAY_POSTS,
+      search: "?curTag="+this.state.curTag,
+      state: { myTag: this.state.curTag }
+    });
   }
 
   render() {
@@ -74,4 +77,6 @@ const mapStateToProps = (store) => ({
   authUser: store.sessionState.authUser,
 });
 
-export default connect(mapStateToProps)(NavigationHeader);
+export default compose(
+  withRouter,
+  connect(mapStateToProps))(NavigationHeader);
