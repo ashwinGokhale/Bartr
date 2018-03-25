@@ -1,10 +1,18 @@
 import React, {Component} from 'react';
-import { Link } from 'react-router-dom';
+import { compose } from 'recompose';
+import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { SignOutButton } from '../Common';
 import * as routes from '../../constants';
 import logo from '../../assets/bartrLogo.png';
 import './index.css'
+
+const algoliasearch = require('algoliasearch');
+const algolia = algoliasearch(
+	'4JI0HWDPVQ',
+	'bf4351dbbfa6cea1d6368431735feca1'
+);
+const index = algolia.initIndex('posts');
 
 const NavigationAuth = () =>
   <div className="buttonsGroup">
@@ -22,6 +30,33 @@ const NavigationNonAuth = () =>
   </div>
 
 class NavigationHeader extends Component {
+
+  constructor(props, context){
+    super(props, context)
+    this.updateTag = this.updateTag.bind(this)
+    this.doSearch = this.doSearch.bind(this)
+    this.state={
+      curTag:''
+    }
+  }
+
+  updateTag(event){
+    this.setState({
+      curTag: event.target.value
+    })      
+  }
+
+  doSearch(){
+    const {
+      history,
+    } = this.props;
+    this.props.history.push({
+      pathname: routes.DISPLAY_POSTS,
+      search: "?curTag="+this.state.curTag,
+      state: { myTag: this.state.curTag }
+    });
+  }
+
   render() {
     return (
       <div className="navBar">
@@ -29,8 +64,8 @@ class NavigationHeader extends Component {
           <img className="logo" src={logo} alt="Bartr"></img>
         </Link>
         <div className="searchBar">
-          <input type="text" className="searchBarInput" placeholder="Search..."/>
-          <span role="img" aria-label="Search" className="searchBarButton">🔍</span>
+          <input onChange={this.updateTag} type="text" className="searchBarInput" placeholder="Search..."/>
+          <span onClick={this.doSearch} role="img" aria-label="Search" className="searchBarButton">🔍</span>
         </div>
         { this.props.authUser ? <NavigationAuth /> : <NavigationNonAuth /> }
       </div>
@@ -42,4 +77,6 @@ const mapStateToProps = (store) => ({
   authUser: store.sessionState.authUser,
 });
 
-export default connect(mapStateToProps)(NavigationHeader);
+export default compose(
+  withRouter,
+  connect(mapStateToProps))(NavigationHeader);
