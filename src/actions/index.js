@@ -52,8 +52,8 @@ export const fetchFeedPosts = () => {
 				}
 			  )
 			  
-			console.log('Got feed posts:', data);
-			dispatch(onSetFeedPosts(data));
+			console.log('Got feed posts:', data.responseData);
+			dispatch(onSetFeedPosts(data.responseData));
 			
 		} catch (error) {
 			console.error('Error:', error.response.data.error);
@@ -73,8 +73,8 @@ export const fetchUserPosts = () => {
 				`/api/posts/user/${auth.currentUser.uid}`,
 				{headers: {token}}
 			)
-			console.log('Got user posts:', data);
-			dispatch(onSetUserPosts(data))
+			console.log('Got user posts:', data.responseData);
+			dispatch(onSetUserPosts(data.responseData))
 		} catch (error) {
 			console.error('Error:', error.response.data.error);
 			dispatch(onErrorUserPosts(error.response.data.error));
@@ -89,10 +89,7 @@ export const createPost = (post) => {
 			// Get DB user and input into Redux store
 			console.log(`Creating user posts w/ user id: ${auth.currentUser.uid}`)
 			const { data: {responseData} } = await axios.post('/api/posts', post, {
-				headers: {
-					'content-type': 'multipart/form-data',
-					token
-				}
+				headers: {token}
 			})
 
 			console.log('Created user post:', responseData);
@@ -130,7 +127,7 @@ export const createUser = (user, token) => {
 	return async dispatch => {
 		try {
 			const response = await axios.post(`/api/users/${user.uid}`, user, {headers: {token}})
-			return response.data	
+			return response.data.responseData
 		} catch (error) {
 			console.error(error)
 			return error
@@ -151,9 +148,9 @@ export const fetchDBUser = () => {
 					`/api/users/${auth.currentUser.uid}`,
 					{headers: {token}}
 				)
-				console.log('Got DB User:', response.data);
-				dispatch(onSetDBUser(response.data));
-				return response.data	
+				console.log('Got DB User:', response.data.responseData);
+				dispatch(onSetDBUser(response.data.responseData));
+				return response.data.responseData
 			} catch (error) {
 				console.error(error)
 				return error
@@ -174,8 +171,8 @@ export const updateDBUser = (user) => {
 				{headers: {token}}
 			)
 			dispatch(onSetDBUser(user))
-			console.log(response.data)
-			return response.data
+			console.log(response.data.responseData)
+			return response.data.responseData
 		} catch (error) {
 			console.error(error)
 			return error
@@ -193,7 +190,7 @@ export const deleteAccount = () => async dispatch => {
 		});
 		const resp = await auth.signOut();
 		dispatch(onSetAuthUser(null));
-		console.log('Deleted user:', data);
+		console.log('Deleted user:', data.responseData);
 	} catch (error) {
 		console.error('Error:', error);
 	}

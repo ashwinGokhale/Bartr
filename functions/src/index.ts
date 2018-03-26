@@ -66,6 +66,4 @@ export const postChanged = functions.firestore.document('/posts/{postId}').onWri
 // Update the search postsIndex every time a blog post is written
 export const usersChanged = functions.firestore.document('/users/{userId}').onWrite(event => handleChange(usersIndex, event));
 
-
-
 export const api = functions.https.onRequest(express().use('/api', app));
