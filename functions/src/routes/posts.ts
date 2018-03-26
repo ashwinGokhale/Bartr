@@ -95,13 +95,10 @@ router.delete('/:postId', async (req, res) => {
 	try {
 		const tok = await firebase.auth().verifyIdToken(userToken, true);
 		const post = await firebase.firestore().doc(`/posts/${req.params.postId}`).get();
-		if (post.data().userId !== tok.uid)
-			return utils.errorRes(res, 401, 'Unauthorized');
-		else {
-			const val = await firebase.firestore().doc(`/posts/${req.params.postId}`).delete();
-			const err = await utils.deletePostfromStorage(req.params.postId);
-			return utils.successRes(res, post.data());
-		}
+		if (post.data().userId !== tok.uid) return utils.errorRes(res, 401, 'Unauthorized');
+		const val = await firebase.firestore().doc(`/posts/${req.params.postId}`).delete();
+		const err = await utils.deletePostfromStorage(req.params.postId);
+		return utils.successRes(res, post.data());
 	} catch (error) {
 		console.error('Error:', error);
 		return utils.errorRes(res, 400, error);

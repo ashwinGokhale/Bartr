@@ -157,7 +157,7 @@ class CreatePostPage extends Component {
 				<div className="postUploadAccount">
 					{/*<input type="file" className="uploadPhoto" placeholder="Choose A Photo" id="photos" onChange={this.onChange} multiple />*/}
 					<label className="custom-file-upload">
-    					<input type="file" classname="UploadPhoto" id="photos" onChange={this.onChange} multiple/>Browse
+    					<input type="file" className="UploadPhoto" id="photos" onChange={this.onChange} multiple/>Browse
 					</label>
 					<label id="uploads" className="filesUploaded"></label>
 				</div>
