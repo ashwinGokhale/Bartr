@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import withAuthorization from '../Session/withAuthorization';
 import { authCondition } from '../../constants';
+import * as routes from '../../constants';
 import { updateDBUser, createPost } from '../../actions';
 import axios from 'axios';
 import insertHere from '../../assets/insertHere.png';
@@ -130,11 +131,17 @@ class CreatePostPage extends Component {
 	render() {
 		return (
 			<form onSubmit={this.onSubmit} encType="multipart/form-data" className="createPost">
+			
+				<label>Title</label><br />
+				<input className="titleAccount" placeholder="Add a title..." id="title" onChange={this.onChange} /><br/>
+				<label>Description</label><br/>
+				<textarea className="descriptionAccount" cols="86" rows ="10" placeholder="Add a description..." id="description" onChange={this.onChange} />
+				<br/>
+
 				<div className="postUploadAccount">
-					<label>Add photos</label>
-					<img className="insertHere" src={insertHere} alt="insertPictureHere.png"></img>
 					<input type="file" className="uploadPhoto" placeholder="Choose A Photo" id="photos" onChange={this.onChange} multiple />
 				</div>
+				
 				<div className="postInformation">
 					<div className="warningForm">
 						{ !!this.state.error ? <p className="warning" style={{'color': 'red'}}>ERROR: {this.state.error}</p> : null }
@@ -145,11 +152,6 @@ class CreatePostPage extends Component {
 						handleAddition={this.handleAddition}
 						handleDrag={this.handleDrag} 
 					/>
-					<label>Title</label>
-					<input className="titleAccount" placeholder="Add a title..." id="title" onChange={this.onChange} /><br/>
-					<label>Description</label><br/>
-					<textarea className="descriptionAccount" cols="86" rows ="10" placeholder="Add a description..." id="description" onChange={this.onChange} />
-					<br/>
 
 					<label>Good</label>
 					<input type="radio" name="postType" onChange={(e) => {this.setState({type: 'good'})}} />

@@ -46,7 +46,7 @@
 
 .filters {
     background-color: rgb(238, 237, 237);
-    height: 65%;
+    height: 60%;
     width: 100%;
 }
 
@@ -256,4 +256,16 @@ ul {
 
 .filterItem {
     height: 8%;
+}
+
+.createPostHome {
+    margin-left: 5%;
+    padding-left: 160px;
+    padding-right: 160px;
+    text-decoration: none;
+    border: 2px solid rgb(255, 255, 255);
+    color: white;
+    background-color: rgb(78, 138, 205);
+    padding-top: 5px;
+    padding-bottom: 5px;
 }

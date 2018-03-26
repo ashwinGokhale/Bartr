@@ -1,5 +1,11 @@
+label {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 100;
+    font-size: 1.25em;
+    margin-left: 2%;
+}
 .createPost {
-    background-color: rgb(238, 237, 237);
+    background-color: white;
     height: 30%;
     width: 100% - 5px;
     border-left: white solid 1px;
@@ -19,10 +25,9 @@
 }
 
 .titleAccount {
-    width: 88%;
+    width: 50%;
     height: 13%;
-    margin-top: 4.4%;
-    margin-left: 3%;
+    margin-left: 2%;
     margin-bottom: 1%;
     font-size: 20px;
 }
@@ -30,7 +35,7 @@
 .descriptionAccount {
     width: 88%;
     height: 34%;
-    margin-left: 3%;
+    margin-left: 2%;
     margin-bottom: 1.5%;
     vertical-align: text-top;
     font-size: 15px;
@@ -62,8 +67,8 @@
     border: gray solid 1px;
     width: 65%;
     height: 13%;
-    margin-left: 23%;
-    margin-top: 5%;
+    margin-left: 8%;
+    margin-top: 0;
     border-radius: 0.5em 0.5em 0.5em 0.5em;
 }
 
@@ -128,3 +133,4 @@ div.ReactTags__suggestions ul li.ReactTags__activeSuggestion {
     background: #b7cfe0;
     cursor: pointer;
 }
+

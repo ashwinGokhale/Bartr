@@ -36,7 +36,7 @@ class HomePage extends Component {
               </div>
             </div>
             
-            <Link to={CREATE_POST}>Create Post</Link>
+            <Link className="createPostHome" to={CREATE_POST}>Create Post</Link>
             
             <div className="filters">
               <div className="filtersCard">
