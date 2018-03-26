@@ -123,17 +123,22 @@ index.deleteObject('xfxewSXkciaxAKmeu9lR')
 	console.error(error);
 });
 
-// index.search("", {
-// 	// "hitsPerPage": "10",
-// 	// "page": "0",
-// 	// "analytics": "false",
-// 	"attributesToRetrieve": "title",
-// 	// "facets": "[]",
-// 	"aroundLatLng": '37.947817, -122.565753',
-// 	"aroundRadius": 'all' // 1km Radius
-// }).then(value => {
-// 	console.log(value);
-// })
+index.search({
+	query
+})
+
+index.search("", {
+	"hitsPerPage": "10",
+	// "hitsPerPage": "10",
+	// "page": "0",
+	// "analytics": "false",
+	"attributesToRetrieve": "title",
+	// "facets": "[]",
+	"aroundLatLng": '37.947817, -122.565753',
+	"aroundRadius": 'all' // 1km Radius
+}).then(value => {
+	console.log(value);
+});
 
 // index.setSettings({
 // 	'searchableAttributes': [
