@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import withAuthorization from '../Session/withAuthorization';
 import { authCondition } from '../../constants';
+import * as routes from '../../constants';
 import { updateDBUser, createPost } from '../../actions';
 import axios from 'axios';
 import insertHere from '../../assets/insertHere.png';
@@ -33,8 +34,15 @@ class CreatePostPage extends Component {
 
 	onChange = (e) => {
 		e.preventDefault();
-		if (e.target.id === 'photos')
+		if (e.target.id === 'photos') {
 			this.setState({photos: e.target.files})
+			var x = document.getElementById("uploads");
+			if(e.target.files.length >= 2) {
+				x.innerHTML = e.target.files.length + " files";
+			} else {
+				x.innerHTML = e.target.files[0].name
+			}
+		}
 		else
 			this.setState({[e.target.id] : e.target.value})
 	}
@@ -130,27 +138,32 @@ class CreatePostPage extends Component {
 	render() {
 		return (
 			<form onSubmit={this.onSubmit} encType="multipart/form-data" className="createPost">
-				<div className="postUploadAccount">
-					<label>Add photos</label>
-					<img className="insertHere" src={insertHere} alt="insertPictureHere.png"></img>
-					<input type="file" className="uploadPhoto" placeholder="Choose A Photo" id="photos" onChange={this.onChange} multiple />
-				</div>
-				<div className="postInformation">
-					<div className="warningForm">
-						{ !!this.state.error ? <p className="warning" style={{'color': 'red'}}>ERROR: {this.state.error}</p> : null }
-					</div>
-					<ReactTags 
-						tags={this.state.tags}
-						handleDelete={this.handleDelete}
-						handleAddition={this.handleAddition}
-						handleDrag={this.handleDrag} 
-					/>
-					<label>Title</label>
-					<input className="titleAccount" placeholder="Add a title..." id="title" onChange={this.onChange} /><br/>
-					<label>Description</label><br/>
-					<textarea className="descriptionAccount" cols="86" rows ="10" placeholder="Add a description..." id="description" onChange={this.onChange} />
-					<br/>
+			
+				<label><strong>Title</strong></label><br />
+				<input className="titleAccount" placeholder="Add a title..." id="title" onChange={this.onChange} /><br/>
+				<label><strong>Description</strong></label><br/>
+				<textarea className="descriptionAccount" cols="86" rows ="10" placeholder="Add a description..." id="description" onChange={this.onChange} />
+				<br/>
 
+				<label><strong>Tags</strong></label>
+				<ReactTags
+					tags={this.state.tags}
+					handleDelete={this.handleDelete}
+					handleAddition={this.handleAddition}
+					handleDrag={this.handleDrag} 
+				/>
+
+				<label><strong>Photos</strong></label><br/>
+				<div className="postUploadAccount">
+					{/*<input type="file" className="uploadPhoto" placeholder="Choose A Photo" id="photos" onChange={this.onChange} multiple />*/}
+					<label className="custom-file-upload">
+    					<input type="file" classname="UploadPhoto" id="photos" onChange={this.onChange} multiple/>Browse
+					</label>
+					<label id="uploads" className="filesUploaded"></label>
+				</div>
+				
+				<div className="postInformation">
+					<label><strong>Post Type:</strong></label>
 					<label>Good</label>
 					<input type="radio" name="postType" onChange={(e) => {this.setState({type: 'good'})}} />
 					<label>Service</label>
@@ -158,17 +171,22 @@ class CreatePostPage extends Component {
 					<br/>
 					<br/>
 
-					<label>Current Location</label>
+					<label><strong>Location: </strong></label>
+					<label>Current</label>
 					<input type="radio" name="location" onChange={(e) => {this.setState({currentLocation: true})}} />
 					<label>Address</label>
 					<input type="radio" name="location" onChange={(e) => {this.setState({currentLocation: false})}} />
-					<br/>
+					
 					{
 						!this.state.currentLocation ?
-							<input id="address" onChange={this.onChange} /> : 
+							<input className="addressInput" id="address" onChange={this.onChange} /> : 
 							null
 					}
 
+					<div className="warningForm">
+						{ !!this.state.error ? <p className="warning" style={{'color': 'red'}}>ERROR: {this.state.error}</p> : null }
+					</div>
+					<br/>
 					<input type="submit" className="createAccountPost" value="Create Post"/>
 				</div>
 			</form>
