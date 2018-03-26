@@ -47,7 +47,7 @@ export const deletePostfromStorage = (postId: string) =>
 	.then(value => null)
 	.catch(error => error);
 
-export const successRes = (res, responseData) => res.json({ responseData });
+export const successRes = (res, responseData) => res.json({status: 200, responseData });
 
 export const errorRes = (res, status: number, error) =>
 	res.status(status).json({

@@ -4,7 +4,7 @@
     "lint": "./node_modules/.bin/tslint --project .",
     "build": "./node_modules/.bin/tsc",
     "watch": "./node_modules/.bin/tsc -w",
-    "test": "mocha -t 30000 ./test/test",
+    "test": "./node_modules/.bin/mocha -t 30000 lib/test",
     "serve": "./node_modules/.bin/firebase serve --only functions,hosting",
     "shell": "npm run build && ./node_modules/.bin/firebase experimental:functions:shell",
     "watchServe": "(npm run watch &) && npm run serve",
@@ -36,7 +36,6 @@
     "node-mocks-http": "^1.6.7",
     "sinon": "^4.3.0",
     "sinon-chai": "^2.14.0",
-    "supertest": "^3.0.0",
     "util": "^0.10.3",
     "uuid": "^3.2.1"
   },
@@ -62,8 +61,7 @@
     "ts-node": "^4.1.0",
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.7.0",
-    "typescript": "^2.5.3",
-    "typings": "^2.1.1"
+    "typescript": "^2.5.3"
   },
   "private": true
 }
