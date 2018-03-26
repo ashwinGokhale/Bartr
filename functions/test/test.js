@@ -11,6 +11,13 @@ var should = require('chai').should();
 var expect = require('chai').expect;
 var api = supertest('http://localhost:5000');
 
+const algoliasearch = require('algoliasearch');
+const algolia = algoliasearch(
+	'4JI0HWDPVQ',
+	'bf4351dbbfa6cea1d6368431735feca1'
+);
+const index = algolia.initIndex('posts');
+
 
 describe('----Firestore Unit Tests---- \n\n', function(){
     var db;
@@ -76,6 +83,46 @@ describe('----Firestore Unit Tests---- \n\n', function(){
         });
     });    
 
+    describe("\n\n\n--Test Algolia Queries--\n", () => {
+            it('Should add an index to the algolia indices posts', function(done){
+                var objects = [{
+                    tags: ["unit", "test"],
+                    title: "Unit test",
+                    _geoloc: { lat: 40, lng: -40 },
+                    description: "unit test",
+                    state: "PENDING",
+                    type: "good"
+                }];
+
+                index.addObjects(objects, function(err, content){
+                    console.log(content);
+                    done();
+                })
+            })
+
+            it('Should query last post by tag and return a Promise', function(done){
+                //console.log("check");
+                index.setSettings({
+                    'searchableAttributes': [
+                      'title',
+                      'tags'
+                    ]
+                  });
+                             
+                var hold;
+                const results = index.search("unit", {
+                    "hitsPerPage": "100",
+                    "analytics": "false",
+                    "attributesToRetrieve": "*",
+                    "facets": "[]"
+                  }).then(res => {
+                       console.log(res);
+                       done();
+                  });
+                  
+            })
+    })
+
     describe("\n\n\n--Test Endpoints--\n", () => {
         it('Should test / the landing page endpoint and return a 200 response', function(done){
             api.get('/')
@@ -85,22 +132,26 @@ describe('----Firestore Unit Tests---- \n\n', function(){
             api.get('/posts')
             .expect(200, done);
         });
-        it('Should test /login endopoint and return a 200 response', function(done){
+        it('Should test /login endpoint and return a 200 response', function(done){
             api.get('/login')
             .expect(200, done);
         });
-        it('Should test /signup endopoint and return a 200 response', function(done){
+        it('Should test /signup endpoint and return a 200 response', function(done){
             api.get('/signup')
             .expect(200, done);
         });
-        it('Should test /pw-forget endopoint and return a 200 response', function(done){
+        it('Should test /pw-forget endpoint and return a 200 response', function(done){
             api.get('/pw-forget')
             .expect(200, done);
         });
-        it('Should test /chat endopoint and return a 200 response', function(done){
+        it('Should test /chat endpoint and return a 200 response', function(done){
             api.get('/chat')
             .expect(200, done);
         });
+        it('Should test /posts endpoint and return a 200 response', function(done){
+            api.get('/posts')
+            .expect(200, done);
+        })
     });
 });
 
