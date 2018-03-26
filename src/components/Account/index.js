@@ -8,7 +8,7 @@ import defaultPhoto from '../../assets/default.png';
 // import PasswordChangeForm from '../PasswordChange';
 import withAuthorization from '../Session/withAuthorization';
 import PostItem from '../Common/PostItem';
-import { fetchUserPosts } from '../../actions'
+import { fetchUserPosts, fetchDBUser } from '../../actions'
 import './account.css'
 
 class AccountPage extends React.Component {
@@ -21,7 +21,7 @@ class AccountPage extends React.Component {
   }
 
   render() {
-    const { user, userPosts } = this.props;
+    const { dbUser, userPosts } = this.props;
     console.log('Rendering userPosts: ', userPosts)
     return (
       <div>
@@ -30,14 +30,14 @@ class AccountPage extends React.Component {
             <div className="column leftCol">
               <div className="profile">
                 <div className="profileCard">
-                  <img className="profilePhoto" src={defaultPhoto} alt="goodsForGoods.png"></img>
-                  <h3 className="accountName">{user.email}</h3>
+                  <img className="profilePhoto" src={dbUser.photoUrl} onError={(e)=>{e.target.src=defaultPhoto}}></img>
+                  <h3 className="accountName">{dbUser.displayName}</h3>
                   <h5 className="rating">-----rating is future sprint-----</h5>
                   <a href="https://docs.google.com/forms/d/e/1FAIpQLScDEeZwyH-fQiDNSUggxKMZFNPm03H9cF3IaI5uwzR7MeECkA/viewform?usp=sf_link" target="_blank"><button className="reportUser">report</button></a>
 
                 </div>
               </div>
-              <Link to={CREATE_POST}>Create Post</Link>
+              <Link className="createPostAccount" to={CREATE_POST}>Create Post</Link>
               <div className="bios">
                 <div className="biosCard">
                   <center><h4>About Me</h4></center>
@@ -76,11 +76,11 @@ class AccountPage extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-  user: state.sessionState.authUser,
+  dbUser: state.sessionState.dbUser,
   userPosts: state.postsState.userPosts,
 });
 
 export default compose(
   withAuthorization((authUser) => !!authUser),
-  connect(mapStateToProps, { fetchUserPosts })
+  connect(mapStateToProps, { fetchUserPosts, fetchDBUser })
 )(AccountPage);
