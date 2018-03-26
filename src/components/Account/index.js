@@ -37,7 +37,7 @@ class AccountPage extends React.Component {
 
                 </div>
               </div>
-              <Link to={CREATE_POST}>Create Post</Link>
+              <Link className="createPostAccount" to={CREATE_POST}>Create Post</Link>
               <div className="bios">
                 <div className="biosCard">
                   <center><h4>About Me</h4></center>

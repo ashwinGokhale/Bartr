@@ -16,11 +16,11 @@ class PostItem extends Component {
 		return (
 			<div className="placeHolder">
 				<div className="postTitle">
+					<div className="floatRight">{
+						type === 'user' ? <button onClick={this.onClick}>X</button> : null
+					}</div>
 					<h3>{post.title}</h3>
 				</div>
-				{
-					type === 'user' ? <button onClick={this.onClick}>X</button> : null
-				}
 				<div className="postInfo">
 					<div className="postPicture">
 						<img className="itemPicture" alt="itemPicture" src={post.photoUrls[0]}></img>
