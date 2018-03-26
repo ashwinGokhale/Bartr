@@ -21,16 +21,14 @@ class HomePage extends Component {
 
   render() {
     const { dbUser, feedPosts } = this.props;
-
     console.log('Rendering feed posts:', feedPosts)
-
     return (
       <div>
         <div className="row">
           <div className="column leftSide">
             <div className="profile">
               <div className="profileCard">
-                <img className="profilePhoto" src={dbUser.photoUrl}onError={(e)=>{e.target.src=defaultPhoto}}></img>
+                <img className="profilePhoto" src={dbUser.photoUrl} onError={(e)=>{e.target.src=defaultPhoto}}></img>
                 { !!dbUser && <h5 className="userName">{dbUser.displayName}</h5> }
                 <h5 className="rating">-----rating is future sprint-----</h5>
               </div>
