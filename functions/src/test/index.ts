@@ -123,7 +123,7 @@ describe('-- API Tests --', () => {
 		});
 	});
 
-	describe('-- /posts Tests --', () => {
+	describe('\n-- Test /posts  --', () => {
 		let postId: string;
 		it('Should create a post', done => {
 			const testPost = {
@@ -168,6 +168,50 @@ describe('-- API Tests --', () => {
 			.catch(err => done(err));
 		});
 
+		it('Should query posts', done => {
+			api
+			.get('/posts/geo')
+			.query({
+				radius: 25000,
+				lat: 40.4242796,
+				lng: -86.9293319
+			})
+			.set({token})
+			.expect(200)
+			.then(response => {
+				const data: object[] = response.body.responseData;
+				assert.typeOf(data, 'array', 'Response data is an array');
+				data.forEach(post => {
+					assert.property(post, 'photoUrls');
+					assert.property(post, 'title');
+					assert.property(post, 'description');
+					assert.property(post, 'tags');
+					assert.property(post, 'state');
+					assert.property(post, 'tags');
+					assert.property(post, 'userId');
+					assert.property(post, 'postId');
+					assert.property(post, 'createdAt');
+					assert.property(post, 'lastModified');
+					assert.property(post, '_geoloc');
+				});
+				done();
+			})
+			.catch(error => done(error));
+		});
+
+		it('Should fail to delete another user\'s post', done => {
+			assert.isNotNull(postId, 'Post ID');
+			api
+			.delete(`/posts/${postId}`)
+			.set({token:testToken})
+			.expect(401)
+			.then(response => {
+				assert.propertyVal(response.body, 'error', 'Unauthorized');
+				done();
+			})
+			.catch(err => done(err));
+		});
+
 		it('Should delete a post', done => {
 			assert.isNotNull(postId, 'Post ID');
 			api
@@ -194,7 +238,7 @@ describe('-- API Tests --', () => {
 	});
 
 
-	describe('-- /users Tests --', () => {
+	describe('\n-- Test /users --', () => {
 		it('Should create the user', done => {
 			api
 			.post(`/users/${testUser.uid}`)
@@ -241,6 +285,18 @@ describe('-- API Tests --', () => {
 				assert.property(data, 'photoUrl');
 				assert.property(data, 'uid');
 				assert.propertyVal(data, 'uid', testUser.uid);
+				done();
+			})
+			.catch(err => done(err));
+		});
+
+		it('Should fail to delete the different user', done => {
+			api
+			.delete(`/users/${user.uid}`)
+			.set({token:testToken})
+			.expect(401)
+			.then(response => {
+				assert.propertyVal(response.body, 'error', 'Unauthorized');
 				done();
 			})
 			.catch(err => done(err));
