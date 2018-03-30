@@ -1,10 +1,10 @@
 {
-  "algolia": {
-    "index": "posts",
-    "key": "23a58b75df085d3635a653ba0b54c27f",
-    "app": "JAGNN9QV1Z"
-  },
   "gmaps": {
     "key": "AIzaSyCS0wuKGReGQWSfs-YZY-YTdMpyvLgU5Ss"
+  },
+  "algolia": {
+    "app": "JAGNN9QV1Z",
+    "key": "23a58b75df085d3635a653ba0b54c27f",
+    "index": "posts"
   }
 }

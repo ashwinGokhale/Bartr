@@ -2,10 +2,9 @@ import * as express from 'express';
 import * as functions from 'firebase-functions';
 import * as firebase from 'firebase-admin';
 import * as algoliasearch from 'algoliasearch';
-import * as googleStorage from '@google-cloud/storage';
 import * as Multer from 'multer';
 import axios from 'axios';
-import { uploadImageToStorage } from '../utils';
+import * as utils from '../utils';
 export const router = express.Router();
 
 const algolia = algoliasearch(
@@ -14,13 +13,6 @@ const algolia = algoliasearch(
 );
 
 const postsIndex = algolia.initIndex('posts');
-
-// const storage = googleStorage({
-// 	projectId: functions.config().firebase.projectId,
-// 	keyFilename: '../serviceaccount.json'
-// });
-  
-// const bucket = storage.bucket(functions.config().firebase.storageBucket);
 
 const multer = Multer({
 	storage: Multer.memoryStorage(),
@@ -32,136 +24,107 @@ const multer = Multer({
 // Get post by id
 router.get("/geo", async (req, res) => {
 	const userToken: string = req.headers.token as string;
-	
-	if (!req.query.radius) res.status(400).send('Query must have a Radius');
-	else if (isNaN(req.query.radius)) res.status(400).send('Radius must be a number');
-	else if (!req.query.lat) res.status(400).send('Query must have a Latitude');
-	else if (isNaN(req.query.lat)) res.status(400).send('Latitude must be a number');
-	else if (!req.query.lng) res.status(400).send('Query must have a Longitude');
-	else if (isNaN(req.query.lng)) res.status(400).send('Longitude must be a number');
-	else if (!userToken) res.status(401).send('Unauthorized');
-	else {
-		try {
-			const tok = await firebase.auth().verifyIdToken(userToken, true);
-			const posts = await postsIndex.search({
-				aroundLatLng: `${req.query.lat}, ${req.query.lng}`,
-				aroundRadius: req.query.radius
-			});
-			res.json(posts.hits);
-		} catch (error) {
-			res.status(400).send(error);
-		}
+	console.log('Geo Body:', req.body);
+	console.log('Lat:', req.body.lat ? req.body.lat : 'NONE');
+	if (!req.query.radius) return utils.errorRes(res, 400, 'Query must have a Radius');
+	if (isNaN(req.query.radius)) return utils.errorRes(res, 400, 'Radius must be a number');
+	if (!req.query.lat) return utils.errorRes(res, 400, 'Query must have a Latitude');
+	if (isNaN(req.query.lat)) return utils.errorRes(res, 400, 'Latitude must be a number');
+	if (!req.query.lng) return utils.errorRes(res, 400, 'Query must have a Longitude');
+	if (isNaN(req.query.lng)) return utils.errorRes(res, 400, 'Longitude must be a number');
+	if (!userToken) return utils.errorRes(res, 401, 'Unauthorized');
+	try {
+		const tok = await firebase.auth().verifyIdToken(userToken, true);
+		const posts = await postsIndex.search({
+			aroundLatLng: `${req.query.lat}, ${req.query.lng}`,
+			aroundRadius: req.query.radius
+		});
+		return utils.successRes(res, posts.hits);
+	} catch (error) {
+		console.error('Error:', error);
+		return utils.errorRes(res, 400, error);
 	}
 });
 
 // Get all posts by user
 router.get('/user/:uid', async (req, res) =>  {
 	const userToken: string = req.headers.token as string;
-	if (userToken) {
-		try {
-			const tok = await firebase.auth().verifyIdToken(userToken, true);
-			const resp = await firebase.firestore().collection('/posts').where('userId', '==', req.params.uid).get();
-			res.json(resp.docs.map(doc => doc.data()));
-		} catch (error) {
-			res.status(400).send(error);
-		}
+	if (!userToken) return utils.errorRes(res, 401, 'Unauthorized');
+	try {
+		const tok = await firebase.auth().verifyIdToken(userToken, true);
+		const resp = await firebase.firestore().collection('/posts').where('userId', '==', req.params.uid).get();
+		return utils.successRes(res, resp.docs.map(doc => doc.data()));
+	} catch (error) {
+		console.error('Error:', error);
+		return utils.errorRes(res, 400, error);
 	}
-	else 
-		res.status(401).send('Unauthorized');
 });
 
 // Get all posts
 router.get("/", async (req, res) => {
 	const userToken: string = req.headers.token as string;
-	if (userToken) {
-		try {
-			const tok = await firebase.auth().verifyIdToken(userToken, true);
-			const resp = await firebase.firestore().collection('/posts').get();
-			res.json(resp.docs.map(doc => doc.data()));
-		} catch (error) {
-			res.status(400).send(error);
-		}
-	}
-	else 
-		res.status(401).send('Unauthorized');
-});
-
-// Create / update a post
-router.post('/', async (req, res) => {
-	const userToken: string = req.headers.token as string;
-	if (!req.body.title) res.status(400).send('Post must have a title');
-	else if (!req.body.photos) res.status(400).send('Post must have a picture');
-	else if (!req.body.description) res.status(400).send('Post must have a description');
-	else if (!req.body._geoloc && !req.body.address) res.status(400).send('Post must have a Geo location or Address');
-	else if (!userToken) res.status(401).send('Unauthorized');
-	else {
-		try {
-			const tok = await firebase.auth().verifyIdToken(userToken, true);
-			const newPost = await firebase.firestore().collection('/posts').add({
-				title: req.body.title,
-				picture: req.body.picture,
-				description: req.body.description,
-				tags: req.body.tags,
-				state: 'PENDING',
-				userId: tok.uid,
-				createdAt: new Date(),
-				lastModified: new Date(),
-				_geoloc: req.body._geoloc
-			});
-			res.status(200).send('Created: ' + newPost.id);
-		} catch (err) {
-			console.error('Error:', err);
-			res.status(400).send(err);
-		}
+	if (!userToken) return utils.errorRes(res, 401, 'Unauthorized');
+	try {
+		const tok = await firebase.auth().verifyIdToken(userToken, true);
+		const resp = await firebase.firestore().collection('/posts').get();
+		return utils.successRes(res, resp.docs.map(doc => doc.data()));
+	} catch (error) {
+		console.error('Error:', error);
+		return utils.errorRes(res, 400, error);
 	}
 });
 
 // Get post by id
 router.get('/:postId', async (req, res) => {
 	const userToken: string = req.headers.token as string;
-	if (userToken) {
-		try {
-			const tok = await firebase.auth().verifyIdToken(userToken, true);
-			const postSnap = await firebase.firestore().doc(`/posts/${req.params.postId}`).get();
-			res.json(postSnap.data());
-		} catch (error) {
-			res.status(400).send(error);
-		}
+	if (!userToken) return utils.errorRes(res, 401, 'Unauthorized');
+	try {
+		const tok = await firebase.auth().verifyIdToken(userToken, true);
+		const postSnap = await firebase.firestore().doc(`/posts/${req.params.postId}`).get();
+		return utils.successRes(res, postSnap.data());
+	} catch (error) {
+		console.error('Error:', error);
+		return utils.errorRes(res, 400, error);
 	}
-	else 
-		res.status(401).send('Unauthorized');
 });
 
 // Delete post by id
 router.delete('/:postId', async (req, res) => {
 	const userToken: string = req.headers.token as string;
-	if (userToken) {
-		try {
-			const tok = await firebase.auth().verifyIdToken(userToken, true);
-			const val = await firebase.firestore().doc(`/posts/${req.params.postId}`).delete();
-			res.send('Delete succeeded');
-		} catch (error) {
-			res.status(400).send(error);
-		}
-	}
-	else 
-		res.status(401).send('Unauthorized');
-});
-
-router.post('/test', multer.array('photos', 12), async (req, res, next) => {
-	const files = req.files as Express.Multer.File[];
-	const userToken: string = req.headers.token as string;
-	if (!req.body.title) return res.status(400).send('Post must have a title');
-	else if (!files.length) return res.status(400).send('Post must have a picture');
-	else if (!req.body.description) return res.status(400).send('Post must have a description');
-	else if (!req.body._geoloc && !req.body.address) return res.status(400).send('Post must have a Geo location or Address');
-	else if (!userToken) return res.status(401).send('Unauthorized');
+	if (!userToken) return utils.errorRes(res, 401, 'Unauthorized');
 	try {
 		const tok = await firebase.auth().verifyIdToken(userToken, true);
-		const newPostRef = await firebase.firestore().collection('/posts').doc();
-		const photoUrls = await Promise.all(files.map((file: Express.Multer.File) => uploadImageToStorage(file, newPostRef.id)));
-		let lat = req.body.lat;
-		let lng = req.body.lng;
+		const post = await firebase.firestore().doc(`/posts/${req.params.postId}`).get();
+		if (post.data().userId !== tok.uid) return utils.errorRes(res, 401, 'Unauthorized');
+		const val = await firebase.firestore().doc(`/posts/${req.params.postId}`).delete();
+		const err = await utils.deletePostfromStorage(req.params.postId);
+		return utils.successRes(res, post.data());
+	} catch (error) {
+		console.error('Error:', error);
+		return utils.errorRes(res, 400, error);
+	}
+});
+
+// Create post route
+router.post('/', multer.array('photos', 12), async (req, res, next) => {
+	const files = req.files as Express.Multer.File[];
+	const userToken: string = req.headers.token as string;
+	if (!req.body.title) return utils.errorRes(res, 400, 'Post must have a title');
+	if (!files || !files.length) return utils.errorRes(res, 400, 'Post must have a picture');
+	if (!req.body.description) return utils.errorRes(res, 400, 'Post must have a description');
+	if (!req.body.type) return utils.errorRes(res, 400, 'Post must have a type');
+	if (req.body.type !== 'good' && req.body.type !== 'service') return utils.errorRes(res, 400, 'Invalid post type: ' + req.body.type);
+	if (!req.body.lat && !req.body.lng && !req.body.address) return utils.errorRes(res, 400, 'Post must have a Geo location or Address');
+	if(!Array.isArray(req.body.tags))
+		req.body.tags = JSON.parse(req.body.tags);
+	
+	if (!userToken) return utils.errorRes(res, 401, 'Unauthorized');
+	console.log('Post body:', req.body);
+	try {
+		const tok = await utils.getIDToken(userToken);
+		if (!tok) return utils.errorRes(res, 401, 'Invalid token');
+		let lat = parseInt(req.body.lat, 10);
+		let lng = parseInt(req.body.lng, 10);
 		if (req.body.address) {
 			const { data } = await axios.get(
 				'https://maps.googleapis.com/maps/api/geocode/json',
@@ -172,11 +135,18 @@ router.post('/test', multer.array('photos', 12), async (req, res, next) => {
 					}
 				}
 			);
-			if (!data.results.length) return res.status(400).send('Invalid address: ' + req.body.address);
+			if (!data.results.length) return utils.errorRes(res, 400, 'Invalid address: ' + req.body.address);
 			
 			lat = data.results[0].geometry.location.lat;
 			lng = data.results[0].geometry.location.lng;
 		}
+
+		if (!lat) return utils.errorRes(res, 400, 'Invalid Latitude: ' + req.body.lat);
+		if (!lng) return utils.errorRes(res, 400, 'Invalid Longitude: ' + req.body.lng);
+
+		const newPostRef = await firebase.firestore().collection('/posts').doc();
+		const photoUrls = await Promise.all(files.map((file: Express.Multer.File) => utils.uploadImageToStorage(file, newPostRef.id)));
+
 
 		const postBuilder = {};
 		// Build properties of user to update
@@ -184,23 +154,21 @@ router.post('/test', multer.array('photos', 12), async (req, res, next) => {
 			postBuilder,
 			{ photoUrls },
 			{ title: req.body.title },
-
 			{ description: req.body.description },
 			{ tags: req.body.tags ? req.body.tags : req.body.title },
+			{ type: req.body.type },
 			{ state: 'PENDING' },
 			{ postId: newPostRef.id },
 			{ userId: tok.uid }, 
 			{ createdAt: new Date() },
 			{ lastModified: new Date() },
-
-			{ _geoloc: {lat, lng} }
-			
+			{ _geoloc: { lat, lng } }
 		);
 
-		const newPost = await newPostRef.set(postBuilder);
-		return res.status(200).send('Created post: ' + newPostRef.id + ' at ' + newPost.writeTime);		
+		await newPostRef.set(postBuilder);
+		return utils.successRes(res, postBuilder);
 	} catch (err) {
 		console.error('Error:', err);
-		return res.status(400).send(err);
+		return utils.errorRes(res, 400, err);
 	}
 });

@@ -58,7 +58,7 @@ let postInfo = [
 	name: 'Tenth',
 	_geoloc: { lat: 38.429970, lng: -122.711332 } // Santa Rosa
 	}
-]
+];
 
 function template ({name, _geoloc}, userId) {return{
 	userId,
@@ -69,10 +69,10 @@ function template ({name, _geoloc}, userId) {return{
 	state: 'PENDING',
 	seller: 'test@test.com',
 	_geoloc
-}}
+};}
 
 const uid = 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjYyZjQ1NTM5ZTFjYTZhNjFjYjM2ZTI3N2FkYzRlZDAwNGVmODBjY2QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vYmFydHItYjE4NTYiLCJhdWQiOiJiYXJ0ci1iMTg1NiIsImF1dGhfdGltZSI6MTUxOTk2Mjg4MywidXNlcl9pZCI6ImswdjByQW1DRTRWUmIxN2psU1ZrMTRGaEpvZzEiLCJzdWIiOiJrMHYwckFtQ0U0VlJiMTdqbFNWazE0RmhKb2cxIiwiaWF0IjoxNTIwMzEzOTcyLCJleHAiOjE1MjAzMTc1NzIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJ0ZXN0QHRlc3QuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.SxrbsbI50ZG9GhQVEdWYAWp_988tY158mPPt_N7Vcj5wXlfdTeEwSLq83QXULH0fg8qAUMJJ_Or05ZendIMRUncV9KoH85aTgb-XYs7Tt38xqh7J2shLeIAD-ZdOFIlaBq1HrZQML5wqA9RKj_CfBqUoneaPxfP94oH-PROHWNnHcMlBA_J4j1Ox0gspF_MLBowXw_XEXng1Rhv2W2NbTpSNImeBhFaFMekMXM92MGLgc1IC7dn2ipgfUQbzXizGCzEpJgrLnWov8wx9a-Fw2JaPsf6W-uJeTYQvsHM7XVQeFj78bkw8lXYoMuyptmx9BPXkv-68rpLLQLSsofxW2w';
-const userId = 'k0v0rAmCE4VRb17jlSVk14FhJog1'
+const userId = 'k0v0rAmCE4VRb17jlSVk14FhJog1';
 // postInfo.forEach(async info => {
 // 	try {
 // 		const resp = await axios.post(
@@ -102,30 +102,43 @@ const userId = 'k0v0rAmCE4VRb17jlSVk14FhJog1'
 // .then(resp => console.log(resp.data))
 // .catch(err => console.error(err))
 
-axios.get(`http://localhost:5000/api/posts/geo`, {
-	headers: {
-		token: uid
-	},
-	params: {
-		lat: 37.761631, 
-		lng: -122.424232,
-		radius: 25000
-	}
-})
-.then(resp => console.log(resp.data))
-.catch(err => console.error(err))
-
-// index.search("", {
-// 	// "hitsPerPage": "10",
-// 	// "page": "0",
-// 	// "analytics": "false",
-// 	"attributesToRetrieve": "title",
-// 	// "facets": "[]",
-// 	"aroundLatLng": '37.947817, -122.565753',
-// 	"aroundRadius": 'all' // 1km Radius
-// }).then(value => {
-// 	console.log(value);
+// axios.get(`http://localhost:5000/api/posts/geo`, {
+// 	headers: {
+// 		token: uid
+// 	},
+// 	params: {
+// 		lat: 37.761631, 
+// 		lng: -122.424232,
+// 		radius: 25000
+// 	}
 // })
+// .then(resp => console.log(resp.data))
+// .catch(err => console.error(err));
+
+index.deleteObject('xfxewSXkciaxAKmeu9lR')
+.then(value => {
+	console.log(value);
+})
+.catch(error => {
+	console.error(error);
+});
+
+index.search({
+	query
+})
+
+index.search("", {
+	"hitsPerPage": "10",
+	// "hitsPerPage": "10",
+	// "page": "0",
+	// "analytics": "false",
+	"attributesToRetrieve": "title",
+	// "facets": "[]",
+	"aroundLatLng": '37.947817, -122.565753',
+	"aroundRadius": 'all' // 1km Radius
+}).then(value => {
+	console.log(value);
+});
 
 // index.setSettings({
 // 	'searchableAttributes': [

@@ -29,7 +29,7 @@ class SupportPage extends Component {
           <div className="headerSupport"> Support </div>
           <div className="textBoxSupport">
               <h2> The 24/7 Bartr support team may be reached at <a href="mailto:BartrTradeHelp@gmail.com">BartrTradeHelp@gmail.com</a> and 
-                  will promptly respond to your email.
+                  will promptly respond to your email. If you need to report a user click <a href="https://docs.google.com/forms/d/e/1FAIpQLScDEeZwyH-fQiDNSUggxKMZFNPm03H9cF3IaI5uwzR7MeECkA/viewform?usp=sf_link" target="_blank">here</a>
               </h2>
               <div className="headerSupport"> Frequently Asked Questions </div>
               <div className="FAQ">

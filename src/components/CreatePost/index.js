@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { WithContext as ReactTags } from 'react-tag-input';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import withAuthorization from '../Session/withAuthorization';
 import { authCondition } from '../../constants';
-import { createPost } from '../../actions';
+import * as routes from '../../constants';
+import { updateDBUser, createPost } from '../../actions';
 import axios from 'axios';
 import insertHere from '../../assets/insertHere.png';
 import './index.css'
@@ -16,19 +18,31 @@ class CreatePostPage extends Component {
 			tags: [],
 			description: '',
 			title: '',
-			lat: 0,
-			radius: 0,
 			photos: [],
 			currentLocation: true,
 			address: '',
-			error: null
+			type: '',
+			error: this.props.userPostsError
 		}
 	}
 
+	componentWillReceiveProps(nextProps) {
+		if(JSON.stringify(this.props.userPostsError) !== JSON.stringify(nextProps.userPostsError))
+			this.setState({ error: nextProps.userPostsError })
+	} 
+	
+
 	onChange = (e) => {
 		e.preventDefault();
-		if (e.target.id === 'photos')
+		if (e.target.id === 'photos') {
 			this.setState({photos: e.target.files})
+			var x = document.getElementById("uploads");
+			if(e.target.files.length >= 2) {
+				x.innerHTML = e.target.files.length + " files";
+			} else {
+				x.innerHTML = e.target.files[0].name
+			}
+		}
 		else
 			this.setState({[e.target.id] : e.target.value})
 	}
@@ -42,6 +56,10 @@ class CreatePostPage extends Component {
 			return this.setState({ error: 'Post must have a description' })
 		if (!this.state.title.length)
 			return this.setState({ error: 'Post must have a title' })
+		if (!this.state.photos.length)
+			return this.setState({ error: 'Post must have a photo' })
+		if (!this.state.type.length)
+			return this.setState({ error: 'Post must be either a good or service' })
 		
 		console.log('State:', this.state);
 		let data = new FormData();
@@ -52,16 +70,21 @@ class CreatePostPage extends Component {
 				return this.setState({ error: 'Please give permission to use your current location' })
 			
 			try {
-				position = await this.getCurrentPosition();
+				position = await this.getCurrentPosition({
+					enableHighAccuracy: true,
+					timeout: 5000,
+					maximumAge: 0
+				  });
 				const { latitude, longitude } = position.coords;
-				data.append('_geoloc', {
-					lat: latitude,
-					lng: longitude
-				});
+				data.append('lat', latitude);
+				data.append('lng', longitude);
+				console.log('Current Location: ', latitude, longitude);
 				this.props.updateDBUser({lat: latitude, lng: longitude})
 			} catch (error) {
-				console.error(error)
-				return this.setState({error: 'Current location error'})
+				console.error('Error:', error);
+				this.setState({error: 'Could not resolve current location. Falling back to default location'});
+				data.append('lat', this.props.lat);
+				data.append('lng', this.props.lng);
 			}
 		}
 		else {
@@ -72,22 +95,14 @@ class CreatePostPage extends Component {
 		}
 
 		try {
-			for (let i = 0; i < this.state.photos.length; i++) {
+			for (let i = 0; i < this.state.photos.length; i++)
 				data.append("photos", this.state.photos[i], this.state.photos[i]['name']);
-			}
 			
-			data.append('tags', this.state.tags.map(tag => tag.text));
+			data.append('tags', JSON.stringify(this.state.tags.map(tag => tag.text)));
 			data.append('title', this.state.title);
 			data.append('description', this.state.description);
-			const resp = this.props.createPost(data)
-			console.log(resp);
-			// const resp = await axios.post('/api/posts/test', data, {
-			// 	headers: {
-			// 		'content-type': 'multipart/form-data',
-					
-			// 	}
-			// })
-			// console.log(resp.data)	
+			data.append('type', this.state.type);
+			this.props.createPost(data);
 		} catch (error) {
 			console.error(error)
 			this.setState({ error: JSON.stringify(error) })
@@ -121,42 +136,57 @@ class CreatePostPage extends Component {
     }
 	
 	render() {
-		
-		// TODO: Add uploading of multiple photos
 		return (
 			<form onSubmit={this.onSubmit} encType="multipart/form-data" className="createPost">
+			
+				<label><strong>Title</strong></label><br />
+				<input className="titleAccount" placeholder="Add a title..." id="title" onChange={this.onChange} /><br/>
+				<label><strong>Description</strong></label><br/>
+				<textarea className="descriptionAccount" cols="86" rows ="10" placeholder="Add a description..." id="description" onChange={this.onChange} />
+				<br/>
+
+				<label><strong>Tags</strong></label>
+				<ReactTags
+					tags={this.state.tags}
+					handleDelete={this.handleDelete}
+					handleAddition={this.handleAddition}
+					handleDrag={this.handleDrag} 
+				/>
+
+				<label><strong>Photos</strong></label><br/>
 				<div className="postUploadAccount">
-					<label>Add photos</label>
-					<img className="insertHere" src={insertHere} alt="insertPictureHere.png"></img>
-					<input type="file" className="uploadPhoto" placeholder="Choose A Photo" id="photos" onChange={this.onChange} multiple />
+					{/*<input type="file" className="uploadPhoto" placeholder="Choose A Photo" id="photos" onChange={this.onChange} multiple />*/}
+					<label className="custom-file-upload">
+    					<input type="file" className="UploadPhoto" id="photos" onChange={this.onChange} multiple/>Browse
+					</label>
+					<label id="uploads" className="filesUploaded"></label>
 				</div>
+				
 				<div className="postInformation">
-					<div className="warningForm">
-						{ !!this.state.error ? <p className="warning" style={{'color': 'red'}}>ERROR: {this.state.error}</p> : null }
-					</div>
-					<ReactTags 
-						tags={this.state.tags}
-						handleDelete={this.handleDelete}
-						handleAddition={this.handleAddition}
-						handleDrag={this.handleDrag} 
-					/>
-					<label>Title</label>
-					<input className="titleAccount" placeholder="Add a title..." id="title" onChange={this.onChange} /><br/>
-					<label>Description</label><br/>
-					<textarea className="descriptionAccount" cols="86" rows ="10" placeholder="Add a description..." id="description" onChange={this.onChange} />
+					<label><strong>Post Type:</strong></label>
+					<label>Good</label>
+					<input type="radio" name="postType" onChange={(e) => {this.setState({type: 'good'})}} />
+					<label>Service</label>
+					<input type="radio" name="postType" onChange={(e) => {this.setState({type: 'service'})}} />
+					<br/>
 					<br/>
 
-					<label>Current Location</label>
+					<label><strong>Location: </strong></label>
+					<label>Current</label>
 					<input type="radio" name="location" onChange={(e) => {this.setState({currentLocation: true})}} />
 					<label>Address</label>
 					<input type="radio" name="location" onChange={(e) => {this.setState({currentLocation: false})}} />
-					<br/>
+					
 					{
 						!this.state.currentLocation ?
-							<input id="address" onChange={this.onChange} /> : 
+							<input className="addressInput" id="address" onChange={this.onChange} /> : 
 							null
 					}
 
+					<div className="warningForm">
+						{ !!this.state.error ? <p className="warning" style={{'color': 'red'}}>ERROR: {this.state.error}</p> : null }
+					</div>
+					<br/>
 					<input type="submit" className="createAccountPost" value="Create Post"/>
 				</div>
 			</form>
@@ -167,10 +197,10 @@ class CreatePostPage extends Component {
 
 const mapStateToProps = (state) => ({
 	...state.sessionState.dbUser,
-	dbUser: state.sessionState.dbUser
+	userPostsError: state.postsState.userPostsError
 });
 
 export default compose(
   	withAuthorization(authCondition),
-	connect(mapStateToProps, { createPost })
+	connect(mapStateToProps, { updateDBUser, createPost })
 )(CreatePostPage);

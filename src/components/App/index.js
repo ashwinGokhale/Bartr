@@ -15,6 +15,7 @@ import Chat from '../Chat';
 import AccountPage from '../Account';
 import SettingsPage from '../Settings';
 import CreatePostPage from '../CreatePost';
+import DisplayPostsPage from '../DisplayPosts';
 import SupportPage from '../Support';
 import TermsPage from '../Terms';
 import AboutUsPage from '../AboutUs';
@@ -39,6 +40,7 @@ const App = () =>
         <Route exact path={routes.SETTINGS} component={SettingsPage} />
         <Route exact path={routes.CHAT} component={Chat} />
         <Route exact path={routes.CREATE_POST} component={CreatePostPage} />
+        <Route exact path={routes.DISPLAY_POSTS} component={DisplayPostsPage} />
         <Route exact path={routes.SUPPORT} component={SupportPage} />
         <Route exact path={routes.TERMS} component={TermsPage} />
         <Route exact path={routes.ABOUTUS} component={AboutUsPage} />

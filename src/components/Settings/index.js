@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import withAuthorization from '../Session/withAuthorization';
 import { authCondition } from '../../constants';
-import { updateDBUser } from '../../actions';
+import { updateDBUser, deleteAccount } from '../../actions';
 import './index.css'
 
 class SettingsPage extends Component {
@@ -89,7 +89,7 @@ class SettingsPage extends Component {
 		return (
 			<div>
 				<div className="background">
-					<div className="settingsForm">
+					<form className="settingsForm">
 						<h4>Account Settings</h4>
 						<hr></hr>
 						<div className="columnLeft">
@@ -99,7 +99,7 @@ class SettingsPage extends Component {
 							<p className="labels">Phone Number</p>
 							<p className="labels">Latitude</p>
 							<p className="labels">Longitude</p>
-							<p className="labels">Radius</p>
+							<p className="labels">Radius (m)</p>
 						</div>
 						<div className="columnRight">
 							<input className="align" type="text" id="displayName" onChange={this.onChange} value={this.state.displayName}/><br/>
@@ -114,7 +114,11 @@ class SettingsPage extends Component {
 							{ !!this.state.error ? <p className="warning" style={{'color': 'red'}}>ERROR: {this.state.error}</p> : null }
 						</div>
 						<input className="submit" type='submit' name='submit' value='Update' onClick={this.onSubmit.bind(this)} />
-					</div>
+						<input className="delete" type="button" value="Delete Account" onClick={e => this.props.deleteAccount()} />
+					</form>
+					<br/>
+					<br/>
+					<br/>
 				</div>
 			</div>
 		);
@@ -130,5 +134,5 @@ const mapStateToProps = (state) => ({
 
 export default compose(
   	withAuthorization(authCondition),
-	connect(mapStateToProps, { updateDBUser })
+	connect(mapStateToProps, { updateDBUser, deleteAccount })
 )(SettingsPage);
