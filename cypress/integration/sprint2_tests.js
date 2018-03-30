@@ -8,8 +8,8 @@ describe('Sprint 2 Front end testing', function () {
         cy.visit('localhost:3000/login')
 
         /* Login with email and password */
-        cy.get('input.textBox').first().type('b.omalley95@yahoo.com')
-        cy.get('input.textBoxPass').type('password')
+        cy.get('input.textBoxUserTest').first().type('b.omalley95@yahoo.com')
+        cy.get('input.textBoxPassTest').type('password')
 
         cy.get('button.signInButton').click();
 
