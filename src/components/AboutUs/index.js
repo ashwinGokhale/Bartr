@@ -6,7 +6,6 @@ import insertHere from '../../assets/insertHere.png';
 import withAuthorization from '../Session/withAuthorization';
 import PostItem from '../Common/PostItem';
 import { fetchFeedPosts, fetchDBUser } from '../../actions';
-
 import './index.css';
 
 class AboutUsPage extends Component {

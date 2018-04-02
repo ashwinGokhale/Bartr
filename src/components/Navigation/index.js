@@ -38,6 +38,7 @@ class NavigationHeader extends Component {
     this.state={
       curTag:''
     }
+    console.log('Navigation Props:', this.props);
   }
 
   updateTag(event){
@@ -77,6 +78,4 @@ const mapStateToProps = (store) => ({
   authUser: store.sessionState.authUser,
 });
 
-export default compose(
-  withRouter,
-  connect(mapStateToProps))(NavigationHeader);
+export default compose(withRouter,connect(mapStateToProps))(NavigationHeader);

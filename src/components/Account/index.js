@@ -12,13 +12,7 @@ import { fetchUserPosts, fetchDBUser } from '../../actions'
 import './account.css'
 
 class AccountPage extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  componentDidMount = () => { 
-    this.props.fetchUserPosts()
-  }
+  componentDidMount = () => this.props.fetchUserPosts();
 
   render() {
     const { dbUser, userPosts } = this.props;

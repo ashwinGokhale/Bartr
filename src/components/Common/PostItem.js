@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { compose } from 'recompose';
 import { authCondition } from '../../constants';
 import { deletePost } from '../../actions';
@@ -26,6 +27,7 @@ class PostItem extends Component {
 						<img className="itemPicture" alt="itemPicture" src={post.photoUrls[0]}></img>
 					</div>
 					<div className="postDescription">
+						Made by: <Link to={`/user/${post.userId}`}>{post.userId}</Link>
 						<ul className="descriptionDetails">
 							{post.description}
 						</ul>

@@ -2,6 +2,7 @@ import React from 'react';
 import {
   BrowserRouter as Router,
   Route,
+  Switch
 } from 'react-router-dom';
 
 import Navigation from '../Navigation';
@@ -11,6 +12,7 @@ import SignUpPage from '../SignUp';
 import SignInPage from '../SignIn';
 import PasswordForgetPage from '../PasswordForget';
 import HomePage from '../Home';
+import UserPage from '../UserPage';
 import Chat from '../Chat';
 import AccountPage from '../Account';
 import SettingsPage from '../Settings';
@@ -24,13 +26,19 @@ import * as routes from '../../constants';
 
 import './index.css';
 
+const NoMatch = ({ location }) => (
+  <div>
+    <h3>
+      No match for <code>{location.pathname}</code>
+    </h3>
+  </div>
+);
+
 const App = () =>
   <Router>
-    <div>
+    <div className="app">
       <Navigation />
-      <div className="app">
-        {/* <Navigation /> */}
-
+      <Switch>
         <Route exact path={routes.LANDING} component={LandingPage} />
         <Route exact path={routes.SIGN_UP} component={SignUpPage} />
         <Route exact path={routes.LOGIN} component={SignInPage} />
@@ -44,10 +52,12 @@ const App = () =>
         <Route exact path={routes.SUPPORT} component={SupportPage} />
         <Route exact path={routes.TERMS} component={TermsPage} />
         <Route exact path={routes.ABOUTUS} component={AboutUsPage} />
-        <hr/>
+        <Route exact path="/user/:userid" component={UserPage} />
+        <Route component={NoMatch} />
+      </Switch>
+      <hr/>
 
-        <Footer/>
-      </div>
+      <Footer/>
     </div>
   </Router>
 

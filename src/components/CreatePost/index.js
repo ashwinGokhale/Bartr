@@ -9,7 +9,7 @@ import * as routes from '../../constants';
 import { updateDBUser, createPost } from '../../actions';
 import axios from 'axios';
 import insertHere from '../../assets/insertHere.png';
-import './index.css'
+import './index.css';
 
 class CreatePostPage extends Component {
 	constructor(props) {
@@ -74,7 +74,7 @@ class CreatePostPage extends Component {
 					enableHighAccuracy: true,
 					timeout: 5000,
 					maximumAge: 0
-				  });
+				});
 				const { latitude, longitude } = position.coords;
 				data.append('lat', latitude);
 				data.append('lng', longitude);

@@ -6,7 +6,7 @@ import { SignOutButton } from '../Common';
 import * as routes from '../../constants';
 import logo from '../../assets/bartrLogo.png';
 import withAuthorization from '../Session/withAuthorization';
-import './index.css'
+import './index.css';
 
 const algoliasearch = require('algoliasearch');
 const algolia = algoliasearch(
@@ -72,7 +72,7 @@ class DisplayPosts extends React.Component {
     </div>
    )
     return (
-      <div id="div1" class="textfieldSupport">
+      <div id="div1" className="textfieldSupport">
           <ol>
               {currentPosts}
           </ol>
@@ -80,10 +80,6 @@ class DisplayPosts extends React.Component {
     )
   }
 }
-
-const mapStateToProps = (store) => ({
-  authUser: store.sessionState.authUser,
-});
 
 export default compose (
   withRouter,

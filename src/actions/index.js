@@ -65,19 +65,16 @@ export const fetchFeedPosts = () => {
 
 export const fetchUserPosts = () => {
 	return async dispatch => {
-		try {
-			const token = await auth.currentUser.getIdToken()
-			// Get DB user and input into Redux store
-			console.log(`Getting user posts w/ user id: ${auth.currentUser.uid}`)
-			const { data } = await axios.get(
-				`/api/posts/user/${auth.currentUser.uid}`,
-				{headers: {token}}
-			)
-			console.log('Got user posts:', data.responseData);
-			dispatch(onSetUserPosts(data.responseData))
-		} catch (error) {
-			console.error('Error:', error.response.data.error);
-			dispatch(onErrorUserPosts(error.response.data.error));
+		if (!auth.currentUser) dispatch(onSetUserPosts([]));
+		else {
+			try {
+				// Get DB user and update Redux store
+				const posts = await fetchPosts(auth.currentUser.uid);
+				dispatch(onSetUserPosts(posts));
+			} catch (error) {
+				console.error('Error:', error.response.data.error);
+				dispatch(onErrorUserPosts(error.response.data.error));
+			}
 		}
 	}
 }
@@ -139,21 +136,15 @@ export const createUser = (user, token) => {
 export const fetchDBUser = () => {
 	return async dispatch => {
 		if (!auth.currentUser)
-			dispatch(onSetDBUser({}))
+			dispatch(onSetDBUser({}));
 		else {
 			try {
 				// Get DB user and update Redux store
-				const token = await auth.currentUser.getIdToken()
-				const response = await axios.get(
-					`/api/users/${auth.currentUser.uid}`,
-					{headers: {token}}
-				)
-				console.log('Got DB User:', response.data.responseData);
-				dispatch(onSetDBUser(response.data.responseData));
-				return response.data.responseData
+				const user = await fetchUser(auth.currentUser.uid);
+				dispatch(onSetDBUser(user));
 			} catch (error) {
-				console.error(error)
-				return error
+				console.error(error);
+				return error;
 			}
 		}
 	}
@@ -196,4 +187,36 @@ export const deleteAccount = () => async dispatch => {
 	}
 }
 	
+// Miscellaneous async actions
+export const fetchUser = async id => {
+	try {
+		// Get DB user and update Redux store
+		const token = await auth.currentUser.getIdToken()
+		const response = await axios.get(
+			`/api/users/${id}`,
+			{headers: {token}}
+		)
+		console.log('Got User:', response.data.responseData);
+		return response.data.responseData
+	} catch (error) {
+		console.error(error)
+		return error;
+	}
+}
 
+export const fetchPosts = async id => {
+	try {
+		const token = await auth.currentUser.getIdToken()
+		// Get DB user and input into Redux store
+		console.log(`Getting user posts w/ user id: ${id}`)
+		const { data } = await axios.get(
+			`/api/posts/user/${id}`,
+			{headers: {token}}
+		)
+		console.log('Got user posts:', data.responseData);
+		return data.responseData;
+	} catch (error) {
+		console.error('Error:', error.response.data.error);
+		return error.response.data.error;
+	}
+}
