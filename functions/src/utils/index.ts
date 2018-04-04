@@ -56,9 +56,16 @@ export const errorRes = (res, status: number, error) =>
 	});
 
 export const getIDToken = async (userToken) => {
+	if (!userToken) return null;
 	try {
 		return await firebase.auth().verifyIdToken(userToken, true);
 	} catch (error) {
 		return null;
 	}
+};
+
+export const authorized = async (req, res, next) => {
+	const userToken: string = req.headers.token as string;
+	if (!userToken || !await getIDToken(userToken)) return errorRes(res, 401, 'Unauthorized');
+	return next();
 };

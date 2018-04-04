@@ -3,6 +3,7 @@ import * as logger from 'morgan';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import * as cors from "cors";
+import * as utils from './utils';
 import { router as posts } from './routes/posts';
 import { router as users } from './routes/users';
 import * as functions from 'firebase-functions';
@@ -32,6 +33,9 @@ app.use(cookieParser());
 app.use(cors());
 
 app.get('/', (req, res) => res.send('This API Home Page'));
+// app.get('/test', utils.authorized, (req, res) => {
+//   res.send('Test works');
+// });
 
 app.use('/posts', posts);
 app.use('/users', users);

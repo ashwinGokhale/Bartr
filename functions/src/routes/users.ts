@@ -4,11 +4,8 @@ import * as utils from '../utils';
 export const router = express.Router();
 
 // Get all users
-router.get("/", async (req, res) => {
-	const userToken: string = req.headers.token as string;
-	if (!userToken) return utils.errorRes(res, 401, 'Unauthorized');
+router.get("/", utils.authorized, async (req, res) => {
 	try {
-		const tok = await firebase.auth().verifyIdToken(userToken, true);
 		const userDocs = await firebase.firestore().collection('/users').get();
 		return utils.successRes(res, userDocs.docs.map(doc => doc.data()));
 	} catch (error) {
@@ -17,11 +14,8 @@ router.get("/", async (req, res) => {
 	}
 });
 
-router.get('/:uid', async (req, res) => {
-	const userToken: string = req.headers.token as string;
-	if (!userToken) return utils.errorRes(res, 401, 'Unauthorized');
+router.get('/:uid', utils.authorized, async (req, res) => {
 	try {
-		const tok = await firebase.auth().verifyIdToken(userToken, true);
 		const userSnap = await firebase.firestore().doc(`/users/${req.params.uid}`).get();
 		console.log('UserSnap:', userSnap.data());
 		return utils.successRes(res, userSnap.data());
@@ -33,13 +27,11 @@ router.get('/:uid', async (req, res) => {
 
 
 // Create / update a post
-router.post('/:uid', async (req, res) => {
-	const userToken: string = req.headers.token as string;
-	if (!userToken) return utils.errorRes(res, 401, 'Unauthorized');
+router.post('/:uid', utils.authorized, async (req, res) => {
 	try {
-		const tok = await firebase.auth().verifyIdToken(userToken, true);
-		if (tok.uid !== req.params.uid)
-			return utils.errorRes(res, 401, 'Unauthorized');
+		const tok = await utils.getIDToken(req.headers.token);
+		if (!tok) return utils.errorRes(res, 401, 'Invalid token');
+		if (tok.uid !== req.params.uid) return utils.errorRes(res, 401, 'Unauthorized');
 		const data = await firebase.firestore().doc(`/users/${req.params.uid}`).get();
 		if (data.exists) return utils.errorRes(res, 400, `User: ${req.params.uid} already exits`);
 		if (!req.params.uid) return utils.errorRes(res, 400, 'User must have a uid');
@@ -69,11 +61,10 @@ router.post('/:uid', async (req, res) => {
 	}
 });
 
-router.put('/:uid', async (req, res) => {
-	const userToken: string = req.headers.token as string;
-	if (!userToken) return utils.errorRes(res, 401, 'Unauthorized');
+router.put('/:uid', utils.authorized, async (req, res) => {
 	try {
-		const tok = await firebase.auth().verifyIdToken(userToken);
+		const tok = await utils.getIDToken(req.headers.token);
+		if (!tok) return utils.errorRes(res, 401, 'Invalid token');
 		if (tok.uid !== req.params.uid) return utils.errorRes(res, 401, 'Unauthorized');
 		
 		const userBuilder = {};
@@ -111,11 +102,9 @@ router.put('/:uid', async (req, res) => {
 	}
 });
 
-router.delete('/:uid', async (req, res) => {
-	const userToken: string = req.headers.token as string;
-	if (!userToken) return utils.errorRes(res, 401, 'Unauthorized');
+router.delete('/:uid', utils.authorized, async (req, res) => {
 	try {
-		const tok = await utils.getIDToken(userToken);
+		const tok = await utils.getIDToken(req.headers.token);
 		if (!tok) return utils.errorRes(res, 401, 'Invalid token');
 		if (tok.uid !== req.params.uid) return utils.errorRes(res, 401, 'Unauthorized');
 		
