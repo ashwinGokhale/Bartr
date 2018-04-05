@@ -1,13 +1,18 @@
 import * as functions from 'firebase-functions';
 import * as firebase from 'firebase-admin';
 import * as googleStorage from '@google-cloud/storage';
+const serviceAccount = require('../../serviceaccount.json');
+const fbConfig = require('../../fbconfig.json');
 
 const storage = googleStorage({
-	projectId: functions.config().firebase.projectId,
+	projectId: serviceAccount.project_id,
 	keyFilename: './serviceaccount.json'
 });
 
-const bucket = storage.bucket(functions.config().firebase.storageBucket);
+
+
+// const bucket = storage.bucket(functions.config().firebase.storageBucket);
+const bucket = storage.bucket(fbConfig.storageBucket);
 
 export const uploadImageToStorage = (file: Express.Multer.File, id: string) => 
 	new Promise<string>((resolve, reject) => {

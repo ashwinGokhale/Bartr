@@ -9,6 +9,8 @@
   "author": "Ashwin Gokhale",
   "license": "MIT",
   "dependencies": {
+    "@fortawesome/fontawesome": "^1.1.5",
+    "@fortawesome/react-fontawesome": "^0.0.18",
     "algoliasearch": "^3.24.11",
     "axios": "^0.17.1",
     "bootstrap": "^4.0.0",

@@ -5,28 +5,30 @@ import { Link, withRouter } from 'react-router-dom';
 import axios from 'axios';
 import { fetchUser, fetchPosts } from '../../actions';
 import withAuthorization from '../Session/withAuthorization';
-import Profile from './Profile';
+import Profile from '../Common/Profile';
 
 class UserPage extends Component {
   constructor(props) {
-	super(props);
-	console.log('User Page Props:', props);
-	this.state = {
-		dbUser: null,
-		feedPosts: []
-	}
+		super(props);
+		console.log('User Page Props:', props);
+		this.state = {
+			dbUser: null,
+			feedPosts: [],
+			currentUser: false
+		}
   }
 
   componentWillMount = async () => {
 	  const id = this.props.match.params.userid;
-	  const userInfo = await Promise.all([fetchUser(id), fetchPosts(id)]);
+		const userInfo = await Promise.all([fetchUser(id), fetchPosts(id)]);
+		if (this.props.authUser.uid === userInfo[0].uid) this.setState({currentUser: true});
 	  this.setState({dbUser: userInfo[0]});
 	  this.setState({feedPosts: userInfo[1]});
   }
 
   render() {
     return (
-      <Profile dbUser={this.state.dbUser} feedPosts={this.state.feedPosts} />
+      <Profile dbUser={this.state.dbUser} feedPosts={this.state.feedPosts} currentUser={this.state.currentUser} />
     );
   }
 }

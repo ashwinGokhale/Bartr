@@ -220,3 +220,25 @@ export const fetchPosts = async id => {
 		return error.response.data.error;
 	}
 }
+
+export const createRating = async (userID, value) => {
+	try {
+		const token = await auth.currentUser.getIdToken();
+		// Get DB user and input into Redux store
+		console.log(`Creating rating for user: ${userID}-${auth.currentUser.uid}`)
+		const { data } = await axios.post(
+			'/api/ratings',
+			{
+				raterID: auth.currentUser.uid,
+				userID,
+				value
+			},
+			{headers: {token}}
+		)
+		console.log('Got user posts:', data.responseData);
+		return data.responseData;
+	} catch (error) {
+		console.error('Error:', error.response.data.error);
+		return error.response.data.error;
+	}
+}

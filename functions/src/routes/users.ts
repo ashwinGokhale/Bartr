@@ -48,6 +48,8 @@ router.post('/:uid', utils.authorized, async (req, res) => {
 				email: req.body.email,
 				phoneNumber: req.body.phoneNumber || ''
 			},
+			totalRatings: 5,
+			numRatings: 1,
 			lat: 0, 
 			lng: 0 ,
 			radius: 5
