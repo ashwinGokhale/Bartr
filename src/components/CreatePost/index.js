@@ -138,7 +138,7 @@ class CreatePostPage extends Component {
 	render() {
 		return (
 			<form onSubmit={this.onSubmit} encType="multipart/form-data" className="createPost">
-			
+				<div className="adjustDown"/>
 				<label><strong>Title</strong></label><br />
 				<input className="titleAccount" placeholder="Add a title..." id="title" onChange={this.onChange} /><br/>
 				<label><strong>Description</strong></label><br/>
