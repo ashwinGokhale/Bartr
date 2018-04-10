@@ -31,7 +31,7 @@ class SupportPage extends Component {
               <h2> The 24/7 Bartr support team may be reached at <a href="mailto:BartrTradeHelp@gmail.com">BartrTradeHelp@gmail.com</a> and 
                   will promptly respond to your email. If you need to report a user click <a href="https://docs.google.com/forms/d/e/1FAIpQLScDEeZwyH-fQiDNSUggxKMZFNPm03H9cF3IaI5uwzR7MeECkA/viewform?usp=sf_link" target="_blank">here</a>
               </h2>
-              <div className="headerSupport"> Frequently Asked Questions </div>
+              <div className="headerFrequent"> Frequently Asked Questions </div>
               <div className="FAQ">
                 <h1> Is Bartr free? </h1>
                 <div className="answerText"> YES! Bartr is completely free to use for all members. </div>

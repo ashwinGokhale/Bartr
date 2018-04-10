@@ -90,13 +90,13 @@
 
 .userName {
     font-size: 18px;
-    padding-left: 45%;
+    margin-left: 15%;
     padding-top: 13%;
 }
 
-.ratingTitle {
+.rating {
     padding-top: 2%;
-    padding-left: 46%;
+    margin-left: 10%;
 }
 
 h5 {
