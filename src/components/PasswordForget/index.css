@@ -2,7 +2,7 @@
     text-decoration: none;
     color: white !important;
     float: right;
-    padding-bottom: 15%;
+    padding-bottom: 5%;
 }
 
 .format:hover {
@@ -17,8 +17,10 @@
     background-color: rgb(220,245,236);
     background-size: cover;
     background-position: center;
-    width: auto;
-    height: 945px;
+    width: 100%;
+    top: 60px;
+    bottom: 32px;
+    position: absolute;
 }
 
 .passResetBackground {

@@ -25,9 +25,9 @@ class AccountPage extends React.Component {
               <div className="profile">
                 <div className="profileCard">
                   <img className="profilePhoto" src={dbUser.photoUrl} onError={(e)=>{e.target.src=defaultPhoto}}></img>
-                  <h3 className="accountName">{dbUser.displayName}</h3>
+                  <h3 className="userName">{dbUser.displayName}</h3>
                   <h5 className="rating">-----rating is future sprint-----</h5>
-                  <a href="https://docs.google.com/forms/d/e/1FAIpQLScDEeZwyH-fQiDNSUggxKMZFNPm03H9cF3IaI5uwzR7MeECkA/viewform?usp=sf_link" target="_blank"><button className="reportUser">report</button></a>
+                  <a href="https://docs.google.com/forms/d/e/1FAIpQLScDEeZwyH-fQiDNSUggxKMZFNPm03H9cF3IaI5uwzR7MeECkA/viewform?usp=sf_link" target="_blank"><button className="reportUser">Report A User</button></a>
 
                 </div>
               </div>
@@ -45,7 +45,11 @@ class AccountPage extends React.Component {
                   userPosts &&
                   userPosts.length ?
                   userPosts.map((post,i) => <PostItem key={i} id={post.postId} type="user" post={post}/>) :
-                  <p>You have made no posts!</p>
+                  <div className="ghostPlaceHolder">
+				          <div className="ghostTitle">
+					            <h3 className="ghostText">You have no active posts.</h3>
+				          </div>
+			          </div>
                 }
               </div>
             </div>
@@ -56,7 +60,7 @@ class AccountPage extends React.Component {
                   <center><h4>Reviews</h4></center>
                   <div className="underline"></div>
                   <div className="reviewPosting">
-                    <center><h5>User Name</h5></center>
+                    <center><h5 className="reviewUserName">User Name</h5></center>
                     <textarea className="reviewDescription" placeholder="stub for user review..."></textarea>
                   </div>
                 </div>

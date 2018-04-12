@@ -7,7 +7,6 @@ import './index.css';
 
 const PasswordForgetPage = () =>
   <div className="passResetPageBackground">
-    <h1>PasswordForget</h1>
     <PasswordForgetForm />
   </div>
 

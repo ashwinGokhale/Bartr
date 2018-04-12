@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import firebase from 'firebase';
 import withAuthorization from '../Session/withAuthorization';
+import './chat.css'
 
 class Chat extends Component{
 
@@ -59,7 +60,7 @@ class Chat extends Component{
         )
 
         return (
-            <div>
+            <div className="chatBoxFormat">
                 <h1>Chat App</h1>
                 <ol>
                     {currentMessage}

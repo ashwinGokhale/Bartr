@@ -78,12 +78,14 @@ class SignUpForm extends Component {
         <form onSubmit={this.onSubmit}>
           <div className="signUpInfo">
             <input
+              spellCheck="false"
               value={displayName}
               onChange={event => this.setState({ displayName: event.target.value})}
               type="text"
               placeholder="Full Name"
             />
             <input
+              spellCheck="false"
               value={email}
               onChange={event => this.setState( {email: event.target.value} )}
               type="text"

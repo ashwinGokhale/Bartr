@@ -121,7 +121,10 @@ class SettingsPage extends Component {
 								<input className="align" type="text" id="address" onChange={this.onChange} value={this.state.contactInfo.address}/><br/>
 							</div>
 							<div className="colHidden">
-								<p className="hidden">Hide?</p>
+								<div className="tooltip">
+									<p className="hidden">Hide?</p>
+									<span className="tooltiptext">Hides this contact info on your public profile.</span>
+								</div>
 								<label class="switch">
 									<input type="checkbox"/>
 									<span class="slider round"></span>
@@ -138,7 +141,10 @@ class SettingsPage extends Component {
 								<input className="align" type="tel" id="phoneNumber" onChange={this.onChange} value={this.state.contactInfo.phoneNumber}/><br/>
 							</div>
 							<div className="colHidden">
-								<p className="hidden">Hide?</p>
+								<div className="tooltip">
+									<p className="hidden">Hide?</p>
+									<span className="tooltiptext">Hides this contact info on your public profile.</span>
+								</div>
 								<label class="switch">
 									<input type="checkbox"/>
 									<span class="slider round"></span>
