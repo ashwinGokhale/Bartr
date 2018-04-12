@@ -82,7 +82,7 @@ class SignInForm extends Component {
 
             <div className="emailBar">
               <input
-                className="textBoxPass"
+                className="textBox"
                 value={password}
                 onChange={event => this.setState(updateByPropertyName('password', event.target.value))}
                 type="password"

@@ -166,8 +166,8 @@ h4 {
 .placeHolder {
     background-color: white;
     border-radius: 0.5em;
-    width: 68%;
-    height: 35%;
+    width: 46vw;
+    height: 25vh;
     margin-left: 5%;
     margin-bottom: 3%;
 }
@@ -177,10 +177,14 @@ h4 {
     border-top-left-radius: 0.5em;
     border-top-right-radius: 0.5em;
     width: 100%;
-    height: 16%;
+    height: 2.5vmax;
     color: white;
     font-size: 20px;
     display: inline-block;
+}
+
+.listingTitle {
+    font-size: 1.4vmax;
 }
 
 .floatRight {
@@ -191,7 +195,7 @@ h4 {
 
 .postInfo {
     width: 100%;
-    height: 100%;
+    height: 80%;
 }
 
 .postInfo:after {
@@ -201,24 +205,28 @@ h4 {
 }
 
 .postPicture {
-    height: 65%;
-    width: 27%;
+    position: relative;
     float: left;
-    padding-top: 5%;
-    padding-left: 3%;
+    top: 12%;
+    bottom: 3%;
+    left: 5%;
+    width: 30%;
 }
 
 .postDescription {
-    height: 84% !important;
+    position: relative;
+    height: 100% !important;
     width: 69%;
     float: left;
-    border-left: rgb(173, 173, 173) solid 1.5px;
+    border-left: rgb(78, 138, 205) solid 0.1vw !important;
+    font-size: 1vw;
 }
 
 
 .itemPicture {
-    height: 70%;
-    width: 70%;
+    height: 14vh;
+    width: 9vw;
+    border-radius: 0.5vw;
 }
 
 h3 {
@@ -231,7 +239,15 @@ h3 {
 
 .descriptionDetails {
     overflow-x: auto;
-    font-size: 15px;
+    font-size: 1vw !important;
+    margin-top: 1vh;
+    padding-left: 1vw;
+}
+
+.postedBy {
+    position: absolute;
+    bottom: 0.5vh;
+    right: 0.3vw;
 }
 
 ul {
