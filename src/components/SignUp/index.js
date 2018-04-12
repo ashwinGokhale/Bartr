@@ -78,6 +78,7 @@ class SignUpForm extends Component {
         <form onSubmit={this.onSubmit}>
           <div className="signUpInfo">
             <input
+              className="textBoxReg"
               spellCheck="false"
               value={displayName}
               onChange={event => this.setState({ displayName: event.target.value})}
@@ -85,6 +86,7 @@ class SignUpForm extends Component {
               placeholder="Full Name"
             />
             <input
+              className="textBoxReg"
               spellCheck="false"
               value={email}
               onChange={event => this.setState( {email: event.target.value} )}
@@ -92,12 +94,14 @@ class SignUpForm extends Component {
               placeholder="Email Address"
             />
             <input
+              className="textBoxReg"
               value={passwordOne}
               onChange={event => this.setState( {passwordOne: event.target.value} )}
               type="password"
               placeholder="Password"
             />
             <input
+              className="textBoxReg"
               value={passwordTwo}
               onChange={event => this.setState( {passwordTwo: event.target.value} )}
               type="password"
