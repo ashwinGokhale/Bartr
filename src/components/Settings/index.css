@@ -8,12 +8,13 @@
 
 .settingsForm {
     background-color: white;
-    margin-top: 2%;
-    margin-left: 30%;
-    height: 600px;
-    width: 40%;
     overflow-y: auto;
     border-radius: 10px;
+    position: absolute;
+    top: 30px;
+    bottom: 30px;
+    left: 30%;
+    right: 30%;
 }
 
 h4 {
@@ -36,15 +37,13 @@ hr {
 
 .labels {
     color: rgb(90, 114, 141);
-    right: 10px;
-    line-height: 20px;
+    right: 0.75vw;
     margin: 0;
-    margin-bottom: 13%;
-    padding-right: 5%;
     position: relative;
     top: 50%; 
     transform: translateY(-50%);
     -webkit-transform: translateY(-50%);
+    font-size: 1.15vw;
 }
 
 .align {
@@ -58,6 +57,7 @@ hr {
     color: rgb(172, 172, 172);
     overflow-x: scroll;
     overflow-y: hidden;
+    font-size: 1vw;
 }
 
 .columnLeft {
@@ -78,11 +78,15 @@ hr {
     border-radius: 3px;
     width: 30%;
     height: 5%;
-    margin-top: 5%;
-    margin-left: 18%;
+    /*margin-top: 5%;
+    margin-left: 18%;*/
+    position: absolute;
+    bottom: 8vh;
+    left: 6vw;
     background-color: rgb(78, 138, 205);
     color: white;
     border: gray solid 1px;
+    font-size: 1vw;
 }
 
 .warningForm {
@@ -93,13 +97,17 @@ hr {
 }
 
 .delete {
-    margin-left: 5%;
+    /*margin-left: 5%;*/
     border-radius: 3px;
     width: 30%;
     height: 5%;
     background-color: rgb(172, 0, 0);
     color: white;
     border: gray solid 1px;
+    font-size: 1vw;
+    position: absolute;
+    bottom: 8vh;
+    right: 6vw;
 }
 
 .rowSettings {
@@ -129,15 +137,15 @@ hr {
 }
 
 .hidden {
-    margin-top: 3px;
+    margin-top: 1px;
     margin-bottom: 3px;
     margin-left: 8px;
-    font-size: 15px;
+    font-size: 1vw;
     color: rgb(90, 114, 141);
     float: left;
-    top: 50%; 
-    transform: translateY(50%);
-    -webkit-transform: translateY(50%);
+    top: 0; 
+    transform: translateY(10%);
+    -webkit-transform: translateY(10%);
 }
 
 checkbox {
@@ -148,8 +156,8 @@ checkbox {
 .switch {
     position: relative;
     display: inline-block;
-    width: 50px;
-    height: 22px;
+    width: 3.2vw;
+    height: 3vh;
     margin-top: 6.5%;
     margin-left: 7%;
   }
@@ -173,10 +181,10 @@ checkbox {
   .slider:before {
     position: absolute;
     content: "";
-    height: 15px;
-    width: 15px;
-    left: 4px;
-    bottom: 4px;
+    height: 2vh;
+    width: 1vw;
+    left: 0.3vw;
+    bottom: 0.5vh;
     background-color: white;
     -webkit-transition: .4s;
     transition: .4s;
@@ -191,16 +199,59 @@ checkbox {
   }
   
   input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
+    -webkit-transform: translateX(1.5vw);
+    -ms-transform: translateX(1.5vw);
+    transform: translateX(1.5vw);
   }
   
   /* Rounded sliders */
   .slider.round {
-    border-radius: 34px;
+    border-radius: 1vw;
   }
   
   .slider.round:before {
-    border-radius: 50%;
+    border-radius: 1vw;
   }
+
+  /* Tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: rgb(90, 114, 141);
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    bottom: 100%;
+    left: 50%; 
+    margin-left: -60px; /* Use half of the width (120/2 = 60), to center the tooltip */
+ 
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    visibility: visible;   
+    opacity: 1;
+}
+
+.tooltip .tooltiptext::after {
+    content: " ";
+    position: absolute;
+    top: 100%; /* At the bottom of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgb(90, 114, 141) transparent transparent transparent;
+}

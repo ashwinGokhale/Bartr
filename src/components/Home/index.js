@@ -41,11 +41,11 @@ class HomePage extends Component {
                 <h4>Filters</h4>
                 <hr></hr>
                 <div className="filterItem">
-                  <input type="radio" className="radio"></input>
+                  <input type="radio" className="radio" id="radioItems"></input>
                    <p className="radioTag">Items</p>                
                 </div>
                 <div className="filterItem">
-                  <input type="radio" id="radioServices"></input>
+                  <input type="radio" className="radio" id="radioServices"></input>
                   <p className="radioTag">Services</p>
                 </div>
               </div>
@@ -57,8 +57,12 @@ class HomePage extends Component {
                 feedPosts &&
                 feedPosts.length ? 
                 feedPosts.map((post,i) => <PostItem key={i} id={i} type="feed" post={post}/>) :
-                <p>No Posts!</p>
-              }
+                <div className="ghostPlaceHolder">
+				          <div className="ghostTitle">
+					            <h3 className="ghostText">No posts available in your area. Please check back later.</h3>
+				          </div>
+			          </div>
+                }
             </div>
           </div>
         </div>

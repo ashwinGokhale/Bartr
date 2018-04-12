@@ -71,6 +71,7 @@ class SignInForm extends Component {
           <form onSubmit={this.onSubmit}>
             <div className="emailBar">
               <input
+                spellCheck="false"
                 className="textBox"
                 value={email}
                 onChange={event => this.setState(updateByPropertyName('email', event.target.value))}
