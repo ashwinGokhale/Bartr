@@ -63,9 +63,9 @@ class AccountPage extends React.Component {
                   <div className="underline"></div>
                   <div className="ratingInfo">
                     <p className="accountRatingTitle">User Rating</p>
-                    <div class="star-ratings-css">
-                      <div class="star-ratings-css-top" style={{width: ((dbUser.totalRatings / dbUser.numRatings) * 20) + '%'}}><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
-                      <div class="star-ratings-css-bottom"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+                    <div className="star-ratings-css">
+                      <div className="star-ratings-css-top" style={{width: ((dbUser.totalRatings / dbUser.numRatings) * 20) + '%'}}><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+                      <div className="star-ratings-css-bottom"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
                     </div>
                     <p className="accountRatingDescription">{dbUser.totalRatings / dbUser.numRatings} average based on {dbUser.numRatings} reviews.</p>
                   </div>
