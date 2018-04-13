@@ -142,8 +142,9 @@
     width: 28%;
     margin-top: 2.5vh;
     margin-left: 1.25vw;
-    border: rgb(221, 221, 221) solid 1px;
+    border: gray solid 0.1vw;
     float: left;
+    border-radius: 0.5vw;
 }
 
 .userName {
@@ -194,7 +195,7 @@ textarea {
     font-size: 0.8vw;
     position: absolute;
     bottom: 5%;
-    right: 5%;
+    right: 2%;
 }
 
 .reportUser:hover {
@@ -209,10 +210,10 @@ textarea {
 
 .createPostAccount {
     margin-left: 5%;
-    padding-left: 35%;
-    padding-right: 35%;
+    padding-left: 35.5%;
+    padding-right: 35.5%;
     text-decoration: none;
-    border: 0.2vw solid rgb(255, 255, 255);
+    border: 0.1vw solid rgb(255, 255, 255);
     color: white;
     background-color: rgb(78, 138, 205);
     padding-top: 1%;
@@ -243,7 +244,7 @@ textarea {
   font-size: 1.6vw;
   height: 1vw;
   width: 8vw;
-  margin: 0 auto;
+  margin: 0;
   position: relative;
   padding: 0;
   text-shadow: 0px 1px 0 #a2a2a2;
@@ -258,6 +259,7 @@ textarea {
   top: 0;
   left: 0;
   overflow: hidden;
+  word-wrap: normal;
 }
 .star-ratings-css-bottom {
   padding: 0;
