@@ -30,7 +30,6 @@ class HomePage extends Component {
               <div className="profileCard">
                 <img className="profilePhoto" src={dbUser.photoUrl} onError={(e)=>{e.target.src=defaultPhoto}}></img>
                 { !!dbUser && <h5 className="userName">{dbUser.displayName}</h5> }
-                <h5 className="rating">-----rating is future sprint-----</h5>
               </div>
             </div>
             
@@ -41,11 +40,11 @@ class HomePage extends Component {
                 <h4>Filters</h4>
                 <hr></hr>
                 <div className="filterItem">
-                  <input type="radio" className="radio" id="radioItems"></input>
+                  <input type="checkbox" className="radio" id="radioItems"></input>
                    <p className="radioTag">Items</p>                
                 </div>
                 <div className="filterItem">
-                  <input type="radio" className="radio" id="radioServices"></input>
+                  <input type="checkbox" className="radio" id="radioServices"></input>
                   <p className="radioTag">Services</p>
                 </div>
               </div>
