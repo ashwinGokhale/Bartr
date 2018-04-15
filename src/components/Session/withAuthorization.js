@@ -22,13 +22,13 @@ const withAuthorization = (condition, props) => (Component) => {
     }
   
     render() {
-
-      return this.props.authUser ? <Component {...this.props} {...props}/> : null;
+      return (this.props.authUser && this.props.dbUser) ? <Component {...this.props} {...props}/> : null;
     }
   }
 
   const mapStateToProps = (store) => ({
     authUser: store.sessionState.authUser,
+    dbUser: store.sessionState.dbUser,
   });
   return compose(
     withRouter,

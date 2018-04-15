@@ -1,6 +1,5 @@
 .navBarSpace {
     margin-top: 50px;
-    /*height: 450px;*/
     width: 100%;
     border-bottom-style: solid;
     border-color:rgb(255, 255, 255);
@@ -10,7 +9,7 @@
     vertical-align: middle;
     position: absolute;
     top: 10px;
-    bottom: 252px;
+    bottom: 20px;
 }
 
 .navBarSpace { 
@@ -45,36 +44,35 @@
 }
 
 .Sm {
-    font-size: 25px;
+    font-size: 1.5vw;
     font-weight: 400;
     margin-top: 10px;
 }
 .Md {
-    font-size: 35px;
+    font-size: 2.2vw;
     font-weight: 400;
     padding-top: 100px;
     margin-bottom: 0px;
 }
 
 .Lg {
-    font-size: 50px;
+    font-size: 3.5vw;
     font-weight: 700;
     margin-top: 0px;
     margin-bottom: 0px;
 }
 
 .image {
-    height: 150px;
-    width: 200px;
+    height: 70%;
+    width: 40%;
 }
 
 .third {
-    height: 220px;
-    width: 33%;
+    height: 30vh;
+    width: 33.2%;
     background-color: rgb(243, 243, 243);
     text-align: center;
-    border-left: solid white 2px;
-    border-right: solid white 2px;
+    border-right: white solid 0.1vw;
     float:left;
 }
 

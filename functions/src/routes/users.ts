@@ -18,10 +18,12 @@ router.get('/:uid', utils.authorized, async (req, res) => {
 	try {
 		const userSnap = await firebase.firestore().doc(`/users/${req.params.uid}`).get();
 		console.log('UserSnap:', userSnap.data());
-		return utils.successRes(res, userSnap.data());
+		// return utils.successRes(res, userSnap.data());
+		utils.successRes(res, userSnap.data());
 	} catch (error) {
 		console.error('Error:', error);
-		return utils.errorRes(res, 400, error);
+		// return utils.errorRes(res, 400, error);
+		utils.errorRes(res, 400, error);
 	}
 });
 
@@ -44,9 +46,11 @@ router.post('/:uid', utils.authorized, async (req, res) => {
 			photoUrl: req.body.photoUrl,
 			displayName: req.body.displayName,
 			contactInfo: {
-				address: req.body.address || '',
 				email: req.body.email,
-				phoneNumber: req.body.phoneNumber || ''
+				address: req.body.address || '',
+				hideAddress: false,
+				phoneNumber: req.body.phoneNumber || '',
+				hidePhoneNumber: false
 			},
 			totalRatings: 5,
 			numRatings: 1,
@@ -87,6 +91,8 @@ router.put('/:uid', utils.authorized, async (req, res) => {
 				contactBuilder,
 				req.body.contactInfo.address && { address: req.body.contactInfo.address },
 				req.body.contactInfo.phoneNumber && { phoneNumber: req.body.contactInfo.phoneNumber },
+				req.body.contactInfo.hideAddress && { hideAddress: req.body.hideAddress ? true : false },
+				req.body.contactInfo.hidePhoneNumber && { hideAddress: req.body.hidePhoneNumber ? true : false }
 			);
 
 			if (Object.keys(contactBuilder).length) Object.assign(userBuilder, {contactInfo: contactBuilder});

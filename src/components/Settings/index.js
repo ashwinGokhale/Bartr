@@ -21,7 +21,9 @@ class SettingsPage extends Component {
 			displayName: this.props.displayName,
 			contactInfo: this.props.contactInfo ||  {		
 				address: '',
-				phoneNumber: ''
+				hideAddress: false,
+				phoneNumber: '',
+				hidePhoneNumber: false
 			}
 		}
 	}
@@ -66,7 +68,7 @@ class SettingsPage extends Component {
 	onSubmit = (event) => {
 		event.preventDefault();
 		if (this.isRadiusValid(this.state.radius) && this.isLatitudeValid(this.state.lat) && this.isLongitudeValid(this.state.lng)) {
-			const { lat, lng, radius, displayName, photoUrl, contactInfo: { address , phoneNumber }} = this.state;
+			const { lat, lng, radius, displayName, photoUrl, contactInfo: { address , phoneNumber, hideAddress, hidePhoneNumber }} = this.state;
 			const { dbUser } = this.props;
 			this.props.updateDBUser({
 				lat: lat || dbUser.lat,
@@ -77,7 +79,9 @@ class SettingsPage extends Component {
 				contactInfo: {
 					email: dbUser.contactInfo.email,	
 					address: address || dbUser.contactInfo.address,
-					phoneNumber: phoneNumber || dbUser.contactInfo.phoneNumber
+					hideAddress: hideAddress || dbUser.contactInfo.hideAddress,
+					phoneNumber: phoneNumber || dbUser.contactInfo.phoneNumber,
+					hidePhoneNumber: hidePhoneNumber || dbUser.contactInfo.hidePhoneNumber
 				}
 			})
 		}
@@ -121,10 +125,13 @@ class SettingsPage extends Component {
 								<input className="align" type="text" id="address" onChange={this.onChange} value={this.state.contactInfo.address}/><br/>
 							</div>
 							<div className="colHidden">
-								<p className="hidden">Hide?</p>
-								<label class="switch">
+								<div className="tooltip">
+									<p className="hidden">Hide?</p>
+									<span className="tooltiptext">Hides this contact info on your public profile.</span>
+								</div>
+								<label className="switch">
 									<input type="checkbox"/>
-									<span class="slider round"></span>
+									<span className="slider round"></span>
 								</label>
 							</div>
 						</div>
@@ -138,10 +145,13 @@ class SettingsPage extends Component {
 								<input className="align" type="tel" id="phoneNumber" onChange={this.onChange} value={this.state.contactInfo.phoneNumber}/><br/>
 							</div>
 							<div className="colHidden">
-								<p className="hidden">Hide?</p>
-								<label class="switch">
+								<div className="tooltip">
+									<p className="hidden">Hide?</p>
+									<span className="tooltiptext">Hides this contact info on your public profile.</span>
+								</div>
+								<label className="switch">
 									<input type="checkbox"/>
-									<span class="slider round"></span>
+									<span className="slider round"></span>
 								</label>
 							</div>
 						</div>

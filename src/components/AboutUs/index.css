@@ -12,7 +12,7 @@
     width: 60%;
     height: 15%;
     font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 48px;
+    font-size: 4vw;
     font-weight: bold;
     text-align: center;
     margin: auto;
@@ -24,4 +24,5 @@
     height: 75%-32px;
     text-align: center;
     margin: auto;
+   font-size: 1vw; 
 }

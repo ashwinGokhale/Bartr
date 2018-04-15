@@ -192,7 +192,7 @@ router.post('/', multer.array('photos', 12), utils.authorized, async (req, res, 
 
 		const newPostRef = await firebase.firestore().collection('/posts').doc();
 		const photoUrls = await Promise.all(files.map((file: Express.Multer.File) => utils.uploadImageToStorage(file, newPostRef.id)));
-
+		const userSnap = await firebase.firestore().doc(`/users/${tok.uid}`).get();
 
 		const postBuilder = {};
 		// Build properties of user to update
@@ -205,7 +205,8 @@ router.post('/', multer.array('photos', 12), utils.authorized, async (req, res, 
 			{ type: req.body.type },
 			{ state: 'PENDING' },
 			{ postId: newPostRef.id },
-			{ userId: tok.uid }, 
+			{ userId: tok.uid },
+			{ displayName: userSnap.data().displayName },
 			{ createdAt: new Date() },
 			{ lastModified: new Date() },
 			{ _geoloc: { lat, lng } }
