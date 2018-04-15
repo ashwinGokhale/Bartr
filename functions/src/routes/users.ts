@@ -56,7 +56,7 @@ router.post('/:uid', utils.authorized, async (req, res) => {
 			numRatings: 1,
 			lat: 0, 
 			lng: 0 ,
-			radius: 5
+			radius: 25000
 		};
 		const { writeTime } = await data.ref.set(newUser);
 		return utils.successRes(res, newUser);
@@ -69,6 +69,7 @@ router.post('/:uid', utils.authorized, async (req, res) => {
 
 router.put('/:uid', utils.authorized, async (req, res) => {
 	try {
+		console.log('Put user body:', req.body);
 		const tok = await utils.getIDToken(req.headers.token);
 		if (!tok) return utils.errorRes(res, 401, 'Invalid token');
 		if (tok.uid !== req.params.uid) return utils.errorRes(res, 401, 'Unauthorized');
@@ -91,8 +92,8 @@ router.put('/:uid', utils.authorized, async (req, res) => {
 				contactBuilder,
 				req.body.contactInfo.address && { address: req.body.contactInfo.address },
 				req.body.contactInfo.phoneNumber && { phoneNumber: req.body.contactInfo.phoneNumber },
-				req.body.contactInfo.hideAddress && { hideAddress: req.body.hideAddress ? true : false },
-				req.body.contactInfo.hidePhoneNumber && { hideAddress: req.body.hidePhoneNumber ? true : false }
+				'hideAddress' in req.body.contactInfo && { hideAddress: req.body.contactInfo.hideAddress ? true : false },
+				'hidePhoneNumber' in req.body.contactInfo && { hidePhoneNumber: req.body.contactInfo.hidePhoneNumber ? true : false }
 			);
 
 			if (Object.keys(contactBuilder).length) Object.assign(userBuilder, {contactInfo: contactBuilder});

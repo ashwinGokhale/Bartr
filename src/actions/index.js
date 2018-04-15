@@ -11,6 +11,7 @@ export const USER_POST_DELETED = 'USER_POST_DELETED';
 
 // Session actions
 export const AUTH_USER_SET = 'AUTH_USER_SET';
+export const AUTH_STATE_SET = 'AUTH_STATE_SET';
 export const DB_USER_SET = 'DB_USER_SET';
 
 // Users actions
@@ -27,6 +28,7 @@ export const onErrorUserPosts = (error) => ({ type: USER_POSTS_ERROR, error });
 // Session creators
 export const onSetDBUser = (user) => ({ type: DB_USER_SET, dbUser: user });
 export const onSetAuthUser = (authUser) => ({ type: AUTH_USER_SET, authUser });
+export const onSetAuthState = (authState) => ({ type: AUTH_STATE_SET, authState });
 
 // Post handlers
 export const fetchFeedPosts = () => {
@@ -154,24 +156,27 @@ export const updateDBUser = (user) => {
 	return async dispatch => {
 		try {
 			// Get DB user and update Redux store
-			const token = await auth.currentUser.getIdToken()
-			console.log('Updating user:', auth.currentUser.uid, 'to:', user)
+			const token = await auth.currentUser.getIdToken();
+			console.log('Updating user:', auth.currentUser.uid, 'to:', user);
 			const response = await axios.put(
 				`/api/users/${auth.currentUser.uid}`, 
 				user,
 				{headers: {token}}
-			)
-			dispatch(onSetDBUser(user))
-			console.log(response.data.responseData)
-			return response.data.responseData
+			);
+			dispatch(onSetDBUser(user));
+			console.log(response.data.responseData);
+			return response.data.responseData;
 		} catch (error) {
-			console.error(error)
-			return error
+			console.error(error);
+			return error;
 		}
 	}
 }
 
-export const setAuthUser = authUser => dispatch => dispatch(onSetAuthUser(authUser));
+export const setAuthUser = authUser => dispatch => {
+	dispatch(onSetAuthUser(authUser));
+	dispatch(onSetAuthState(authUser ? true : false));
+}
 
 export const deleteAccount = () => async dispatch => {
 	try {
@@ -205,8 +210,8 @@ export const fetchUser = async id => {
 }
 
 export const fetchPosts = async id => {
-	try {
-		const token = await auth.currentUser.getIdToken()
+	// try {
+		const token = await auth.currentUser.getIdToken();
 		// Get DB user and input into Redux store
 		console.log(`Getting user posts w/ user id: ${id}`)
 		const { data } = await axios.get(
@@ -215,10 +220,10 @@ export const fetchPosts = async id => {
 		)
 		console.log('Got user posts:', data.responseData);
 		return data.responseData;
-	} catch (error) {
-		console.error('Error:', error.response.data.error);
-		return error.response.data.error;
-	}
+	// } catch (error) {
+	// 	console.error('Error:', error.response.data.error);
+	// 	return error.response.data.error;
+	// }
 }
 
 export const createRating = async (userID, value) => {
