@@ -34,12 +34,14 @@ router.post('/:uid', utils.authorized, async (req, res) => {
 		const tok = await utils.getIDToken(req.headers.token);
 		if (!tok) return utils.errorRes(res, 401, 'Invalid token');
 		if (tok.uid !== req.params.uid) return utils.errorRes(res, 401, 'Unauthorized');
-		const data = await firebase.firestore().doc(`/users/${req.params.uid}`).get();
-		if (data.exists) return utils.errorRes(res, 400, `User: ${req.params.uid} already exits`);
 		if (!req.params.uid) return utils.errorRes(res, 400, 'User must have a uid');
 		if (!req.body.photoUrl) return utils.errorRes(res, 400, 'User must have a photo url');
 		if (!req.body.email) return utils.errorRes(res, 400, 'User must have a description');
 		if (!req.body.displayName) return utils.errorRes(res, 400, 'User must have a display name');
+
+		const userRef = firebase.firestore().doc(`/users/${req.params.uid}`);
+		const data = await userRef.get();
+		if (data.exists) return utils.errorRes(res, 400, `User: ${req.params.uid} already exits`);
 		
 		const newUser = {
 			uid: req.params.uid,
@@ -58,8 +60,9 @@ router.post('/:uid', utils.authorized, async (req, res) => {
 			lng: 0 ,
 			radius: 25000
 		};
-		const { writeTime } = await data.ref.set(newUser);
-		return utils.successRes(res, newUser);
+		const { writeTime } = await userRef.set(newUser);
+		// return utils.successRes(res, newUser);
+		return utils.successRes(res, (await userRef.get()).data());
 		
 	} catch (error) {
 		console.error('Error:', error);
@@ -99,12 +102,15 @@ router.put('/:uid', utils.authorized, async (req, res) => {
 			if (Object.keys(contactBuilder).length) Object.assign(userBuilder, {contactInfo: contactBuilder});
 		}
 
-		const userSnap = await firebase.firestore().doc(`/users/${req.params.uid}`).set(
+		const userRef = firebase.firestore().doc(`/users/${req.params.uid}`);
+		// const userSnap = await firebase.firestore().doc(`/users/${req.params.uid}`).set(
+		const userSnap = await userRef.set(
 			userBuilder,
 			{merge: true}
 		);
 
-		return utils.successRes(res, userBuilder);
+		// return utils.successRes(res, userBuilder);
+		return utils.successRes(res, (await userRef.get()).data());
 	} catch (error) {
 		console.error('Error:', error);
 		return utils.errorRes(res, 400, error);
