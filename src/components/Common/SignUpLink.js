@@ -5,7 +5,7 @@ export default class SignUpLink extends Component {
 	render() {
 		return (
 			<div>
-				<div>
+				<div className="noAccount">
 					Don't have an account?
 					{' '}
 					<Link className="formats" to={routes.SIGN_UP}>Sign Up</Link>

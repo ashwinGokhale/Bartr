@@ -3,17 +3,20 @@ import * as logger from 'morgan';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import * as cors from "cors";
+import * as utils from './utils';
 import { router as posts } from './routes/posts';
 import { router as users } from './routes/users';
+import { router as ratings } from './routes/ratings';
 import * as functions from 'firebase-functions';
 import * as firebase from 'firebase-admin';
 import * as algoliasearch from 'algoliasearch';
 const serviceAccount = require('../serviceaccount.json');
+const fbConfig = require('../fbconfig.json');
 
 // Initialize app and dependencies
 firebase.initializeApp({
   credential: firebase.credential.cert(serviceAccount),
-  databaseURL: "https://bartr-b1856.firebaseio.com",
+  databaseURL: fbConfig.databaseURL
 });
 
 const algolia = algoliasearch(
@@ -32,18 +35,23 @@ app.use(cookieParser());
 app.use(cors());
 
 app.get('/', (req, res) => res.send('This API Home Page'));
+// app.get('/test', utils.authorized, (req, res) => {
+//   res.send('Test works');
+// });
 
 app.use('/posts', posts);
 app.use('/users', users);
+app.use('/ratings', ratings);
 
-const handleChange = (index: algoliasearch.AlgoliaIndex, event: functions.Event<functions.firestore.DeltaDocumentSnapshot>) => {
+
+const handleChange = (index: algoliasearch.AlgoliaIndex, event: functions.Change<FirebaseFirestore.DocumentSnapshot>, context: functions.EventContext) => {
   // Document created/updated
-  if (event.data.exists) {
+  if (event.after.exists) {
     // Get the post document
-    const doc = event.data.data();
+    const doc = event.after.data();
     
     // Add an 'objectID' field which Algolia requires
-    doc.objectID = event.params.postId;
+    doc.objectID = context.params.postId;
 
     console.log('Saving:', doc, 'to Algolia');
 
@@ -52,18 +60,51 @@ const handleChange = (index: algoliasearch.AlgoliaIndex, event: functions.Event<
   }
   // Post deleted
   else {
-    console.log('Deleting:', event.params.postId, 'from Algolia');
+    console.log('Deleting:', context.params.postId, 'from Algolia');
   
     // Delete post from Algolia
-    return index.deleteObject(event.params.postId);
+    return index.deleteObject(context.params.postId);
   }
 };
 
 
 // Update the search postsIndex every time a blog post is written
-export const postChanged = functions.firestore.document('/posts/{postId}').onWrite(event => handleChange(postsIndex, event));
+export const postChanged = functions.firestore.document('/posts/{postId}').onWrite((event, context) => handleChange(postsIndex, event, context));
 
 // Update the search postsIndex every time a blog post is written
-export const usersChanged = functions.firestore.document('/users/{userId}').onWrite(event => handleChange(usersIndex, event));
+export const usersChanged = functions.firestore.document('/users/{userId}').onWrite((event, context) => handleChange(usersIndex, event, context));
+
+export const ratingUpdated = functions.firestore.document('/ratings/{rating}').onWrite(async (event, context) => {
+  const [userID, raterID] = context.params.rating.split('_');
+  const data = await firebase.firestore().doc(`/users/${userID}`).get();
+
+  console.log('UserID:', userID);
+  console.log('RaterID:', raterID);
+
+  const newRating = {};
+
+  // Update rating
+  if (event.before.exists) {
+    Object.assign(
+      newRating,
+      {
+        totalRatings: data.data().totalRatings+event.after.get('value')-event.before.get('value'),
+      }
+    );
+    console.log('Changing rating to:', newRating);
+  }
+  // New rating
+  else {
+    Object.assign(
+      newRating,
+      {
+        totalRatings: data.data().totalRatings+event.after.get('value'),
+        numRatings: data.data().numRatings+1,
+      }
+    );
+    console.log('Adding new rating:', newRating);
+  }
+  return data.ref.set(newRating, {merge: true});
+});
 
 export const api = functions.https.onRequest(express().use('/api', app));

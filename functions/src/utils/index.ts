@@ -1,13 +1,18 @@
 import * as functions from 'firebase-functions';
 import * as firebase from 'firebase-admin';
 import * as googleStorage from '@google-cloud/storage';
+const serviceAccount = require('../../serviceaccount.json');
+const fbConfig = require('../../fbconfig.json');
 
 const storage = googleStorage({
-	projectId: functions.config().firebase.projectId,
+	projectId: serviceAccount.project_id,
 	keyFilename: './serviceaccount.json'
 });
 
-const bucket = storage.bucket(functions.config().firebase.storageBucket);
+
+
+// const bucket = storage.bucket(functions.config().firebase.storageBucket);
+const bucket = storage.bucket(fbConfig.storageBucket);
 
 export const uploadImageToStorage = (file: Express.Multer.File, id: string) => 
 	new Promise<string>((resolve, reject) => {
@@ -56,9 +61,16 @@ export const errorRes = (res, status: number, error) =>
 	});
 
 export const getIDToken = async (userToken) => {
+	if (!userToken) return null;
 	try {
 		return await firebase.auth().verifyIdToken(userToken, true);
 	} catch (error) {
 		return null;
 	}
+};
+
+export const authorized = async (req, res, next) => {
+	const userToken: string = req.headers.token as string;
+	if (!userToken || !await getIDToken(userToken)) return errorRes(res, 401, 'Unauthorized');
+	return next();
 };

@@ -1,10 +1,16 @@
 import * as chai from 'chai';
 import * as firebase from 'firebase';
+import * as algoliasearch from 'algoliasearch';
 // tslint:disable-next-line:no-implicit-dependencies
 import * as request from 'supertest';
 
 chai.use(require('chai-as-promised'));
 chai.use(require('sinon-chai'));
+const algolia = algoliasearch(
+	'4JI0HWDPVQ',
+	'bf4351dbbfa6cea1d6368431735feca1'
+);
+const index = algolia.initIndex('posts');
 
 const ENDPOINT = 'http://localhost:5000/api';
 const assert = chai.assert;
@@ -127,21 +133,22 @@ describe('-- API Tests --', () => {
 		let postId: string;
 		it('Should create a post', done => {
 			const testPost = {
-				title: 'test',
-				description: 'description',
+				title: "Unit test",
+				description: 'Unit test',
 				type: 'good',
+				tags: ["unit", "test"],
+				_geoloc: { lat: 40, lng: -40 },
 				address: '305 N University St, West Lafayette, IN 47907',
-				tags: ['Test', 'Tag']
 			};
 
 			api
 			.post('/posts')
 			.set({token})
-			.field('title', 'test')
-			.field('description', 'description')
-			.field('type', 'good')
-			.field('address', '305 N University St, West Lafayette, IN 47907')
-			.field('tags', ['Test', 'Tag'])
+			.field('title', testPost.title)
+			.field('description', testPost.description)
+			.field('type', testPost.type)
+			.field('address', testPost.address)
+			.field('tags', testPost.tags)
 			.attach('photos', '../src/assets/bartrLogo.png')
 			.expect(200)
 			.then(response => {
@@ -225,7 +232,6 @@ describe('-- API Tests --', () => {
 				assert.property(data, 'description');
 				assert.property(data, 'tags');
 				assert.property(data, 'state');
-				assert.property(data, 'tags');
 				assert.property(data, 'userId');
 				assert.property(data, 'postId');
 				assert.property(data, 'createdAt');
@@ -245,7 +251,7 @@ describe('-- API Tests --', () => {
 			.set({token:testToken})
 			.send({
 				uid: testUser.uid,
-				displayName: 'display',
+				displayName: 'Unit',
 				photoUrl: 'none',
 				email: testUser.email,
 				contactInfo: {
@@ -317,6 +323,69 @@ describe('-- API Tests --', () => {
 				assert.property(data, 'photoUrl');
 				assert.property(data, 'uid');
 				assert.propertyVal(data, 'uid', testUser.uid);
+				done();
+			})
+			.catch(err => done(err));
+		});
+	});
+
+	describe("\n\n\n--Test Algolia Queries--\n", () => {
+		const algoliaPost = {
+			tags: ["unit", "test"],
+			title: "Unit test",
+			_geoloc: { lat: 40, lng: -40 },
+			description: "unit test",
+			state: "PENDING",
+			type: "good"
+		};
+		let algoliaPostID: string;
+
+		it('Should add a post to the algolia posts index', done => {
+			setTimeout(() => {
+				index.addObject(algoliaPost)
+				.then(content => {
+					assert.isNotNull(content, 'Content not null');
+					assert.property(content, 'objectID', 'Content has id');
+					algoliaPostID = content.objectID;
+					done();
+				})
+				.catch(err => done(err));
+			}, 2000);
+		});
+
+		it('Should query last post by tag and return a Promise', async () => {
+			await index.setSettings({
+				searchableAttributes: [
+					'title',
+					'tags',
+					'description'
+				],
+			});
+						 
+			const res = await index.search({
+				hitsPerPage: 100,
+				analytics: false,
+				attributesToRetrieve: ["*"],
+				facets: "[]",
+				query: 'Unit Test'
+			});
+			assert(res.nbHits >= 1, 'Has at least 1 hit');
+			res.hits.forEach(data => {
+				assert.property(data, 'title');
+				assert.property(data, 'description');
+				assert.property(data, 'tags');
+				assert.property(data, 'state');
+				assert.property(data, 'type');
+				assert.property(data, '_geoloc');
+			});
+		});
+
+		it('Should delete post from the algolia posts index', done => {
+			index.deleteObject(algoliaPostID)
+			.then(content => {
+				assert.property(content, 'objectID', 'Content has id');
+				assert.propertyVal(content, 'objectID', algoliaPostID);
+				Object.assign(algoliaPost, {objectID: content.objectID});
 				done();
 			})
 			.catch(err => done(err));

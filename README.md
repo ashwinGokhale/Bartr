@@ -12,7 +12,8 @@ Exchange goods and services with people in your area
 1. `./node_modules/.bin/firebase login`
 2. `./node_modules/.bin/firebase use --add`
     * Choose the "Bartr" project
-3. `firebase functions:config:get > .runtimeconfig.json`
+3. `cd functions`
+4. `firebase functions:config:get > .runtimeconfig.json`
 
 ## Frontend Usage
 

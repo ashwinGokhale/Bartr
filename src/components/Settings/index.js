@@ -21,7 +21,9 @@ class SettingsPage extends Component {
 			displayName: this.props.displayName,
 			contactInfo: this.props.contactInfo ||  {		
 				address: '',
-				phoneNumber: ''
+				hideAddress: false,
+				phoneNumber: '',
+				hidePhoneNumber: false
 			}
 		}
 	}
@@ -66,7 +68,7 @@ class SettingsPage extends Component {
 	onSubmit = (event) => {
 		event.preventDefault();
 		if (this.isRadiusValid(this.state.radius) && this.isLatitudeValid(this.state.lat) && this.isLongitudeValid(this.state.lng)) {
-			const { lat, lng, radius, displayName, photoUrl, contactInfo: { address , phoneNumber }} = this.state;
+			const { lat, lng, radius, displayName, photoUrl, contactInfo: { address , phoneNumber, hideAddress, hidePhoneNumber }} = this.state;
 			const { dbUser } = this.props;
 			this.props.updateDBUser({
 				lat: lat || dbUser.lat,
@@ -77,7 +79,9 @@ class SettingsPage extends Component {
 				contactInfo: {
 					email: dbUser.contactInfo.email,	
 					address: address || dbUser.contactInfo.address,
-					phoneNumber: phoneNumber || dbUser.contactInfo.phoneNumber
+					hideAddress: hideAddress || dbUser.contactInfo.hideAddress,
+					phoneNumber: phoneNumber || dbUser.contactInfo.phoneNumber,
+					hidePhoneNumber: hidePhoneNumber || dbUser.contactInfo.hidePhoneNumber
 				}
 			})
 		}
@@ -92,24 +96,96 @@ class SettingsPage extends Component {
 					<form className="settingsForm">
 						<h4>Account Settings</h4>
 						<hr></hr>
-						<div className="columnLeft">
-							<p className="labels">Display Name</p>
-							<p className="labels">Photo URL</p>
-							<p className="labels">Address</p>
-							<p className="labels">Phone Number</p>
-							<p className="labels">Latitude</p>
-							<p className="labels">Longitude</p>
-							<p className="labels">Radius (m)</p>
+						{/*DISPLAY NAME*/}
+						<div className="rowSettings">
+							<div className="colLabels">
+								<p className="labels">Display Name</p>
+							</div>
+							<div className="colInput">
+								<input className="align" type="text" id="displayName" onChange={this.onChange} value={this.state.displayName}/><br/>
+							</div>
 						</div>
-						<div className="columnRight">
-							<input className="align" type="text" id="displayName" onChange={this.onChange} value={this.state.displayName}/><br/>
-							<input className="align" type="url" id="photoUrl" onChange={this.onChange} value={this.state.photoUrl}/><br/>
-							<input className="align" type="text" id="address" onChange={this.onChange} value={this.state.contactInfo.address}/><br/>
-							<input className="align" type="tel" id="phoneNumber" onChange={this.onChange} value={this.state.contactInfo.phoneNumber}/><br/>
-							<input className="align" type="number" id="lat" onChange={this.onChange} value={this.state.lat}/><br/>
-							<input className="align" type="number" id="lng" onChange={this.onChange} value={this.state.lng}/><br/>
-							<input className="align" type="number" id="radius" onChange={this.onChange} value={this.state.radius}/>
+
+						{/*PHOTO URL*/}
+						<div className="rowSettings">
+							<div className="colLabels">
+								<p className="labels">Photo URL</p>
+							</div>
+							<div className="colInput">
+								<input className="align" type="url" id="photoUrl" onChange={this.onChange} value={this.state.photoUrl}/><br/>
+							</div>
 						</div>
+
+						{/*ADDRESS*/}
+						<div className="rowSettings">
+							<div className="colLabels">
+								<p className="labels">Address</p>
+							</div>
+							<div className="colInput">
+								<input className="align" type="text" id="address" onChange={this.onChange} value={this.state.contactInfo.address}/><br/>
+							</div>
+							<div className="colHidden">
+								<div className="tooltip">
+									<p className="hidden">Hide?</p>
+									<span className="tooltiptext">Hides this contact info on your public profile.</span>
+								</div>
+								<label className="switch">
+									<input type="checkbox"/>
+									<span className="slider round"></span>
+								</label>
+							</div>
+						</div>
+
+						{/*PHONE NUMBER*/}
+						<div className="rowSettings">
+							<div className="colLabels">
+								<p className="labels">Phone Number</p>
+							</div>
+							<div className="colInput">
+								<input className="align" type="tel" id="phoneNumber" onChange={this.onChange} value={this.state.contactInfo.phoneNumber}/><br/>
+							</div>
+							<div className="colHidden">
+								<div className="tooltip">
+									<p className="hidden">Hide?</p>
+									<span className="tooltiptext">Hides this contact info on your public profile.</span>
+								</div>
+								<label className="switch">
+									<input type="checkbox"/>
+									<span className="slider round"></span>
+								</label>
+							</div>
+						</div>
+
+						{/*LATITUDE*/}
+						<div className="rowSettings">
+							<div className="colLabels">
+								<p className="labels">Latitude</p>
+							</div>
+							<div className="colInput">
+								<input className="align" type="number" id="lat" onChange={this.onChange} value={this.state.lat}/><br/>
+							</div>
+						</div>
+
+						{/*LONGITUDE*/}
+						<div className="rowSettings">
+							<div className="colLabels">
+								<p className="labels">Longitude</p>
+							</div>
+							<div className="colInput">
+								<input className="align" type="number" id="lng" onChange={this.onChange} value={this.state.lng}/><br/>
+							</div>
+						</div>
+
+						{/*RADIUS*/}
+						<div className="rowSettings">
+							<div className="colLabels">
+								<p className="labels">Radius (m)</p>
+							</div>
+							<div className="colInput">
+								<input className="align" type="number" id="radius" onChange={this.onChange} value={this.state.radius}/>
+							</div>
+						</div>
+
 						<div className="warningForm">
 							{ !!this.state.error ? <p className="warning" style={{'color': 'red'}}>ERROR: {this.state.error}</p> : null }
 						</div>

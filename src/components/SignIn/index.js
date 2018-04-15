@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-
-// import { SignUpLink } from '../SignUp';
 import { SignUpLink } from '../Common'
 import { PasswordForgetLink } from '../PasswordForget';
 import { auth } from '../../firebase';
@@ -71,6 +69,7 @@ class SignInForm extends Component {
           <form onSubmit={this.onSubmit}>
             <div className="emailBar">
               <input
+                spellCheck="false"
                 className="textBox"
                 value={email}
                 onChange={event => this.setState(updateByPropertyName('email', event.target.value))}
@@ -81,7 +80,7 @@ class SignInForm extends Component {
 
             <div className="emailBar">
               <input
-                className="textBoxPass"
+                className="textBox"
                 value={password}
                 onChange={event => this.setState(updateByPropertyName('password', event.target.value))}
                 type="password"

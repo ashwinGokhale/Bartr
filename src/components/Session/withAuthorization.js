@@ -7,7 +7,7 @@ import { firebase } from '../../firebase';
 import { setAuthUser, fetchDBUser } from '../../actions';
 import * as routes from '../../constants';
 
-const withAuthorization = (condition) => (Component) => {
+const withAuthorization = (condition, props) => (Component) => {
   class WithAuthorization extends React.Component {
     
     componentWillMount = () => {
@@ -22,13 +22,13 @@ const withAuthorization = (condition) => (Component) => {
     }
   
     render() {
-
-      return this.props.authUser ? <Component /> : null;
+      return (this.props.authUser && this.props.dbUser) ? <Component {...this.props} {...props}/> : null;
     }
   }
 
-  const mapStateToProps = (state) => ({
-    authUser: state.sessionState.authUser,
+  const mapStateToProps = (store) => ({
+    authUser: store.sessionState.authUser,
+    dbUser: store.sessionState.dbUser,
   });
   return compose(
     withRouter,
