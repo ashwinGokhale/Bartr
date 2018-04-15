@@ -10,12 +10,6 @@ export default class Profile extends Component {
 	starHandler = async (e, num) => {
 		console.log('Value:', e.target.value);
 		console.log('Num:', num);
-		// console.log('Creating Rating:', {
-		// 	raterID: this.props.currentUser,
-		// 	userID: this.props.dbUser.uid,
-		// 	value: num
-		// });
-		// console.log(this.props.authUser.uid);
 		const data = await createRating(this.props.dbUser.uid, num);
 		console.log(data);
 	}

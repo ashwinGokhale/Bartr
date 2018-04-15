@@ -21,7 +21,6 @@ import DisplayPostsPage from '../DisplayPosts';
 import SupportPage from '../Support';
 import TermsPage from '../Terms';
 import AboutUsPage from '../AboutUs';
-import withAuthentication from '../Session/withAuthentication';
 import * as routes from '../../constants';
 
 import './index.css';
@@ -61,4 +60,4 @@ const App = () =>
     </div>
   </Router>
 
-export default withAuthentication(App);
+export default App;

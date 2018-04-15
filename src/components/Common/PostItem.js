@@ -31,7 +31,7 @@ class PostItem extends Component {
 							{post.description}
 						</ul>
 						<div className="postedBy">
-							Posted by: <Link to={`/user/${post.userId}`}>{post.userId}</Link>
+							Posted by: <Link to={`/user/${post.userId}`}>{post.displayName}</Link>
 						</div>
 					</div>
 				</div>
