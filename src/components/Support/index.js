@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import { Link } from 'react-router-dom';
+import { VERIFICATION_PAGE } from '../../constants';
 import defaultPhoto from '../../assets/default.png';
 import insertHere from '../../assets/insertHere.png';
 import withAuthorization from '../Session/withAuthorization';
@@ -44,6 +46,10 @@ class SupportPage extends Component {
                                             Our website is purely based on bartering for a good or service. </div>
                 <h1> Whats the catch? </h1>
                 <div className="answerText"> No catch at all, the Bartr website is completely free to use, so go ahead and create your account today! </div>
+
+                <h1> How do I get verified? </h1>
+                <div className="answerText">If you would like to become verified barterer on Bartr, you will have to fill out the <Link to={VERIFICATION_PAGE}>verification application</Link>.
+                     We will verify your previous transactions and your user ratings to determine if you are eligible to be verified.</div>
               </div>
           </div>
         </div>

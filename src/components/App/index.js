@@ -21,6 +21,7 @@ import DisplayPostsPage from '../DisplayPosts';
 import SupportPage from '../Support';
 import TermsPage from '../Terms';
 import AboutUsPage from '../AboutUs';
+import VerificationPage from '../Verification';
 import withAuthentication from '../Session/withAuthentication';
 import * as routes from '../../constants';
 
@@ -48,6 +49,7 @@ const App = () =>
         <Route exact path={routes.SETTINGS} component={SettingsPage} />
         <Route exact path={routes.CHAT} component={Chat} />
         <Route exact path={routes.CREATE_POST} component={CreatePostPage} />
+        <Route exact path={routes.VERIFICATION_PAGE} component={VerificationPage} />
         <Route exact path={routes.DISPLAY_POSTS} component={DisplayPostsPage} />
         <Route exact path={routes.SUPPORT} component={SupportPage} />
         <Route exact path={routes.TERMS} component={TermsPage} />
