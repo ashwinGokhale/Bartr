@@ -33,6 +33,34 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors());
+app.use(function(req, res, next) {
+  req.socket.on("error", function(err) {
+    console.log('Socket Error:', err);
+  });
+  req.on('end', (...args) => {
+    console.log('Request ended w/ args:', args);
+  });
+  req.on('close', () => {
+    console.log('Request Closed');
+  });
+  req.on('error', (err) => {
+    console.error('Request error:', err);
+  });
+  res.on('end', (...args) => {
+    console.error('Response ended w/ args:', args);
+  });
+  res.on('close', () => {
+    console.log('Response Closed');
+  });
+  res.on('error', (err) => {
+    console.error('Response error:', err);
+  });
+  next();
+});
+app.use(function(err,req, res, next) {
+  if(err) console.error('Error:', err);
+  next();
+});
 
 app.get('/', (req, res) => res.send('This API Home Page'));
 // app.get('/test', utils.authorized, (req, res) => {
