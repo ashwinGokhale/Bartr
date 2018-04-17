@@ -171,6 +171,26 @@ export const updateDBUser = (user) => {
 	}
 }
 
+export const updateVerified = (user) => {
+	return async dispatch => {
+		try {
+			const token = await auth.currentUser.getIdToken()
+			console.log('Updating verification status:', auth.currentUser.uid)
+			const response = await axios.put(
+				'/api/users/verify',
+				user,
+				{headers: {token}}
+			)
+			dispatch(onSetDBUser(user))
+			console.log(response.data.responseData)
+			return response.data.responseData
+		} catch (error){
+			console.error(error)
+			return error
+		}
+	}
+}
+
 export const setAuthUser = authUser => dispatch => dispatch(onSetAuthUser(authUser));
 
 export const deleteAccount = () => async dispatch => {

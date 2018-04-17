@@ -54,6 +54,7 @@ router.post('/:uid', utils.authorized, async (req, res) => {
 			},
 			totalRatings: 5,
 			numRatings: 1,
+			verified: false,
 			lat: 0, 
 			lng: 0 ,
 			radius: 5
@@ -63,6 +64,25 @@ router.post('/:uid', utils.authorized, async (req, res) => {
 		
 	} catch (error) {
 		console.error('Error:', error);
+		return utils.errorRes(res, 400, error);
+	}
+});
+
+router.put('/verify', utils.authorized, async (req, res) => {
+	try{
+		const tok = await utils.getIDToken(req.headers.token);
+		if(!tok) return utils.errorRes(res, 401, 'Invalid token');
+		// if (tok.uid !== req.params.uid) return utils.errorRes(res, 401, 'Unauthorized');
+		const userGet = await firebase.firestore().doc(`/users/${tok.uid}`).get();
+		if(userGet.data().totalRatings > 4 ){
+			console.log(userGet.data().totalRatings);
+			const userSnap = await firebase.firestore().doc(`/users/${tok.uid}`).set(
+				{verified: true},
+				{merge: true}
+			);
+	   }
+	}catch (error){
+		console.error('Error: ', error);
 		return utils.errorRes(res, 400, error);
 	}
 });

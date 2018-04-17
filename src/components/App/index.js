@@ -21,11 +21,7 @@ import DisplayPostsPage from '../DisplayPosts';
 import SupportPage from '../Support';
 import TermsPage from '../Terms';
 import AboutUsPage from '../AboutUs';
-<<<<<<< HEAD
 import VerificationPage from '../Verification';
-import withAuthentication from '../Session/withAuthentication';
-=======
->>>>>>> 2aac15f629687d930fd1a97bf7135a0ac56edd5a
 import * as routes from '../../constants';
 
 import './index.css';

@@ -7,12 +7,16 @@ import insertHere from '../../assets/insertHere.png';
 import withAuthorization from '../Session/withAuthorization';
 import PostItem from '../Common/PostItem';
 import { fetchFeedPosts, fetchDBUser } from '../../actions';
+import { updateVerified } from '../../actions';
 
 import './index.css';
 
 class VerificationPage extends Component {
   constructor(props) {
     super(props);
+    this.state={
+      verified: false
+    }
   }
   
   //componentDidMount = () => {
@@ -20,6 +24,8 @@ class VerificationPage extends Component {
   //}
 
   render() {
+      const { verified } = this.state;
+      const { dbUser } = this.props;
       return (
       <div>
         
@@ -34,7 +40,9 @@ class VerificationPage extends Component {
                   by your profile name.
                 </h2>
                 <br></br>
-                <button className="submit">Apply to be verified</button>
+                <button className="submit" onClick={e => this.props.updateVerified({
+                  verified: verified || dbUser.verified
+                })}>Apply to be verified</button>
             </div>
         </div>
       </div>
@@ -46,4 +54,7 @@ const mapStateToProps = (store) => ({
   authUser: store.sessionState.authUser,
 });
 
-export default compose(withRouter,connect(mapStateToProps))(VerificationPage);
+export default compose(
+  withRouter,
+  connect(mapStateToProps, { updateVerified })
+)(VerificationPage);

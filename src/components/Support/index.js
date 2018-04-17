@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { compose } from 'recompose';
-<<<<<<< HEAD
 import { Link } from 'react-router-dom';
 import { VERIFICATION_PAGE } from '../../constants';
 import defaultPhoto from '../../assets/default.png';
@@ -9,8 +8,6 @@ import withAuthorization from '../Session/withAuthorization';
 import PostItem from '../Common/PostItem';
 import { fetchFeedPosts, fetchDBUser } from '../../actions';
 
-=======
->>>>>>> 2aac15f629687d930fd1a97bf7135a0ac56edd5a
 import './index.css';
 
 class SupportPage extends Component {
@@ -42,7 +39,7 @@ class SupportPage extends Component {
                 <div className="answerText"> No catch at all, the Bartr website is completely free to use, so go ahead and create your account today! </div>
 
                 <h1> How do I get verified? </h1>
-                <div className="answerText">If you would like to become verified barterer on Bartr, you will have to fill out the <Link to={VERIFICATION_PAGE}>verification application</Link>.
+                <div className="answerText">If you would like to become a verified barterer on Bartr, you will have to fill out the <Link to={VERIFICATION_PAGE}>verification application</Link>.
                      We will verify your previous transactions and your user ratings to determine if you are eligible to be verified.</div>
               </div>
           </div>
