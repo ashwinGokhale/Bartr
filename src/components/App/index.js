@@ -13,6 +13,7 @@ import SignInPage from '../SignIn';
 import PasswordForgetPage from '../PasswordForget';
 import HomePage from '../Home';
 import UserPage from '../UserPage';
+import PostPage from '../PostPage';
 import Chat from '../Chat';
 import AccountPage from '../Account';
 import SettingsPage from '../Settings';
@@ -35,27 +36,29 @@ const NoMatch = ({ location }) => (
 
 const App = () =>
   <Router>
-    <div className="app">
-      <Navigation />
-      <Switch>
-        <Route exact path={routes.LANDING} component={LandingPage} />
-        <Route exact path={routes.SIGN_UP} component={SignUpPage} />
-        <Route exact path={routes.LOGIN} component={SignInPage} />
-        <Route exact path={routes.PASSWORD_FORGET} component={PasswordForgetPage} />
-        <Route exact path={routes.HOME} component={HomePage} />
-        <Route exact path={routes.ACCOUNT} component={AccountPage} />
-        <Route exact path={routes.SETTINGS} component={SettingsPage} />
-        <Route exact path={routes.CHAT} component={Chat} />
-        <Route exact path={routes.CREATE_POST} component={CreatePostPage} />
-        <Route exact path={routes.DISPLAY_POSTS} component={DisplayPostsPage} />
-        <Route exact path={routes.SUPPORT} component={SupportPage} />
-        <Route exact path={routes.TERMS} component={TermsPage} />
-        <Route exact path={routes.ABOUTUS} component={AboutUsPage} />
-        <Route exact path="/user/:userid" component={UserPage} />
-        <Route component={NoMatch} />
-      </Switch>
-      <hr/>
-
+    <div>
+    <Navigation />
+      <div className="app">
+        <Switch>
+          <Route exact path={routes.LANDING} component={LandingPage} />
+          <Route exact path={routes.SIGN_UP} component={SignUpPage} />
+          <Route exact path={routes.LOGIN} component={SignInPage} />
+          <Route exact path={routes.PASSWORD_FORGET} component={PasswordForgetPage} />
+          <Route exact path={routes.HOME} component={HomePage} />
+          <Route exact path={routes.ACCOUNT} component={AccountPage} />
+          <Route exact path={routes.SETTINGS} component={SettingsPage} />
+          <Route exact path={routes.CHAT} component={Chat} />
+          <Route exact path={routes.CREATE_POST} component={CreatePostPage} />
+          <Route exact path={routes.DISPLAY_POSTS} component={DisplayPostsPage} />
+          <Route exact path={routes.SUPPORT} component={SupportPage} />
+          <Route exact path={routes.TERMS} component={TermsPage} />
+          <Route exact path={routes.ABOUTUS} component={AboutUsPage} />
+          <Route exact path="/user/:userid" component={UserPage} />
+          <Route exact path="/post/:postid" component={PostPage} />
+          <Route component={NoMatch} />
+        </Switch>
+        <hr/>
+      </div>
       <Footer/>
     </div>
   </Router>

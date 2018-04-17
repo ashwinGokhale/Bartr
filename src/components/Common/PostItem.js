@@ -23,7 +23,7 @@ class PostItem extends Component {
 						type === 'user' ? <button className="editPostButton" onClick={this.onClick}>Edit</button> : null
 					}</div>
 					
-					<h3 className="listingTitle">{post.title}</h3>
+					<Link to={`/post/${post.postId}`}><h3 className="listingTitle">{post.title}</h3></Link>
 				</div>
 				<div className="postInfo">
 					<div className="postPicture">
