@@ -176,7 +176,9 @@ router.post('/', multer.array('photos', 12), utils.authorized, async (req, res, 
 		if (!tok) return utils.errorRes(res, 401, 'Invalid token');
 		let lat = parseInt(req.body.lat, 10);
 		let lng = parseInt(req.body.lng, 10);
-		if (req.body.address) {
+		let address = req.body.address;
+		// Given address, get lat and lng
+		if (address) {
 			const { data } = await axios.get(
 				'https://maps.googleapis.com/maps/api/geocode/json',
 				{
@@ -187,10 +189,26 @@ router.post('/', multer.array('photos', 12), utils.authorized, async (req, res, 
 					}
 				}
 			);
-			if (!data.results.length) return utils.errorRes(res, 400, 'Invalid address: ' + req.body.address);
+			if (!data.results.length) return utils.errorRes(res, 400, 'Invalid address: ' + address);
 			
 			lat = data.results[0].geometry.location.lat;
 			lng = data.results[0].geometry.location.lng;
+		}
+		// Given lat and lng, get address
+		else {
+			const { data } = await axios.get(
+				'https://maps.googleapis.com/maps/api/geocode/json',
+				{
+					params: {
+						latlng: `${lat},${lng}`,
+						// key: functions.config().gmaps.key
+						key: process.env.GMAPS_KEY
+					}
+				}
+			);
+			if (!data.results.length) return utils.errorRes(res, 400, 'Invalid latitude and longitude: ' + lat + ', ' + lng);
+			
+			address = data.results[0].formatted_address;
 		}
 
 		if (!lat) return utils.errorRes(res, 400, 'Invalid Latitude: ' + req.body.lat);
@@ -215,6 +233,7 @@ router.post('/', multer.array('photos', 12), utils.authorized, async (req, res, 
 			{ displayName: userSnap.data().displayName },
 			{ createdAt: new Date() },
 			{ lastModified: new Date() },
+			{ address },
 			{ _geoloc: { lat, lng } }
 		);
 
