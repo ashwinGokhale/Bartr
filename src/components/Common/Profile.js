@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PostItem from '../Common/PostItem';
 import { createRating } from '../../actions';
-// import Rating from './Rating';
 import defaultPhoto from '../../assets/default.png';
 import './profile.css'
 
-export default class Profile extends Component {
+export default class ProfilePage extends Component {
 	starHandler = async (e, num) => {
 		console.log('Value:', e.target.value);
 		console.log('Num:', num);
@@ -49,36 +48,31 @@ export default class Profile extends Component {
 			</fieldset>
 		</div>
 
-  render() {
-	const { dbUser, feedPosts, currentUser } = this.props;
-	console.log('Profile Props:', this.props);
-	return (
-		<div>
-			<div className="row">
-				<div className="column leftSide">
-					<div className="profile">
-					<div className="profileCard">
+	Profile = ({ dbUser, feedPosts, currentUser }) => 
+		<div className="row">
+			<div className="column leftSide">
+				<div className="profile">
+				<div className="profileCard">
 
-						<img className="profilePhoto" src={dbUser ? dbUser.photoUrl : defaultPhoto} onError={(e)=>{e.target.src=defaultPhoto}}></img>
-						{ !!dbUser && <h5 className="userName">{dbUser.displayName}</h5> }
-						{ !currentUser && <this.Rating/>}
-					</div>
-					</div>
-
+					<img className="profilePhoto" src={dbUser.photoUrl !== 'none' ? dbUser.photoUrl : defaultPhoto}></img>
+					{ !!dbUser && <h5 className="userName">{dbUser.displayName}</h5> }
+					{ !currentUser && <this.Rating/>}
 				</div>
-				<div className="column rightSide">
-					<div className="postFeed">
-					{
-						feedPosts &&
-						feedPosts.length ? 
-						feedPosts.map((post,i) => <PostItem key={i} id={i} type="feed" post={post}/>) :
-						<p>No Posts!</p>
-					}
-					</div>
+				</div>
+
+			</div>
+			<div className="column rightSide">
+				<div className="postFeed">
+				{
+					feedPosts &&
+					feedPosts.length ? 
+					feedPosts.map((post,i) => <PostItem key={i} id={i} type="feed" post={post}/>) :
+					<p>No Posts!</p>
+				}
 				</div>
 			</div>
 		</div>
-	);
-  }
+
+  render = () => this.props.dbUser ? <this.Profile {...this.props} /> : <div>Loading...</div>
 }
 

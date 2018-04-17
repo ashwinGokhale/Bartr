@@ -1,28 +1,49 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { Link, withRouter } from 'react-router-dom';
-import axios from 'axios';
-import { fetchUser, fetchPosts } from '../../actions';
+import { fetchUserPosts, fetchPost } from '../../actions';
 import withAuthorization from '../Session/withAuthorization';
-import Profile from '../Common/Profile';
+import { PostCard } from '../Common';
 
 class PostPage extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      post: null
+    };
     console.log('Post Page props', this.props);
   }
 
   componentWillMount = async () => {
+    const { id } = this.props.match.params;
+    console.log('Rendering post:', id);
+    await this.props.fetchUserPosts();
+    try {
+      const post = await fetchPost(id);
+      console.log('PostPage post data:', post);
+      this.setState({post});
+    } catch (error) {
+      console.error('Error fetching post:', id);
+      console.error(error);
+    }
   }
 
   render = () => {
-      return (
-          <div>Post</div>
-      );
+    const { post } = this.state;
+
+    return (post ? <PostCard post={post} userPosts={this.props.userPosts} self={this.props.authUser.uid === post.userId}/> : <div>Loading...</div>)
   }
 }
 
+// export default compose(
+//   	withAuthorization((authUser) => !!authUser),
+// )(PostPage);
+
+const mapStateToProps = (state) => ({
+  userPosts: state.postsState.userPosts,
+});
+
 export default compose(
-  	withAuthorization((authUser) => !!authUser),
+  withAuthorization((authUser) => !!authUser),
+  connect(mapStateToProps, { fetchUserPosts })
 )(PostPage);

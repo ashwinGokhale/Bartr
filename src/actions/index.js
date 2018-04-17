@@ -184,7 +184,7 @@ export const deleteAccount = () => async dispatch => {
 		const { data } = await axios.delete(`/api/users/${auth.currentUser.uid}`,{
 			headers: {token}
 		});
-		const resp = await auth.signOut();
+		await auth.signOut();
 		dispatch(onSetAuthUser(null));
 		console.log('Deleted user:', data.responseData);
 	} catch (error) {
@@ -210,20 +210,26 @@ export const fetchUser = async id => {
 }
 
 export const fetchPosts = async id => {
-	// try {
-		const token = await auth.currentUser.getIdToken();
-		// Get DB user and input into Redux store
-		console.log(`Getting user posts w/ user id: ${id}`)
-		const { data } = await axios.get(
-			`/api/posts/user/${id}`,
-			{headers: {token}}
-		)
-		console.log('Got user posts:', data.responseData);
-		return data.responseData;
-	// } catch (error) {
-	// 	console.error('Error:', error.response.data.error);
-	// 	return error.response.data.error;
-	// }
+	const token = await auth.currentUser.getIdToken();
+	// Get DB user and input into Redux store
+	console.log(`Getting user posts w/ user id: ${id}`)
+	const { data } = await axios.get(
+		`/api/posts/user/${id}`,
+		{headers: {token}}
+	)
+	console.log('Got user posts:', data.responseData);
+	return data.responseData;
+}
+
+export const fetchPost = async id => {
+	const token = await auth.currentUser.getIdToken();
+	console.log(`Getting user post w/ id: ${id}`)
+	const { data } = await axios.get(
+		`/api/posts/${id}`,
+		{headers: {token}}
+	)
+	console.log('Got post:', data.responseData);
+	return data.responseData;
 }
 
 export const createRating = async (userID, value) => {

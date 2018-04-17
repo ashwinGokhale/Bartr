@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { compose } from 'recompose';
-import { authCondition } from '../../constants';
 import { deletePost } from '../../actions';
 
 class PostItem extends Component {

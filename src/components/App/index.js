@@ -53,8 +53,8 @@ const App = () =>
           <Route exact path={routes.SUPPORT} component={SupportPage} />
           <Route exact path={routes.TERMS} component={TermsPage} />
           <Route exact path={routes.ABOUTUS} component={AboutUsPage} />
-          <Route exact path="/user/:userid" component={UserPage} />
-          <Route exact path="/post/:postid" component={PostPage} />
+          <Route exact path="/user/:id" component={UserPage} />
+          <Route exact path="/post/:id" component={PostPage} />
           <Route component={NoMatch} />
         </Switch>
         <hr/>

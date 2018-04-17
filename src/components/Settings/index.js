@@ -122,7 +122,7 @@ class SettingsPage extends Component {
 								<p className="labels">Address</p>
 							</div>
 							<div className="colInput">
-								<input className="align" type="text" id="address" onChange={this.onChange} value={this.state.contactInfo.address}/><br/>
+								<input className="align" autoComplete="street-address" type="text" id="address" onChange={this.onChange} value={this.state.contactInfo.address}/><br/>
 							</div>
 							<div className="colHidden">
 								<div className="tooltip">
@@ -142,7 +142,7 @@ class SettingsPage extends Component {
 								<p className="labels">Phone Number</p>
 							</div>
 							<div className="colInput">
-								<input className="align" type="tel" id="phoneNumber" onChange={this.onChange} value={this.state.contactInfo.phoneNumber}/><br/>
+								<input className="align" autoComplete="tel-national" type="tel" id="phoneNumber" onChange={this.onChange} value={this.state.contactInfo.phoneNumber}/><br/>
 							</div>
 							<div className="colHidden">
 								<div className="tooltip">

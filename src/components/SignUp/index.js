@@ -2,17 +2,12 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import axios from 'axios';
-
 import { auth } from '../../firebase';
-import { setAuthUser, createUser } from '../../actions'
+import { createUser } from '../../actions'
 import * as routes from '../../constants';
 import './index.css';
 
 class SignUpPage extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     return (
@@ -126,7 +121,7 @@ class SignUpForm extends Component {
   }
 }
 
-const SignUpLink = () =>
+export const SignUpLink = () =>
   <div>
     <div>
       Don't have an account?

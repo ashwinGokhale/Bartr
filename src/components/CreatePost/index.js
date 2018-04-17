@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import { WithContext as ReactTags } from 'react-tag-input';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import withAuthorization from '../Session/withAuthorization';
 import { authCondition } from '../../constants';
 import * as routes from '../../constants';
 import { updateDBUser, createPost } from '../../actions';
-import axios from 'axios';
-import insertHere from '../../assets/insertHere.png';
 import './index.css';
 
 class CreatePostPage extends Component {
@@ -102,7 +99,9 @@ class CreatePostPage extends Component {
 			data.append('title', this.state.title);
 			data.append('description', this.state.description);
 			data.append('type', this.state.type);
-			this.props.createPost(data);
+			console.log('About to create a post:', data);
+			await this.props.createPost(data);
+			this.props.history.push(routes.HOME);
 		} catch (error) {
 			console.error(error)
 			this.setState({ error: JSON.stringify(error) })

@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { Link, withRouter } from 'react-router-dom';
-import axios from 'axios';
 import { fetchUser, fetchPosts } from '../../actions';
 import withAuthorization from '../Session/withAuthorization';
 import Profile from '../Common/Profile';
@@ -19,7 +16,7 @@ class UserPage extends Component {
   }
 
   componentWillMount = async () => {
-	  const id = this.props.match.params.userid;
+	  const { id } = this.props.match.params;
 		const userInfo = await Promise.all([fetchUser(id), fetchPosts(id)]);
 		console.log('Got userInfo:', userInfo);
 		if (this.props.authUser && this.props.authUser.uid === userInfo[0].uid) this.setState({currentUser: true});
@@ -35,6 +32,5 @@ class UserPage extends Component {
 }
 
 export default compose(
-	withRouter,
-  	withAuthorization((authUser) => !!authUser),
+	withAuthorization(),
 )(UserPage);
