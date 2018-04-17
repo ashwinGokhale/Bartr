@@ -1,5 +1,4 @@
 import * as express from 'express';
-import * as functions from 'firebase-functions';
 import * as firebase from 'firebase-admin';
 import * as utils from '../utils';
 export const router = express.Router();

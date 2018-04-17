@@ -8,8 +8,10 @@ import * as utils from '../utils';
 export const router = express.Router();
 
 const algolia = algoliasearch(
-	functions.config().algolia.app,
-	functions.config().algolia.key
+	// functions.config().algolia.app,
+	process.env.ALGOLIA_APP,
+	// functions.config().algolia.key
+	process.env.ALGOLIA_KEY,
 );
 
 const postsIndex = algolia.initIndex('posts');
@@ -47,7 +49,9 @@ router.get("/geo", utils.authorized, async (req, res) => {
 router.get('/user/:uid', utils.authorized, async (req, res) =>  {
 	try {
 		const resp = await firebase.firestore().collection('/posts').where('userId', '==', req.params.uid).get();
-		return utils.successRes(res, resp.docs.map(doc => doc.data()));
+		const data = resp.docs.map(doc => doc.data());
+		console.log('User Posts:', data);
+		return utils.successRes(res, data);
 	} catch (error) {
 		console.error('Error:', error);
 		return utils.errorRes(res, 400, error);
@@ -106,7 +110,8 @@ router.put('/:postId', multer.array('photos', 12), utils.authorized, async (req,
 				{
 					params: {
 						address: req.body.address,
-						key: functions.config().gmaps.key
+						// key: functions.config().gmaps.key
+						key: process.env.GMAPS_KEY
 					}
 				}
 			);
@@ -177,7 +182,8 @@ router.post('/', multer.array('photos', 12), utils.authorized, async (req, res, 
 				{
 					params: {
 						address: req.body.address,
-						key: functions.config().gmaps.key
+						// key: functions.config().gmaps.key
+						key: process.env.GMAPS_KEY
 					}
 				}
 			);

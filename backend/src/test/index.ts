@@ -17,12 +17,12 @@ const assert = chai.assert;
 const should = chai.should;
 const expect = chai.expect;
 let config = {
-    apiKey: "AIzaSyDBETqIADd-E75bR2lSbS-VuqP5-RD1U4Q",
-    authDomain: "bartr-b1856.firebaseapp.com",
-    databaseURL: "https://bartr-b1856.firebaseio.com",
-    projectId: "bartr-b1856",
-    storageBucket: "bartr-b1856.appspot.com",
-    messagingSenderId: "952082363953"
+	apiKey: "AIzaSyDBETqIADd-E75bR2lSbS-VuqP5-RD1U4Q",
+	authDomain: "bartr-b1856.firebaseapp.com",
+	databaseURL: "https://bartr-b1856.firebaseio.com",
+	projectId: "bartr-b1856",
+	storageBucket: "bartr-b1856.appspot.com",
+	messagingSenderId: "952082363953"
 };
 
 const app = firebase.initializeApp(config);

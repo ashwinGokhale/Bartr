@@ -21,7 +21,8 @@ class UserPage extends Component {
   componentWillMount = async () => {
 	  const id = this.props.match.params.userid;
 		const userInfo = await Promise.all([fetchUser(id), fetchPosts(id)]);
-		if (this.props.authUser.uid === userInfo[0].uid) this.setState({currentUser: true});
+		console.log('Got userInfo:', userInfo);
+		if (this.props.authUser && this.props.authUser.uid === userInfo[0].uid) this.setState({currentUser: true});
 	  this.setState({dbUser: userInfo[0]});
 	  this.setState({feedPosts: userInfo[1]});
   }

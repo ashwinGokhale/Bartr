@@ -27,6 +27,7 @@ class SignUpPage extends Component {
 const INITIAL_STATE = {
   displayName: '',
   email: '',
+  phoneNumber: '',
   passwordOne: '',
   passwordTwo: '',
   error: null,
@@ -40,17 +41,18 @@ class SignUpForm extends Component {
 
   onSubmit = async (event) => {
     event.preventDefault();
-    const { displayName, email, passwordOne } = this.state;
+    const { displayName, email, phoneNumber, passwordOne } = this.state;
     const { history } = this.props;
     try {
-      const authUser = await auth.createUserWithEmailAndPassword(email, passwordOne)
+      const authUser = await auth.createUserWithEmailAndPassword(email, passwordOne);
       const token = await auth.currentUser.getIdToken();
       const data = await this.props.createUser(
         {
             uid: authUser.uid,
             displayName,
             photoUrl: authUser.photoURL || 'none',
-            email
+            email,
+            phoneNumber
         },
         token
       )
@@ -64,13 +66,9 @@ class SignUpForm extends Component {
   }
 
   render() {
-    const { displayName, email, passwordOne, passwordTwo, error } = this.state;
+    const { displayName, email, phoneNumber, passwordOne, passwordTwo, error } = this.state;
 
-    const isInvalid =
-      passwordOne !== passwordTwo ||
-      passwordOne === '' ||
-      displayName === '' ||
-      email === '';
+    const isInvalid = passwordOne !== passwordTwo || passwordOne === '' || displayName === '' || phoneNumber === '' || email === '';
 
     return (
       <div className="signUpBackground">
@@ -81,7 +79,7 @@ class SignUpForm extends Component {
               className="textBoxReg"
               spellCheck="false"
               value={displayName}
-              onChange={event => this.setState({ displayName: event.target.value})}
+              onChange={event => this.setState({ displayName: event.target.value })}
               type="text"
               placeholder="Full Name"
             />
@@ -89,21 +87,29 @@ class SignUpForm extends Component {
               className="textBoxReg"
               spellCheck="false"
               value={email}
-              onChange={event => this.setState( {email: event.target.value} )}
-              type="text"
+              onChange={event => this.setState({ email: event.target.value })}
+              type="email"
               placeholder="Email Address"
             />
             <input
               className="textBoxReg"
+              spellCheck="false"
+              value={phoneNumber}
+              onChange={event => this.setState({ phoneNumber: event.target.value })}
+              type="tel"
+              placeholder="Phone Number"
+            />
+            <input
+              className="textBoxReg"
               value={passwordOne}
-              onChange={event => this.setState( {passwordOne: event.target.value} )}
+              onChange={event => this.setState({ passwordOne: event.target.value })}
               type="password"
               placeholder="Password"
             />
             <input
               className="textBoxReg"
               value={passwordTwo}
-              onChange={event => this.setState( {passwordTwo: event.target.value} )}
+              onChange={event => this.setState({ passwordTwo: event.target.value })}
               type="password"
               placeholder="Confirm Password"
             />
@@ -128,9 +134,6 @@ const SignUpLink = () =>
       <Link className="formats" to={routes.SIGN_UP}>Sign Up</Link>
     </div>
   </div>
-
-// export default withRouter(SignUpPage);
-// connect(null, { createUser })(SignUpForm)
 
 export default compose(
   withRouter,

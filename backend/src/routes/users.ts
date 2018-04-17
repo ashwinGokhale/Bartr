@@ -18,12 +18,10 @@ router.get('/:uid', utils.authorized, async (req, res) => {
 	try {
 		const userSnap = await firebase.firestore().doc(`/users/${req.params.uid}`).get();
 		console.log('UserSnap:', userSnap.data());
-		// return utils.successRes(res, userSnap.data());
-		utils.successRes(res, userSnap.data());
+		return utils.successRes(res, userSnap.data());
 	} catch (error) {
 		console.error('Error:', error);
-		// return utils.errorRes(res, 400, error);
-		utils.errorRes(res, 400, error);
+		return utils.errorRes(res, 400, error);
 	}
 });
 
