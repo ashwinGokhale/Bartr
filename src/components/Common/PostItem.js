@@ -19,7 +19,10 @@ class PostItem extends Component {
 				<div className="postTitle">
 					<div className="floatRight">{
 						type === 'user' ? <button className="deletePostButton" onClick={this.onClick}>X</button> : null
+					}{
+						type === 'user' ? <button className="editPostButton" onClick={this.onClick}>Edit</button> : null
 					}</div>
+					
 					<h3 className="listingTitle">{post.title}</h3>
 				</div>
 				<div className="postInfo">

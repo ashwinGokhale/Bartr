@@ -12,9 +12,13 @@ const withAuthorization = (condition, props) => (Component) => {
     
     componentWillMount = () => {
       firebase.auth.onAuthStateChanged(authUser => {
-        if (!condition(authUser))
+        console.log('Auth state has changed to:', condition(authUser));
+        console.log('Auth State:', this.props.authState);
+        if (!condition(authUser)) {
+          this.props.setAuthUser(authUser);
           this.props.history.push(routes.LOGIN);
-        else {
+        }
+        else if (!this.props.authState) {
           this.props.setAuthUser(authUser);
           this.props.fetchDBUser();
         }
@@ -27,8 +31,9 @@ const withAuthorization = (condition, props) => (Component) => {
   }
 
   const mapStateToProps = (store) => ({
-    authUser: store.sessionState.authUser,
-    dbUser: store.sessionState.dbUser,
+    ...store.sessionState,
+    // authUser: store.sessionState.authUser,
+    // dbUser: store.sessionState.dbUser,
   });
   return compose(
     withRouter,
