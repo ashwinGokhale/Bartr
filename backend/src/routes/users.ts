@@ -4,7 +4,7 @@ import * as utils from '../utils';
 export const router = express.Router();
 
 // Get all users
-router.get("/", utils.authorized, async (req, res) => {
+router.get("/", async (req: utils.Req, res: utils.Res) => {
 	try {
 		const userDocs = await firebase.firestore().collection('/users').get();
 		return utils.successRes(res, userDocs.docs.map(doc => doc.data()));
@@ -14,25 +14,24 @@ router.get("/", utils.authorized, async (req, res) => {
 	}
 });
 
-router.get('/:uid', utils.authorized, async (req, res) => {
+router.get('/:uid', async (req: utils.Req, res: utils.Res) => {
 	try {
 		const userSnap = await firebase.firestore().doc(`/users/${req.params.uid}`).get();
 		console.log('UserSnap:', userSnap.data());
-		// return utils.successRes(res, userSnap.data());
-		utils.successRes(res, userSnap.data());
+		return utils.successRes(res, userSnap.data());
 	} catch (error) {
 		console.error('Error:', error);
-		// return utils.errorRes(res, 400, error);
-		utils.errorRes(res, 400, error);
+		return utils.errorRes(res, 400, error);
 	}
 });
 
 
 // Create / update a post
-router.post('/:uid', utils.authorized, async (req, res) => {
+router.post('/:uid', async (req: utils.Req, res: utils.Res) => {
 	try {
-		const tok = await utils.getIDToken(req.headers.token);
-		if (!tok) return utils.errorRes(res, 401, 'Invalid token');
+		// const tok = await utils.getIDToken(req.headers.token);
+		// if (!tok) return utils.errorRes(res, 401, 'Invalid token');
+		const tok = req.token;
 		if (tok.uid !== req.params.uid) return utils.errorRes(res, 401, 'Unauthorized');
 		if (!req.params.uid) return utils.errorRes(res, 400, 'User must have a uid');
 		if (!req.body.photoUrl) return utils.errorRes(res, 400, 'User must have a photo url');
@@ -71,6 +70,7 @@ router.post('/:uid', utils.authorized, async (req, res) => {
 	}
 });
 
+<<<<<<< HEAD:functions/src/routes/users.ts
 router.put('/verify', utils.authorized, async (req, res) => {
 	try{
 		const tok = await utils.getIDToken(req.headers.token);
@@ -91,10 +91,14 @@ router.put('/verify', utils.authorized, async (req, res) => {
 });
 
 router.put('/:uid', utils.authorized, async (req, res) => {
+=======
+router.put('/:uid', async (req: utils.Req, res: utils.Res) => {
+>>>>>>> 120cdbcb67737403a345ab992e09ded0559daf56:backend/src/routes/users.ts
 	try {
 		console.log('Put user body:', req.body);
-		const tok = await utils.getIDToken(req.headers.token);
-		if (!tok) return utils.errorRes(res, 401, 'Invalid token');
+		// const tok = await utils.getIDToken(req.headers.token);
+		// if (!tok) return utils.errorRes(res, 401, 'Invalid token');
+		const tok = req.token;
 		if (tok.uid !== req.params.uid) return utils.errorRes(res, 401, 'Unauthorized');
 		
 		const userBuilder = {};
@@ -137,10 +141,11 @@ router.put('/:uid', utils.authorized, async (req, res) => {
 	}
 });
 
-router.delete('/:uid', utils.authorized, async (req, res) => {
+router.delete('/:uid', async (req: utils.Req, res: utils.Res) => {
 	try {
-		const tok = await utils.getIDToken(req.headers.token);
-		if (!tok) return utils.errorRes(res, 401, 'Invalid token');
+		// const tok = await utils.getIDToken(req.headers.token);
+		// if (!tok) return utils.errorRes(res, 401, 'Invalid token');
+		const tok = req.token;
 		if (tok.uid !== req.params.uid) return utils.errorRes(res, 401, 'Unauthorized');
 		
 		// Save user object for later

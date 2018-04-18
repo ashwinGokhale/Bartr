@@ -45,9 +45,5 @@ class SupportPage extends Component {
           </div>
         </div>
       </div>
-    );
-  }
+    )}
 }
-
-export default compose(
-)(SupportPage);

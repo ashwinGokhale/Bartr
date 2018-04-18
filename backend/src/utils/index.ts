@@ -1,18 +1,33 @@
 import * as functions from 'firebase-functions';
 import * as firebase from 'firebase-admin';
-import * as googleStorage from '@google-cloud/storage';
+import { Request, Response } from 'express';
 const serviceAccount = require('../../serviceaccount.json');
 const fbConfig = require('../../fbconfig.json');
 
-const storage = googleStorage({
-	projectId: serviceAccount.project_id,
-	keyFilename: './serviceaccount.json'
+// Initialize app and dependencies
+
+firebase.initializeApp({
+	credential: firebase.credential.cert(serviceAccount),
+	...fbConfig
 });
 
+const bucket = firebase.storage().bucket();
 
 
-// const bucket = storage.bucket(functions.config().firebase.storageBucket);
-const bucket = storage.bucket(fbConfig.storageBucket);
+export interface Req extends Request {
+	token: firebase.auth.DecodedIdToken
+}
+
+export interface Res extends Response {}
+
+export const getTransactions = async (type: string, uid: string, buyer?: boolean) => {
+	const transactions = await firebase.firestore().collection('/transactions')
+                            .where(`${buyer ? 'buyer' : 'seller'}.userId`, '==', uid)
+                            .where('state', '==', type)
+                            .get();
+    
+    return transactions.forEach(doc => doc.data());
+}
 
 export const uploadImageToStorage = (file: Express.Multer.File, id: string) => 
 	new Promise<string>((resolve, reject) => {
@@ -52,9 +67,9 @@ export const deletePostfromStorage = (postId: string) =>
 	.then(value => null)
 	.catch(error => error);
 
-export const successRes = (res, responseData) => res.json({status: 200, responseData });
+export const successRes = (res: Res, responseData) => res.json({status: 200, responseData });
 
-export const errorRes = (res, status: number, error) =>
+export const errorRes = (res: Res, status: number, error) =>
 	res.status(status).json({
 		status,
 		error
@@ -69,8 +84,10 @@ export const getIDToken = async (userToken) => {
 	}
 };
 
-export const authorized = async (req, res, next) => {
+export const authorized = async (req: Req, res: Res, next) => {
 	const userToken: string = req.headers.token as string;
-	if (!userToken || !await getIDToken(userToken)) return errorRes(res, 401, 'Unauthorized');
+	const token = await getIDToken(userToken);
+	if (!userToken || !token) return errorRes(res, 401, 'Unauthorized');
+	req.token = token;
 	return next();
 };
