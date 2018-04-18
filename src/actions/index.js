@@ -173,7 +173,6 @@ export const updateDBUser = (user) => {
 	}
 }
 
-<<<<<<< HEAD
 export const updateVerified = (user) => {
 	return async dispatch => {
 		try {
@@ -194,13 +193,10 @@ export const updateVerified = (user) => {
 	}
 }
 
-export const setAuthUser = authUser => dispatch => dispatch(onSetAuthUser(authUser));
-=======
 export const setAuthUser = authUser => dispatch => {
 	dispatch(onSetAuthUser(authUser));
 	dispatch(onSetAuthState(authUser ? true : false));
 }
->>>>>>> d3a57c4ba418ec4e7244edae860d23c983809609
 
 export const deleteAccount = () => async dispatch => {
 	try {

@@ -41,7 +41,7 @@ class VerificationPage extends Component {
                 </h2>
                 <br></br>
                 <button className="submit" onClick={e => this.props.updateVerified({
-                  verified: verified || dbUser.verified
+                  verified: verified
                 })}>Apply to be verified</button>
             </div>
         </div>
