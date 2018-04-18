@@ -7,13 +7,10 @@ export const ACCOUNT = '/account';
 export const SETTINGS = '/settings';
 export const CHAT = '/chat';
 export const CREATE_POST = '/post/create';
-<<<<<<< HEAD
 export const VERIFICATION_PAGE = '/verify';
 export const DISPLAY_POSTS = '/posts'
-=======
 export const DISPLAY_POSTS = '/posts';
 export const OFFERS = '/offers';
->>>>>>> 120cdbcb67737403a345ab992e09ded0559daf56
 export const SUPPORT = '/support';
 export const TERMS = '/terms';
 export const ABOUTUS = '/aboutUs';
