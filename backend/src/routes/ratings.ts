@@ -1,10 +1,9 @@
 import * as express from 'express';
-import * as functions from 'firebase-functions';
 import * as firebase from 'firebase-admin';
 import * as utils from '../utils';
 export const router = express.Router();
 
-router.post('/', async (req, res) => {
+router.post('/', async (req: utils.Req, res: utils.Res) => {
 	console.log('Rating body:', req.body);
 	const {userID, raterID} = req.body;
 	let {value} = req.body;

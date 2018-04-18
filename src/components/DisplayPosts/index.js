@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { SignOutButton } from '../Common';
 import * as routes from '../../constants';
 import logo from '../../assets/bartrLogo.png';
 import withAuthorization from '../Session/withAuthorization';

@@ -321,6 +321,23 @@ ul {
     position: absolute;
     top: 1vh;
     right: 0.5vw;
+    border-radius: 0.5em 0.5em 0.5em 0.5em;
+    background-color: rgb(136, 136, 136);
+    color: white;
+    border: none;
+}
+
+.editPostButton {
+    height: 1.5vw;
+    width: 3.2vw;
+    font-size: 1.1vw;
+    position: absolute;
+    top: 1vh;
+    right: 3vw;
+    border-radius: 0.5em 0.5em 0.5em 0.5em;
+    background-color: rgb(136, 136, 136);
+    color: white;
+    border: none;
 }
 
 /* width */

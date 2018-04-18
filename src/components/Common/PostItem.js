@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { compose } from 'recompose';
-import { authCondition } from '../../constants';
 import { deletePost } from '../../actions';
 
 class PostItem extends Component {
@@ -19,8 +18,11 @@ class PostItem extends Component {
 				<div className="postTitle">
 					<div className="floatRight">{
 						type === 'user' ? <button className="deletePostButton" onClick={this.onClick}>X</button> : null
+					}{
+						type === 'user' ? <button className="editPostButton" onClick={this.onClick}>Edit</button> : null
 					}</div>
-					<h3 className="listingTitle">{post.title}</h3>
+					
+					<Link to={`/post/${post.postId}`}><h3 className="listingTitle">{post.title}</h3></Link>
 				</div>
 				<div className="postInfo">
 					<div className="postPicture">
