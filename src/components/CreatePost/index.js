@@ -3,7 +3,6 @@ import { WithContext as ReactTags } from 'react-tag-input';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import withAuthorization from '../Session/withAuthorization';
-import { authCondition } from '../../constants';
 import * as routes from '../../constants';
 import { updateDBUser, createPost } from '../../actions';
 import './index.css';
@@ -200,6 +199,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default compose(
-  	withAuthorization(authCondition),
+  	withAuthorization(),
 	connect(mapStateToProps, { updateDBUser, createPost })
 )(CreatePostPage);

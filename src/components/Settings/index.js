@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import withAuthorization from '../Session/withAuthorization';
-import { authCondition } from '../../constants';
 import { updateDBUser, deleteAccount } from '../../actions';
 import './index.css'
 
@@ -209,6 +208,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default compose(
-  	withAuthorization(authCondition),
+  	withAuthorization(),
 	connect(mapStateToProps, { updateDBUser, deleteAccount })
 )(SettingsPage);

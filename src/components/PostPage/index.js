@@ -35,15 +35,11 @@ class PostPage extends Component {
   }
 }
 
-// export default compose(
-//   	withAuthorization((authUser) => !!authUser),
-// )(PostPage);
-
 const mapStateToProps = (state) => ({
   userPosts: state.postsState.userPosts,
 });
 
 export default compose(
-  withAuthorization((authUser) => !!authUser),
+  withAuthorization(),
   connect(mapStateToProps, { fetchUserPosts })
 )(PostPage);

@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import withAuthorization from '../Session/withAuthorization';
 
-class PostCard extends Component {
+export default class PostCard extends Component {
     constructor(props) {
         super(props);
         console.log('Post Card props:', this.props);
@@ -24,7 +23,7 @@ class PostCard extends Component {
                 <label>{post.description}</label><br/>
 
                 <label><strong>Type</strong></label>
-                <label>{post.type == 'good' ? 'Good' : 'Service'}</label><br/>
+                <label>{post.type === 'good' ? 'Good' : 'Service'}</label><br/>
 
                 <label><strong>Created By:</strong></label>
                 <Link to={`/user/${post.userId}`}><label>{post.displayName}</label></Link><br/>
@@ -36,8 +35,8 @@ class PostCard extends Component {
                 { post.tags.map((tag, i) => [<label key={i}>{tag} </label>])} <br/>
 
 
-                <label><strong>Photos</strong></label>
-                { post.photoUrls.map((url, i) => [<img style={{maxWidth:'8vw',maxHeight: '15vw'}} key={i} src={url} alt={`photo${i}`} />])} <br/>
+                <label><strong>Photos</strong></label><br/>
+                { post.photoUrls.map((url, i) => [<img style={{maxWidth:'8vw',maxHeight: '15vw'}} key={i} src={url} alt={`postPhoto${i}`} />])} <br/>
 
                 {
                     !self &&
@@ -54,12 +53,3 @@ class PostCard extends Component {
     }
     
 }
-
-const mapStateToProps = (state) => ({
-    userPosts: state.postsState.userPosts,
-});
-  
-export default compose(
-    withAuthorization((authUser) => !!authUser),
-    connect(null, null)
-)(PostCard);
