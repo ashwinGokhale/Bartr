@@ -50,7 +50,7 @@ router.get('/user/:uid', async (req: utils.Req, res: utils.Res) =>  {
 	try {
 		const resp = await firebase.firestore().collection('/posts')
 							.where('userId', '==', req.params.uid)
-							.where('state', '==', 'PENDING')
+							.where('state', '==', 'OPEN')
 							.get();
 		const data = resp.docs.map(doc => doc.data());
 		console.log('User Posts:', data);

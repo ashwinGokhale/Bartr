@@ -17,6 +17,13 @@ export const DB_USER_SET = 'DB_USER_SET';
 // Users actions
 export const USERS_SET = 'USERS_SET';
 
+// Trades actions
+export const OPEN_TRADES_SET = 'OPEN_TRADES_SET';
+export const ACCEPTED_TRADES_SET = 'ACCEPTED_TRADES_SET';
+export const REJECTED_TRADES_SET = 'REJECTED_TRADES_SET';
+export const CLOSED_TRADES_SET = 'CLOSED_TRADES_SET';
+export const TRADES_ERROR = 'TRADES_ERROR';
+
 // Post creators
 export const onSetFeedPosts = (feedPosts) => ({ type: FEED_POSTS_SET, feedPosts });
 export const onErrorFeedPosts = (error) => ({ type: FEED_POSTS_ERROR, error });
@@ -29,6 +36,13 @@ export const onErrorUserPosts = (error) => ({ type: USER_POSTS_ERROR, error });
 export const onSetDBUser = (user) => ({ type: DB_USER_SET, dbUser: user });
 export const onSetAuthUser = (authUser) => ({ type: AUTH_USER_SET, authUser });
 export const onSetAuthState = (authState) => ({ type: AUTH_STATE_SET, authState });
+
+// Trades creators
+export const onSetOpenTrades = (open) => ({type: OPEN_TRADES_SET, open});
+export const onSetAccepetedTrades = (accepted) => ({type: ACCEPTED_TRADES_SET, accepted});
+export const onSetRejectedTrades = (rejected) => ({type: REJECTED_TRADES_SET, rejected});
+export const onSetClosedTrades = (closed) => ({type: CLOSED_TRADES_SET, closed});
+export const onSetTradesError = (error) => ({type: TRADES_ERROR, error});
 
 // Post handlers
 export const fetchFeedPosts = () => {
@@ -126,7 +140,7 @@ export const createUser = (user, token) => {
 	return async dispatch => {
 		try {
 			const response = await axios.post(`/api/users/${user.uid}`, user, {headers: {token}})
-			return response.data.responseData
+			dispatch(onSetDBUser(response.data.responseData));
 		} catch (error) {
 			console.error(error)
 			return error
@@ -251,5 +265,39 @@ export const createRating = async (userID, value) => {
 	} catch (error) {
 		console.error('Error:', error.response.data.error);
 		return error.response.data.error;
+	}
+}
+
+export const createOffer = async (seller, buyer) => {
+	try {
+		const token = await auth.currentUser.getIdToken();
+		const { data } = await axios.post(
+			`/api/trades/${seller}-${buyer}`,
+			null,
+			{headers: {token}}
+		)
+		console.log('Trade:', data);
+		return data;
+	} catch (error) {
+		console.error(error);
+		return error.response.data;
+	}
+}
+
+export const fetchOffers = (buyer) => async dispatch => {
+	try {
+		const token = await auth.currentUser.getIdToken();
+		const { data } = await axios.get(
+			'/api/trades/',
+			{headers: {token}}
+		);
+		console.log('Trades:', data);
+		dispatch(onSetOpenTrades(data.responseData.open));
+		dispatch(onSetAccepetedTrades(data.responseData.accepted));
+		dispatch(onSetRejectedTrades(data.responseData.rejected));
+		dispatch(onSetClosedTrades(data.responseData.closed));
+	} catch (error) {
+		console.error(error.response.data);
+		dispatch(onSetTradesError(error.response.data));
 	}
 }

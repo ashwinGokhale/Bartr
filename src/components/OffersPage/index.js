@@ -5,32 +5,41 @@ import { Link } from 'react-router-dom';
 import { CREATE_POST } from '../../constants';
 import defaultPhoto from '../../assets/default.png';
 import withAuthorization from '../Session/withAuthorization';
-import PostItem from '../Common/PostItem';
-import { fetchFeedPosts, fetchDBUser } from '../../actions';
+import TradeItem from '../Common/TradeItem';
+import { fetchOffers } from '../../actions';
 
 class OffersPage extends Component {
-  componentDidMount = () => {}
+  componentDidMount = async () => {
+    const data = await this.props.fetchOffers();
+    console.log('Offers Page received trades:', data);
+  }
 
   render() {
+    console.log('Offers Page props', this.props);
     return (
       <div>
-        <h3>New Offers:</h3>
-        
-        <h3>Accepted Trades:</h3>
-        
-        <h3>Completed Trades:</h3>
-        
+        <h3>Your Offers:</h3>
+        { this.props.open.buyer.length ? this.props.open.buyer.map((trade, i) => <TradeItem key={i} trade={trade} />) : <div>None</div> }
+        <h3>Recieved Offers:</h3>
+        { this.props.open.seller.length ? this.props.open.seller.map((trade, i) => <TradeItem key={i} trade={trade} />) : <div>None</div> }
+        <h3>Your Accepted Trades:</h3>
+        { this.props.accepted.buyer.length ? this.props.accepted.buyer.map((trade, i) => <TradeItem key={i} trade={trade} />) : <div>None</div> }
+        <h3>Recieved Accepted Trades:</h3>
+        { this.props.accepted.seller.length ? this.props.accepted.seller.map((trade, i) => <TradeItem key={i} trade={trade} />) : <div>None</div> }
+        <h3>Your Closed Trades:</h3>
+        { this.props.closed.buyer.length ? this.props.closed.buyer.map((trade, i) => <TradeItem key={i} trade={trade} />) : <div>None</div> }
+        <h3>Recieved Closed Trades:</h3>
+        { this.props.closed.seller.length ? this.props.closed.seller.map((trade, i) => <TradeItem key={i} trade={trade} />) : <div>None</div> }
       </div>
     );
   }
 }
 
 const mapStateToProps = (state) => ({
-  dbUser: state.sessionState.dbUser,
-  feedPosts: state.postsState.feedPosts
+  ...state.tradesState
 });
 
 export default compose(
   withAuthorization(),
-  connect(mapStateToProps, { fetchFeedPosts, fetchDBUser })
+  connect(mapStateToProps, { fetchOffers })
 )(OffersPage);

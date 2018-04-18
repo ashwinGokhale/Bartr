@@ -1,16 +1,30 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { compose } from 'recompose';
+import { connect } from 'react-redux';
+import { createOffer } from '../../actions';
+import * as routes from '../../constants';
 import withAuthorization from '../Session/withAuthorization';
 
-export default class PostCard extends Component {
+class PostCard extends Component {
     constructor(props) {
         super(props);
         console.log('Post Card props:', this.props);
         this.state = {
-
+            postId: (this.props.userPosts && this.props.userPosts.length) ? this.props.userPosts[0].postId : '',
+            error: null
         }
     }
+
+    onSubmit = async e => {
+        const url = `/trades/${this.props.post.postId}-${this.state.postId}`;
+        console.log(`Making trade on /trades/${this.props.post.postId}-${this.state.postId}`);
+        const data = await createOffer(this.props.post.postId, this.state.postId);
+        console.log('Data:', data);
+        if (data.error) this.setState({error: data.error});
+        else this.props.history.push(routes.OFFERS);
+    }
+
 
     render = () => {
         const { post, userPosts, self } = this.props;
@@ -42,14 +56,27 @@ export default class PostCard extends Component {
                     !self &&
                     <div>
                         <h3>Make an Offer</h3>
-                        <select>
+                        <select onChange={e => this.setState({postId: e.target.value})}>
                             {userPosts.map((userPost, i) => <option key={i} value={userPost.postId} >{userPost.title}</option>)}
                         </select>
+                        <input className="submit" type='submit' name='submit' value='Submit' onClick={this.onSubmit} />
                     </div>
                     
                 }
+
+                { !!this.state.error ? <p className="warning" style={{'color': 'red'}}>ERROR: {this.state.error}</p> : null }
             </div>
         );
     }
     
 }
+
+const mapStateToProps = (state) => ({
+	...state.sessionState.dbUser,
+	userPostsError: state.postsState.userPostsError
+});
+
+export default compose(
+  	withAuthorization(),
+	connect(mapStateToProps, { createOffer })
+)(PostCard);
