@@ -11,7 +11,14 @@ h1 { font-size: 1.5em; margin: 10px; }
 
 .rating { 
   border: none;
-  float: left;
+  padding-left: 0.8vw;
+}
+
+fieldset.rating {
+  margin-left: 0;
+  position: relative;
+  bottom: 1vw;
+  right: 0.75vw;
 }
 
 .rating > input { display: none; } 
@@ -35,9 +42,19 @@ h1 { font-size: 1.5em; margin: 10px; }
 
 .rating > input:checked ~ label,
 .rating:not(:checked) > label:hover, 
-.rating:not(:checked) > label:hover ~ label { color: #FFD700;  } 
+.rating:not(:checked) > label:hover ~ label { color: rgb(163, 216, 195);  } 
 
 .rating > input:checked + label:hover, 
 .rating > input:checked ~ label:hover,
 .rating > label:hover ~ input:checked ~ label,  selection 
-.rating > input:checked ~ label:hover ~ label { color: #FFED85;  }
+.rating > input:checked ~ label:hover ~ label { color: rgb(163, 216, 195);  }
+
+.ratingTitle {
+  font-size: 1vw;
+  color: gray;
+  position: relative;
+  bottom: 1vh;
+  left: 4.5vw;
+  margin-bottom: 0;
+  margin-top: 3vh;
+}

@@ -93,4 +93,16 @@
     font-size: 1.15vw;
     height: 5vh;
     width: 98%;
+    background-color: transparent;
+    border: none;
+    border-bottom: white solid 1px;
+    color: white;
+}
+
+.textBoxReg:focus {
+   outline: none;
+}
+
+.signUpError {
+    font-size: 0.75vw;
 }
