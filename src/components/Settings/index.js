@@ -53,6 +53,11 @@ class SettingsPage extends Component {
 			if (valid) this.setState({ error: null })
 	}
 	
+	hideInfo = (event) => {
+		if(event.target.id === 'hideAddress' || event.target.id === 'hidePhoneNumber') {
+			this.setState({ contactInfo: { ...this.state.contactInfo, [event.target.id]: event.target.checked}});
+		}
+	}
 
 	onChange = (event) => {
 		event.preventDefault();
@@ -129,8 +134,8 @@ class SettingsPage extends Component {
 									<p className="hidden">Hide?</p>
 									<span className="tooltiptext">Hides this contact info on your public profile.</span>
 								</div>
-								<label className="switch">
-									<input type="checkbox"/>
+								<label className="switch" >
+									<input type="checkbox" id="hideAddress" onChange={this.hideInfo} checked={this.state.contactInfo.hideAddress}/>
 									<span className="slider round"></span>
 								</label>
 							</div>
@@ -150,7 +155,7 @@ class SettingsPage extends Component {
 									<span className="tooltiptext">Hides this contact info on your public profile.</span>
 								</div>
 								<label className="switch">
-									<input type="checkbox"/>
+									<input type="checkbox" id="hidePhoneNumber" onChange={this.hideInfo} checked={this.state.contactInfo.hidePhoneNumber}/>
 									<span className="slider round"></span>
 								</label>
 							</div>
