@@ -1,5 +1,6 @@
 import * as express from 'express';
 import * as firebase from 'firebase-admin';
+import axios from 'axios';
 import * as utils from '../utils';
 export const router = express.Router();
 
@@ -55,9 +56,9 @@ router.post('/:uid', async (req: utils.Req, res: utils.Res) => {
 			},
 			totalRatings: 5,
 			numRatings: 1,
-			lat: 0, 
-			lng: 0 ,
-			radius: 25000
+			lat: 40.427671,
+			lng: -86.916978,
+			radius: 250000
 		};
 		const { writeTime } = await userRef.set(newUser);
 		// return utils.successRes(res, newUser);
@@ -72,10 +73,52 @@ router.post('/:uid', async (req: utils.Req, res: utils.Res) => {
 router.put('/:uid', async (req: utils.Req, res: utils.Res) => {
 	try {
 		console.log('Put user body:', req.body);
-		// const tok = await utils.getIDToken(req.headers.token);
-		// if (!tok) return utils.errorRes(res, 401, 'Invalid token');
 		const tok = req.token;
 		if (tok.uid !== req.params.uid) return utils.errorRes(res, 401, 'Unauthorized');
+
+		let lat = parseInt(req.body.lat, 10);
+		let lng = parseInt(req.body.lng, 10);
+		let address = req.body.contactInfo ? req.body.contactInfo.address : '';
+		// Given address, get lat and lng
+		if (address) {
+			try {
+				const { data } = await axios.get(
+					'https://maps.googleapis.com/maps/api/geocode/json',
+					{
+						params: {
+							address,
+							key: process.env.GMAPS_KEY
+						}
+					}
+				);
+				if (!data.results.length) return utils.errorRes(res, 400, 'Invalid address: ' + address);
+				console.log('Parsed address coordinates to:', data.results[0].geometry.location);
+				lat = data.results[0].geometry.location.lat;
+				lng = data.results[0].geometry.location.lng;
+			} catch (error) {
+				console.error(error);
+				return utils.errorRes(res, 500, error);
+			}
+		}
+		// // Given lat and lng, get address
+		// if (lat && lng) {
+		// 	const { data } = await axios.get(
+		// 		'https://maps.googleapis.com/maps/api/geocode/json',
+		// 		{
+		// 			params: {
+		// 				latlng: `${lat},${lng}`,
+		// 				// key: functions.config().gmaps.key
+		// 				key: process.env.GMAPS_KEY
+		// 			}
+		// 		}
+		// 	);
+		// 	if (!data.results.length) return utils.errorRes(res, 400, 'Invalid latitude and longitude: ' + lat + ', ' + lng);
+			
+		// 	address = data.results[0].formatted_address;
+		// }
+
+		if (!lat) return utils.errorRes(res, 400, 'Invalid Latitude: ' + req.body.lat);
+		if (!lng) return utils.errorRes(res, 400, 'Invalid Longitude: ' + req.body.lng);
 		
 		const userBuilder = {};
 
@@ -84,16 +127,17 @@ router.put('/:uid', async (req: utils.Req, res: utils.Res) => {
 			userBuilder,
 			req.body.photoUrl && { photoUrl: req.body.photoUrl },
 			req.body.displayName && { displayName: req.body.displayName },
-			req.body.lat && { lat: req.body.lat },
-			req.body.lng && { lng: req.body.lng },
+			lat && { lat },
+			lng && { lng },
 			req.body.radius && { radius: req.body.radius }
 		);
 		// Build contact info to update
 		if (req.body.contactInfo) {
+			
 			const contactBuilder = {};
 			Object.assign(
 				contactBuilder,
-				req.body.contactInfo.address && { address: req.body.contactInfo.address },
+				address && { address },
 				req.body.contactInfo.phoneNumber && { phoneNumber: req.body.contactInfo.phoneNumber },
 				'hideAddress' in req.body.contactInfo && { hideAddress: req.body.contactInfo.hideAddress ? true : false },
 				'hidePhoneNumber' in req.body.contactInfo && { hidePhoneNumber: req.body.contactInfo.hidePhoneNumber ? true : false }

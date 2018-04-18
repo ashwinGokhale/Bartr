@@ -20,13 +20,12 @@ export interface Req extends Request {
 
 export interface Res extends Response {}
 
-export const getTransactions = async (type: string, uid: string, buyer?: boolean) => {
-	const transactions = await firebase.firestore().collection('/transactions')
-                            .where(`${buyer ? 'buyer' : 'seller'}.userId`, '==', uid)
-                            .where('state', '==', type)
-                            .get();
-    
-    return transactions.forEach(doc => doc.data());
+export const getTrades = async (type: string, uid: string, buyer?: boolean) => {
+	const transactions = await firebase.firestore().collection('/trades')
+							.where('state', '==', type)
+							.where(`${buyer ? 'buyer' : 'seller'}.userId`, '==', uid)
+							.get();
+    return transactions.docs.map(doc => doc.data());
 }
 
 export const uploadImageToStorage = (file: Express.Multer.File, id: string) => 
@@ -87,7 +86,7 @@ export const getIDToken = async (userToken) => {
 export const authorized = async (req: Req, res: Res, next) => {
 	const userToken: string = req.headers.token as string;
 	const token = await getIDToken(userToken);
-	if (!userToken || !token) return errorRes(res, 401, 'Unauthorized');
+	// if (!userToken || !token) return errorRes(res, 401, 'Unauthorized');
 	req.token = token;
 	return next();
 };

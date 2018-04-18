@@ -11,8 +11,8 @@ class SettingsPage extends Component {
 
 		console.log('Props:', this.props)
 		this.state = { 
-			lat: this.props.lat,
-			lng: this.props.lng,
+			// lat: this.props.lat,
+			// lng: this.props.lng,
 			radius: this.props.radius,
 			error: null,
 			// dbUser: this.props.dbUser,
@@ -29,8 +29,8 @@ class SettingsPage extends Component {
 
 	invalidChars = value => (/^-?\d+(\.\d{1,6})?$/.test(value)) ? true : false
 	isRadiusValid = value => (value < 5) ? false : true
-	isLatitudeValid = value => (value > 90 || value < -90) ? false : true
-	isLongitudeValid = value => (value > 180 || value < -180) ? false : true
+	// isLatitudeValid = value => (value > 90 || value < -90) ? false : true
+	// isLongitudeValid = value => (value > 180 || value < -180) ? false : true
 	validateAll = (event) => {
 		let valid = true;
 			// Validate latitude, longitude, and radius
@@ -39,15 +39,15 @@ class SettingsPage extends Component {
 				valid = false;
 			}
 			
-			if (!this.isLatitudeValid(this.state.lat)) {
-				this.setState({ error: 'Latitude must be <= 90 and >= -90'});
-				valid = false;
-			}
+			// if (!this.isLatitudeValid(this.state.lat)) {
+			// 	this.setState({ error: 'Latitude must be <= 90 and >= -90'});
+			// 	valid = false;
+			// }
 			
-			if (!this.isLongitudeValid(this.state.lng)) {
-				this.setState({ error: 'Longitude must be <= 180 and >= -180'});
-				valid = false;
-			}
+			// if (!this.isLongitudeValid(this.state.lng)) {
+			// 	this.setState({ error: 'Longitude must be <= 180 and >= -180'});
+			// 	valid = false;
+			// }
 					
 			if (valid) this.setState({ error: null })
 	}
@@ -66,12 +66,14 @@ class SettingsPage extends Component {
 
 	onSubmit = (event) => {
 		event.preventDefault();
-		if (this.isRadiusValid(this.state.radius) && this.isLatitudeValid(this.state.lat) && this.isLongitudeValid(this.state.lng)) {
-			const { lat, lng, radius, displayName, photoUrl, contactInfo: { address , phoneNumber, hideAddress, hidePhoneNumber }} = this.state;
+		// if (this.isRadiusValid(this.state.radius) && this.isLatitudeValid(this.state.lat) && this.isLongitudeValid(this.state.lng)) {
+		if (this.isRadiusValid(this.state.radius)) {
+			// const { lat, lng, radius, displayName, photoUrl, contactInfo: { address , phoneNumber, hideAddress, hidePhoneNumber }} = this.state;
+			const { radius, displayName, photoUrl, contactInfo: { address , phoneNumber, hideAddress, hidePhoneNumber }} = this.state;
 			const { dbUser } = this.props;
 			this.props.updateDBUser({
-				lat: lat || dbUser.lat,
-				lng: lng || dbUser.lng,
+				// lat: lat || dbUser.lat,
+				// lng: lng || dbUser.lng,
 				radius: radius || dbUser.radius,
 				displayName: displayName || dbUser.displayName,
 				photoUrl: photoUrl || dbUser.photoUrl,
@@ -156,24 +158,24 @@ class SettingsPage extends Component {
 						</div>
 
 						{/*LATITUDE*/}
-						<div className="rowSettings">
+						{/* <div className="rowSettings">
 							<div className="colLabels">
 								<p className="labels">Latitude</p>
 							</div>
 							<div className="colInput">
 								<input className="align" type="number" id="lat" onChange={this.onChange} value={this.state.lat}/><br/>
 							</div>
-						</div>
+						</div> */}
 
 						{/*LONGITUDE*/}
-						<div className="rowSettings">
+						{/* <div className="rowSettings">
 							<div className="colLabels">
 								<p className="labels">Longitude</p>
 							</div>
 							<div className="colInput">
 								<input className="align" type="number" id="lng" onChange={this.onChange} value={this.state.lng}/><br/>
 							</div>
-						</div>
+						</div> */}
 
 						{/*RADIUS*/}
 						<div className="rowSettings">
