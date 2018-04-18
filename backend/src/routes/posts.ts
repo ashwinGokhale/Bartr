@@ -64,7 +64,7 @@ router.get('/user/:uid', async (req: utils.Req, res: utils.Res) =>  {
 // Get all posts
 router.get("/", async (req: utils.Req, res: utils.Res) => {
 	try {
-		const resp = await firebase.firestore().collection('/posts').get();
+		const resp = await firebase.firestore().collection('/posts').where('state', '==', 'OPEN').get();
 		return utils.successRes(res, resp.docs.map(doc => doc.data()));
 	} catch (error) {
 		console.error('Error:', error);
@@ -232,7 +232,7 @@ router.post('/', multer.array('photos', 12), async (req: utils.Req, res: utils.R
 			{ description: req.body.description },
 			{ tags: req.body.tags ? req.body.tags : req.body.title },
 			{ type: req.body.type },
-			{ state: 'PENDING' },
+			{ state: 'OPEN' },
 			{ postId: newPostRef.id },
 			{ userId: tok.uid },
 			{ displayName: userSnap.data().displayName },

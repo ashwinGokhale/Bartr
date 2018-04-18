@@ -20,6 +20,15 @@ export interface Req extends Request {
 
 export interface Res extends Response {}
 
+export const getTransactions = async (type: string, uid: string, buyer?: boolean) => {
+	const transactions = await firebase.firestore().collection('/transactions')
+                            .where(`${buyer ? 'buyer' : 'seller'}.userId`, '==', uid)
+                            .where('state', '==', type)
+                            .get();
+    
+    return transactions.forEach(doc => doc.data());
+}
+
 export const uploadImageToStorage = (file: Express.Multer.File, id: string) => 
 	new Promise<string>((resolve, reject) => {
 		if (!file)
@@ -58,9 +67,9 @@ export const deletePostfromStorage = (postId: string) =>
 	.then(value => null)
 	.catch(error => error);
 
-export const successRes = (res, responseData) => res.json({status: 200, responseData });
+export const successRes = (res: Res, responseData) => res.json({status: 200, responseData });
 
-export const errorRes = (res, status: number, error) =>
+export const errorRes = (res: Res, status: number, error) =>
 	res.status(status).json({
 		status,
 		error
