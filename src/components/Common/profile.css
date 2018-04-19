@@ -90,7 +90,7 @@ fieldset.rating {
 }
 
 .postCardInfoRow {
-  height: 70%;
+  height: 87%;
   margin-top: 5%;
   width: 85%;
   margin-left: 10%;
@@ -98,10 +98,10 @@ fieldset.rating {
 }
 
 .postCardSubmitRow {
-  height: 10%;
+  height: 15%;
   margin-top: 5%;
-  width: 85%;
-  margin-left: 10%;
+  width: 100%;
+  margin-left: 0;
   background-color: white;
 }
 
@@ -184,4 +184,8 @@ fieldset.rating {
   color: rgb(69, 89, 112);
   margin-top: 1.5vh;
   text-decoration: underline;
+}
+
+.makeOfferShiftDown {
+  margin-top: 8vh;
 }
