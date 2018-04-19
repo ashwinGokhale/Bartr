@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { compose } from 'recompose';
-import { acceptOffer, rejectOffer } from '../../actions';
+import { acceptTrade, rejectTrade } from '../../actions';
 import PostItem from './PostItem';
 
 class TradeItem extends Component {
@@ -12,11 +12,11 @@ class TradeItem extends Component {
 		const { id } = e.target;
 		console.log('ID:', id);
 		if (id === 'ACCEPT') {
-			const data = await this.props.acceptOffer(this.props.trade.id);
+			const data = await this.props.acceptTrade(this.props.trade.id);
 			console.log('Just accepted offer:', data);
 		}
 		else if (id === 'REJECT') {
-			const data = await this.props.rejectOffer(this.props.trade.id);
+			const data = await this.props.rejectTrade(this.props.trade.id);
 			console.log('Just rejected offer:', data);
 		}
 	}
@@ -48,5 +48,5 @@ class TradeItem extends Component {
 }
 
 export default compose(
-	connect(null, { acceptOffer, rejectOffer })
+	connect(null, { acceptTrade, rejectTrade })
 )(TradeItem);

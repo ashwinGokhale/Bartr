@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { fetchUserPosts, fetchPost, fetchOffers } from '../../actions';
+import { fetchUserPosts, fetchPost, fetchTrades } from '../../actions';
 import withAuthorization from '../Session/withAuthorization';
 import { PostCard } from '../Common';
 
@@ -18,7 +18,7 @@ class PostPage extends Component {
     const { id } = this.props.match.params;
     console.log('Rendering post:', id);
     await this.props.fetchUserPosts();
-    await this.props.fetchOffers();
+    await this.props.fetchTrades();
     try {
       const post = await fetchPost(id);
       console.log('PostPage post data:', post);
@@ -41,5 +41,5 @@ const mapStateToProps = (state) => ({
 
 export default compose(
   withAuthorization(),
-  connect(mapStateToProps, { fetchUserPosts, fetchOffers })
+  connect(mapStateToProps, { fetchUserPosts, fetchTrades })
 )(PostPage);

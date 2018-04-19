@@ -9,7 +9,6 @@ import './index.css';
 
 store.dispatch(setAuthUser(auth.currentUser));
 store.dispatch(fetchDBUser());
-// setTimeout(() => store.dispatch(fetchOffers()), 1000);
 
 console.log('Initial Store:', store.getState());
 

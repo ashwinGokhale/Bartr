@@ -288,7 +288,7 @@ export const createRating = async (userID, value) => {
 	}
 }
 
-export const createOffer = (seller, buyer) => async dispatch => {
+export const createTrade = (seller, buyer) => async dispatch => {
 	try {
 		const token = await auth.currentUser.getIdToken();
 		const { data } = await axios.post(
@@ -306,7 +306,7 @@ export const createOffer = (seller, buyer) => async dispatch => {
 	}
 }
 
-export const fetchOffers = () => async dispatch => {
+export const fetchTrades = () => async dispatch => {
 	try {
 		const token = await auth.currentUser.getIdToken();
 		const { data } = await axios.get(
@@ -326,7 +326,7 @@ export const fetchOffers = () => async dispatch => {
 	}
 }
 
-export const acceptOffer = (id) => async (dispatch, getState) => {
+export const acceptTrade = (id) => async (dispatch, getState) => {
 	try {
 		const token = await auth.currentUser.getIdToken();
 		const { data } = await axios.post(
@@ -354,7 +354,35 @@ export const acceptOffer = (id) => async (dispatch, getState) => {
 	}
 }
 
-export const rejectOffer = (id) => async (dispatch, getState) => {
+export const rejectTrade = (id) => async (dispatch, getState) => {
+	try {
+		const token = await auth.currentUser.getIdToken();
+		const { data } = await axios.post(
+			`/api/trades/reject/${id}`,
+			null,
+			{headers: {token}}
+		);
+
+		const trade = data.responseData;
+		console.log('Rejected Trade:', trade);
+		let open = getState().tradesState.open;
+		const newOpen = {
+			buyer: open.buyer,
+			seller: open.seller.filter(post => post.buyer.postId !== trade.buyer.postId)
+		};
+		console.log('Old open state:', open);
+		console.log('New open state:', newOpen);
+		dispatch(onAddRejectedTrades(data.responseData));
+		dispatch(onSetOpenTrades(newOpen));
+		return trade;
+	} catch (error) {
+		console.error(error.response.data);
+		dispatch(onSetTradesError(error.response.data));
+		return error.response.data;
+	}
+}
+
+export const completeTrade = (id) => async (dispatch, getState) => {
 	try {
 		const token = await auth.currentUser.getIdToken();
 		const { data } = await axios.post(
