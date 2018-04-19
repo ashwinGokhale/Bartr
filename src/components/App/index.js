@@ -61,7 +61,7 @@ const App = () =>
         </Switch>
         <hr/>
       </div>
-      {/* <Footer/> */}
+      {<Footer/>}
     </div>
   </Router>
 
