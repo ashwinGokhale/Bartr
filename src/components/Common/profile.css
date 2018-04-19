@@ -11,7 +11,14 @@ h1 { font-size: 1.5em; margin: 10px; }
 
 .rating { 
   border: none;
-  float: left;
+  padding-left: 0.8vw;
+}
+
+fieldset.rating {
+  margin-left: 0;
+  position: relative;
+  bottom: 1vw;
+  right: 0.75vw;
 }
 
 .rating > input { display: none; } 
@@ -35,9 +42,106 @@ h1 { font-size: 1.5em; margin: 10px; }
 
 .rating > input:checked ~ label,
 .rating:not(:checked) > label:hover, 
-.rating:not(:checked) > label:hover ~ label { color: #FFD700;  } 
+.rating:not(:checked) > label:hover ~ label { color: rgb(163, 216, 195);  } 
 
 .rating > input:checked + label:hover, 
 .rating > input:checked ~ label:hover,
 .rating > label:hover ~ input:checked ~ label,  selection 
-.rating > input:checked ~ label:hover ~ label { color: #FFED85;  }
+.rating > input:checked ~ label:hover ~ label { color: rgb(163, 216, 195);  }
+
+.ratingTitle {
+  font-size: 1vw;
+  color: gray;
+  position: relative;
+  bottom: 1vh;
+  left: 4.5vw;
+  margin-bottom: 0;
+  margin-top: 3vh;
+}
+
+.postCardShiftDown {
+  position: absolute;
+  top: 60px;
+  bottom: 24px;
+  background-color: rgb(238, 237, 237) !important;
+  width: 100%;
+}
+
+.postCardLeft {
+  height: 100%;
+  width: 60vw;
+  float: left;
+  background-color: rgb(238, 237, 237);
+}
+
+.postCardRight {
+  height: 100%;
+  width: 40vw;
+  float: left;
+  background-color: rgb(238, 237, 237);
+}
+
+.postCardPhotosColumn {
+  height: 88%;
+  margin-top: 7%;
+  width: 60%;
+  margin-left: 20%;
+  background-color: white;
+}
+
+.postCardInfoRow {
+  height: 70%;
+  margin-top: 5%;
+  width: 85%;
+  margin-left: 10%;
+  background-color: white;
+}
+
+.postCardSubmitRow {
+  height: 10%;
+  margin-top: 5%;
+  width: 85%;
+  margin-left: 10%;
+  background-color: white;
+}
+
+.round {
+  border-radius: 0.5vw;
+}
+
+.postCardPhotosTitle {
+  padding-top: 8%;
+  height: 7%;
+  width: 100%;
+  border-bottom: rgb(94, 94, 94) 1px solid;
+}
+
+.centerTitle {
+  font-size: 2.5vw;
+  line-height: 2vw;
+  margin-left: 9vw;
+  color: rgb(94, 94, 94);
+}
+
+.postCardPhotosScroll {
+  height: 80%;
+  width:95%;
+  margin-top: 2%;
+  padding-left: 3%;
+  padding-top: 5%;
+  white-space: nowrap;
+  overflow-y: scroll;
+}
+
+.postCardSubmit {
+  width: 10%;
+}
+
+.centerImage {
+  transform: translateX(20%);
+  -webkit-transform: translateX(20%);
+  display: block;
+  border: gray solid 1.5px;
+  margin-bottom: 2vh;
+  border-radius: 0.5vw;
+}

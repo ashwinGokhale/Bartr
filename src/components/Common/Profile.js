@@ -15,7 +15,7 @@ export default class ProfilePage extends Component {
 
 	Rating = () =>
 		<div>
-			<h1 className="ratingTitle">Rating</h1>
+			<h1 className="ratingTitle">User Feedback</h1>
 			<fieldset className="rating">
 				{[5,4,3,2,1].map((num, i) => [
 					<input
@@ -60,6 +60,17 @@ export default class ProfilePage extends Component {
 				</div>
 				</div>
 
+				<div className="bios">
+              		<div className="biosCard">
+                		<center><h4>Info</h4></center>
+                		<div className="underline"></div>
+                		<div className="myInfo">
+							<p>Email: {dbUser.contactInfo.email}</p>
+							<p>{dbUser.contactInfo.hideAddress == false ? "Address: " + dbUser.contactInfo.address : ""}</p>
+							<p>{dbUser.contactInfo.hidePhoneNumber == false ? "Phone Number: " + dbUser.contactInfo.phoneNumber : ""}</p>
+                		</div>
+              		</div>
+            	</div>
 			</div>
 			<div className="column rightSide">
 				<div className="postFeed">
@@ -67,7 +78,11 @@ export default class ProfilePage extends Component {
 					feedPosts &&
 					feedPosts.length ? 
 					feedPosts.map((post,i) => <PostItem key={i} id={i} type="feed" post={post}/>) :
-					<p>No Posts!</p>
+					<div className="ghostPlaceHolder">
+                <div className="ghostTitle">
+                    <h3 className="ghostText">This user has no active posts.</h3>
+                </div>
+              </div>
 				}
 				</div>
 			</div>
