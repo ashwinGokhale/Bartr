@@ -48,10 +48,9 @@ router.get("/geo", async (req: utils.Req, res: utils.Res) => {
 // Get all posts by user
 router.get('/user/:uid', async (req: utils.Req, res: utils.Res) =>  {
 	try {
-		const resp = await firebase.firestore().collection('/posts')
-							.where('userId', '==', req.params.uid)
-							.where('state', '==', 'OPEN')
-							.get();
+		let query = firebase.firestore().collection('/posts').where('userId', '==', req.params.uid);
+		if (req.token.uid !== req.params.uid) query = query.where('state', '==', 'OPEN');
+		const resp = await query.get();
 		const data = resp.docs.map(doc => doc.data());
 		console.log('User Posts:', data);
 		return utils.successRes(res, data);

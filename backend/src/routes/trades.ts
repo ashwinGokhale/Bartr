@@ -21,10 +21,11 @@ export const router = express.Router();
     1.  Trade is created w/ both user's IDs and state of PENDING
 */
 router.post('/:seller-:buyer', async (req: utils.Req, res: utils.Res) => {
-    const [sellerPost, buyerPost, trans] = await Promise.all([
+    const [sellerPost, buyerPost, trans, existingTrans] = await Promise.all([
         firebase.firestore().doc(`/posts/${req.params.seller}`).get(),
         firebase.firestore().doc(`/posts/${req.params.buyer}`).get(),
-        firebase.firestore().doc(`/trades/${req.params.seller}_${req.params.buyer}`).get()
+        firebase.firestore().doc(`/trades/${req.params.seller}_${req.params.buyer}`).get(),
+        firebase.firestore().doc(`/trades/${req.params.buyer}_${req.params.seller}`).get()
     ]);
 
     if (!sellerPost.exists) return utils.errorRes(res, 400, `Post: ${req.params.seller} does not exist`);
@@ -35,6 +36,29 @@ router.post('/:seller-:buyer', async (req: utils.Req, res: utils.Res) => {
     if (buyerPost.data().state !== 'OPEN') return utils.errorRes(res, 400, `Post: ${req.params.buyer} is not available for trading`);
 
     if (sellerPost.data().userId === buyerPost.data().userId) return utils.errorRes(res, 400, 'Cannot make offer on your own post');
+
+    if (existingTrans.exists) {
+        console.log('Existing trade already exists. Accepting the offer');
+        // Update the states to accepted
+        const batchUpdate = firebase.firestore().batch();
+        batchUpdate.update(existingTrans.ref, 'state', 'ACCEPTED');
+        batchUpdate.update(sellerPost.ref, 'state', 'PENDING');
+        batchUpdate.update(buyerPost.ref, 'state', 'PENDING');
+        await batchUpdate.commit();
+
+        // Batch delete all other trades on this post
+        const batchDelete = firebase.firestore().batch();
+        const trades = await firebase.firestore().collection('/trades')
+                                    .where('state', '==', 'OPEN')
+                                    .where('seller.postId', '<', req.params.seller)
+                                    .where('seller.postId', '>', req.params.seller)
+                                    .get();
+
+        trades.forEach(trade => batchDelete.delete(trade.ref));
+        await batchDelete.commit();
+
+        return utils.successRes(res, existingTrans.data());
+    }
 
     const newTrade = {
         id: `${req.params.seller}_${req.params.buyer}`,
@@ -54,7 +78,7 @@ router.post('/:seller-:buyer', async (req: utils.Req, res: utils.Res) => {
         createdAt: new Date(),
     };
 
-    trans.ref.set(newTrade);
+    await trans.ref.set(newTrade);
     return utils.successRes(res, newTrade);
 })
 
@@ -101,14 +125,15 @@ router.post('/accept/:id', async (req: utils.Req, res: utils.Res) => {
     const batchDelete = firebase.firestore().batch();
     const trades = await firebase.firestore().collection('/trades')
                                 .where('state', '==', 'OPEN')
-                                .where('seller.userId', '<', sellerPostId)
-                                .where('seller.userId', '>', sellerPostId)
+                                .where('seller.postId', '==', sellerPostId)
+                                // .where('seller.postId', '>', sellerPostId)
                                 .get();
 
     trades.forEach(trade => batchDelete.delete(trade.ref));
-    await batchDelete.commit();
+    const del = await batchDelete.commit();
+    console.log('Deleted:', del.length, 'Trades');
 
-    return utils.successRes(res, `Trade: ${req.params.id} -- ACCEPTED`);
+    return utils.successRes(res, (await trade.ref.get()).data());
 });
 
 /**
@@ -116,12 +141,22 @@ router.post('/accept/:id', async (req: utils.Req, res: utils.Res) => {
  * 1.   Trade record is deleted
  */
 router.post('/reject/:id', async (req: utils.Req, res: utils.Res) => {
-    const trade = await firebase.firestore().doc(`/trades/${req.params.id}`).get();
+    const [, buyerId] = req.params.id.split('_');
+    const [trade, buyerPost] = await Promise.all([
+        firebase.firestore().doc(`/trades/${req.params.id}`).get(),
+        firebase.firestore().doc(`/posts/${buyerId}`).get()
+    ]);
+    
     if (!trade.exists) return utils.errorRes(res, 400, 'Offer does not exist');
 
-    await trade.ref.update('state', 'REJECTED');
+    const data = trade.data();
+    await Promise.all([
+        trade.ref.delete(),
+        // trade.ref.update('state', 'REJECTED'),
+        buyerPost.exists ? buyerPost.ref.update('state', 'OPEN') : null
+    ]);
 
-    return utils.successRes(res, `Trade: ${req.params.id} -- REJECTED`);
+    return utils.successRes(res, data);
 });
 
 /**

@@ -1,7 +1,8 @@
 {
   "name": "functions",
   "scripts": {
-    "build": "tsc",
+    "lint": "tslint --project .",
+    "build": "npm run lint && tsc",
     "serve": "npm run build && firebase serve --only functions,hosting",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
@@ -16,6 +17,8 @@
   },
   "devDependencies": {
     "@types/algoliasearch": "^3.24.10",
+    "tslint": "^5.9.1",
+    "tslint-config-prettier": "^1.10.0",
     "typescript": "^2.5.3"
   },
   "private": true

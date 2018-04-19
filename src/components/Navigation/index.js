@@ -4,7 +4,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { SignOutButton } from '../Common';
 import { firebase } from '../../firebase';
-import { setAuthUser, fetchDBUser } from '../../actions';
+import { setAuthUser, fetchDBUser, fetchOffers } from '../../actions';
 import * as routes from '../../constants';
 import logo from '../../assets/bartrLogo.png';
 import './index.css'
@@ -59,6 +59,7 @@ class NavigationHeader extends Component {
       else if (!this.props.authState) {
         this.props.setAuthUser(authUser);
         this.props.fetchDBUser();
+        this.props.fetchOffers();
       }
     });    
   }
@@ -103,5 +104,5 @@ const mapStateToProps = (store) => ({
 
 export default compose(
   withRouter,
-  connect(mapStateToProps, { setAuthUser, fetchDBUser }),
+  connect(mapStateToProps, { setAuthUser, fetchDBUser, fetchOffers }),
 )(NavigationHeader);
