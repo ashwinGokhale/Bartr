@@ -29,42 +29,52 @@ class PostCard extends Component {
     render = () => {
         const { post, userPosts, self } = this.props;
         return (
-            <div>
-                <label><strong>Title</strong></label>
-                <label>{post.title}</label><br/>
+            <div className="postCardShiftDown">
+                <div className="postCardLeft">
+                    <div className="postCardInfoRow round">
+                        <label><strong>Title</strong></label>
+                        <label>{post.title}</label><br/>
 
-                <label><strong>Description</strong></label>
-                <label>{post.description}</label><br/>
+                        <label><strong>Description</strong></label>
+                        <label>{post.description}</label><br/>
 
-                <label><strong>Type</strong></label>
-                <label>{post.type === 'good' ? 'Good' : 'Service'}</label><br/>
+                        <label><strong>Type</strong></label>
+                        <label>{post.type === 'good' ? 'Good' : 'Service'}</label><br/>
 
-                <label><strong>Created By:</strong></label>
-                <Link to={`/user/${post.userId}`}><label>{post.displayName}</label></Link><br/>
+                        <label><strong>Created By:</strong></label>
+                        <Link to={`/user/${post.userId}`}><label>{post.displayName}</label></Link><br/>
 
-                <label><strong>Created On:</strong></label>
-                <label>{new Date(post.createdAt).toDateString()}</label><br/>
+                        <label><strong>Created On:</strong></label>
+                        <label>{new Date(post.createdAt).toDateString()}</label><br/>
 
-                <label><strong>Tags</strong></label>
-                { post.tags.map((tag, i) => [<label key={i}>{tag} </label>])} <br/>
-
-
-                <label><strong>Photos</strong></label><br/>
-                { post.photoUrls.map((url, i) => [<img style={{maxWidth:'8vw',maxHeight: '15vw'}} key={i} src={url} alt={`postPhoto${i}`} />])} <br/>
-
-                {
-                    !self &&
-                    <div>
-                        <h3>Make an Offer</h3>
-                        <select onChange={e => this.setState({postId: e.target.value})}>
-                            {userPosts.map((userPost, i) => <option key={i} value={userPost.postId} >{userPost.title}</option>)}
-                        </select>
-                        <input className="submit" type='submit' name='submit' value='Submit' onClick={this.onSubmit} />
+                        <label><strong>Tags</strong></label>
+                        { post.tags.map((tag, i) => [<label key={i}>{tag} </label>])} <br/>
                     </div>
-                    
-                }
+                    <div className="postCardSubmitRow round">
+                        {
+                            !self &&
+                            <div>
+                                <h3>Make an Offer</h3>
+                                <select onChange={e => this.setState({postId: e.target.value})}>
+                                {userPosts.map((userPost, i) => <option key={i} value={userPost.postId} >{userPost.title}</option>)}
+                                </select>
+                                <input className="postCardSubmit" type='submit' name='submit' value='Submit' onClick={this.onSubmit} />
+                            </div>
+                        }
 
-                { !!this.state.error ? <p className="warning" style={{'color': 'red'}}>ERROR: {this.state.error}</p> : null }
+                        { !!this.state.error ? <p className="warning" style={{'color': 'red'}}>ERROR: {this.state.error}</p> : null }   
+                    </div>
+                </div>
+                <div className="postCardRight">
+                    <div className="postCardPhotosColumn round">
+                        <div className="postCardPhotosTitle">
+                            <label className="centerTitle">Photos</label>
+                        </div>
+                        <div className="postCardPhotosScroll">
+                            { post.photoUrls.map((url, i) => [<img className="centerImage" style={{maxWidth:'15vw',maxHeight: '23vw'}} key={i} src={url} alt={`postPhoto${i}`} />])} <br/>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }

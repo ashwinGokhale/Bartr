@@ -24,7 +24,7 @@ class HomePage extends Component {
           <div className="column leftSide">
             <div className="profile">
               <div className="profileCard">
-                <img className="profilePhoto" src={dbUser.photoUrl !== null ? dbUser.photoUrl : defaultPhoto}></img>
+                <img className="profilePhoto" src={dbUser.photoUrl !== "none" ? dbUser.photoUrl : defaultPhoto}></img>
                 { !!dbUser && <h5 className="userName">{dbUser.displayName}</h5> }
               </div>
             </div>
