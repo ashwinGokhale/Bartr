@@ -19,10 +19,25 @@ class DisplayPosts extends React.Component {
   constructor(props, context){
     super(props, context)
     this.doSearch = this.doSearch.bind(this)
+    this.createTags = this.createTags.bind(this)
     this.state={
       posts:[]
     }
     this.doSearch();
+  }
+
+  createTags(param) {
+    var toReturn;
+    if(param[0] === undefined) {
+      return;
+    }
+
+    for(var i = 0; i < param.length; i++) {
+      if(i != param.length - 1) {
+        param[i] = param[i] + ', ';
+      }
+    }
+    return param;
   }
 
   doSearch(){
@@ -72,7 +87,7 @@ class DisplayPosts extends React.Component {
               {posts.description}
             </ul>
             <div className="displayPostTags">
-
+              <p className="tagsLabel">Tags: {this.createTags(posts.tags)}</p>
             </div>
           </div>
         </div>

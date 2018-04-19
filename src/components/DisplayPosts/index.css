@@ -59,3 +59,25 @@
     overflow-y: auto;
     overflow-x: hidden;
 }
+
+.displayPostTags {
+    color: gray;
+    margin-left: 1vw;
+    width: 100%;
+    height: 2.5vh;
+    font-size: 1vw;
+    overflow-x: hidden;
+    float: left;
+}
+
+.tagsLabel {
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-right: 0.5vw;
+    float: left;
+    font-size: 1vw;
+}
+
+ol {
+    margin: 0;
+}
