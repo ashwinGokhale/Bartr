@@ -7,8 +7,7 @@ export const router = express.Router();
     4 Possible states for trades:
         1.  OPEN
         2.  ACCEPTED
-        3.  REJECTED
-        4.  CLOSED
+        3.  CLOSED
 
     3 Possible states for posts
         1.  OPEN
@@ -206,19 +205,30 @@ router.post('/close/:id', async (req: utils.Req, res: utils.Res) => {
 
 router.get('/', async (req: utils.Req, res: utils.Res) => {
     try {
-        const [sellerOpen, sellerAccepted, sellerRejected, sellerClosed] = await Promise.all([
+        const [sellerOpen, sellerAccepted, sellerClosed, sellerCompleted, buyerOpen, buyerAccepted, buyerClosed, buyerCompleted] = await Promise.all([
             utils.getTrades('OPEN', req.token.uid, false),
             utils.getTrades('ACCEPTED', req.token.uid, false),
-            utils.getTrades('REJECTED', req.token.uid, false),
-            utils.getTrades('CLOSED', req.token.uid, false)
-        ]);
+            firebase.firestore().collection('/trades')
+                .where('seller.closed', '==', true)
+                .get(),
+            utils.getTrades('CLOSED', req.token.uid, false),
 
-        const [buyerOpen, buyerAccepted, buyerRejected, buyerClosed] = await Promise.all([
             utils.getTrades('OPEN', req.token.uid, true),
             utils.getTrades('ACCEPTED', req.token.uid, true),
-            utils.getTrades('REJECTED', req.token.uid, true),
+            firebase.firestore().collection('/trades')
+                .where('buyer.closed', '==', true)
+                .get(),
             utils.getTrades('CLOSED', req.token.uid, true)
         ]);
+
+        // const [buyerOpen, buyerAccepted, buyerClosed] = await Promise.all([
+        //     utils.getTrades('OPEN', req.token.uid, true),
+        //     utils.getTrades('ACCEPTED', req.token.uid, true),
+        //     firebase.firestore().collection('/trades')
+        //         .where('buyer.closed', '==', true)
+        //         .get()
+        //     // utils.getTrades('CLOSED', req.token.uid, true)
+        // ]);
 
         const trades = {
             open: {
@@ -229,14 +239,11 @@ router.get('/', async (req: utils.Req, res: utils.Res) => {
                 seller: sellerAccepted,
                 buyer: buyerAccepted
             },
-            rejected: {
-                seller: sellerRejected,
-                buyer: buyerRejected
-            },
             closed: {
-                seller: sellerClosed,
-                buyer: buyerClosed
-            }
+                seller: sellerClosed.docs.map(doc => doc.data()),
+                buyer: buyerClosed.docs.map(doc => doc.data())
+            },
+            completed: sellerCompleted.concat(buyerCompleted)
         };
 
         return utils.successRes(res, trades);
@@ -257,14 +264,6 @@ router.get('/open', async (req: utils.Req, res: utils.Res) => {
 router.get('/accepted', async (req: utils.Req, res: utils.Res) => {
     try {
         return utils.successRes(res, await utils.getTrades('ACCEPTED', req.token.uid, req.query.buyer === 'true'));
-    } catch (error) {
-        return utils.errorRes(res, 500, error);
-    }
-});
-
-router.get('/rejected', async (req: utils.Req, res: utils.Res) => {
-    try {
-        return utils.successRes(res, await utils.getTrades('REJECTED', req.token.uid, req.query.buyer === 'true'));
     } catch (error) {
         return utils.errorRes(res, 500, error);
     }

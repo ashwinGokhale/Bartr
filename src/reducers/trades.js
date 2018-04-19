@@ -4,13 +4,13 @@ import {
 	OPEN_TRADES_REMOVE, 
 	ACCEPTED_TRADES_SET, 
 	ACCEPTED_TRADES_ADD, 
-	ACCEPTED_TRADES_REMOVE, 
-	REJECTED_TRADES_SET, 
-	REJECTED_TRADES_ADD,
-	REJECTED_TRADES_REMOVE,
+	ACCEPTED_TRADES_REMOVE,
 	CLOSED_TRADES_SET,
 	CLOSED_TRADES_ADD,
 	CLOSED_TRADES_REMOVE,
+	COMPLETED_TRADES_SET,
+	COMPLETED_TRADES_ADD,
+	COMPLETED_TRADES_REMOVE,
 	TRADES_ERROR 
 } from '../actions';
 
@@ -23,14 +23,11 @@ const INITIAL_STATE = {
 		seller: [],
 		buyer: []
 	},
-    rejected: {
-		seller: [],
-		buyer: []
-	},
     closed: {
 		seller: [],
 		buyer: []
 	},
+	completed: [],
     error:null
 };
 
@@ -55,7 +52,7 @@ export default (state = INITIAL_STATE, action) => {
 			return {
 				...state,
 				open: {
-					buyer: state.open.buyer.filter(trade => trade.buyer.postId !== action.buyer.postId),
+					buyer: state.open.buyer.filter(trade => trade.buyer.postId !== action.trade.buyer.postId),
 				}
 			}
 		}
@@ -78,30 +75,7 @@ export default (state = INITIAL_STATE, action) => {
 			return {
 				...state,
 				accepted: {
-					buyer: state.accepted.buyer.filter(trade => trade.buyer.postId !== action.buyer.postId),
-				}
-			}
-		}
-        case REJECTED_TRADES_SET: {
-			return {
-				...state,
-				rejected: action.rejected
-			}
-		}
-		case REJECTED_TRADES_ADD: {
-			return {
-				...state,
-				rejected: {
-					...state.rejected,
-					buyer: [...state.rejected.buyer, action.trade]
-				}
-			}
-		}
-		case REJECTED_TRADES_REMOVE: {
-			return {
-				...state,
-				rejected: {
-					buyer: state.rejected.buyer.filter(trade => trade.buyer.postId !== action.buyer.postId),
+					buyer: state.accepted.buyer.filter(trade => trade.buyer.postId !== action.trade.buyer.postId),
 				}
 			}
 		}
@@ -124,8 +98,27 @@ export default (state = INITIAL_STATE, action) => {
 			return {
 				...state,
 				closed: {
-					buyer: state.closed.buyer.filter(trade => trade.buyer.postId !== action.buyer.postId),
+					buyer: state.closed.buyer.filter(trade => trade.buyer.postId !== action.trade.buyer.postId),
 				}
+			}
+		}
+		case COMPLETED_TRADES_SET: {
+			return {
+				...state,
+				completed: action.completed
+			}
+		}
+		case COMPLETED_TRADES_ADD: {
+			return {
+				...state,
+				completed: [...state.completed, action.trade]
+			}
+		}
+		case COMPLETED_TRADES_REMOVE: {
+			return {
+				...state,
+				completed: state.completed.filter(trade => trade.id !== action.trade.id),
+				
 			}
 		}
 		case TRADES_ERROR: {
