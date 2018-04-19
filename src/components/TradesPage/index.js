@@ -6,16 +6,16 @@ import { CREATE_POST } from '../../constants';
 import defaultPhoto from '../../assets/default.png';
 import withAuthorization from '../Session/withAuthorization';
 import TradeItem from '../Common/TradeItem';
-import { fetchOffers } from '../../actions';
+import { fetchTrades } from '../../actions';
 
-class OffersPage extends Component {
+class TradesPage extends Component {
   componentDidMount = async () => {
-    const data = await this.props.fetchOffers();
-    console.log('Offers Page received trades:', data);
+    const data = await this.props.fetchTrades();
+    console.log('Trades Page received trades:', data);
   }
 
   render() {
-    console.log('Offers Page props', this.props);
+    console.log('Trades Page props', this.props);
     return (
       <div>
         <h3>Sent Offers:</h3>
@@ -41,5 +41,5 @@ const mapStateToProps = (state) => ({
 
 export default compose(
   withAuthorization(),
-  connect(mapStateToProps, { fetchOffers })
-)(OffersPage);
+  connect(mapStateToProps, { fetchTrades })
+)(TradesPage);

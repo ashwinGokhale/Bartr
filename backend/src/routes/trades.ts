@@ -152,7 +152,6 @@ router.post('/reject/:id', async (req: utils.Req, res: utils.Res) => {
     const data = trade.data();
     await Promise.all([
         trade.ref.delete(),
-        // trade.ref.update('state', 'REJECTED'),
         buyerPost.exists ? buyerPost.ref.update('state', 'OPEN') : null
     ]);
 

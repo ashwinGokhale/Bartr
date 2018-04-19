@@ -4,7 +4,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { SignOutButton } from '../Common';
 import { firebase } from '../../firebase';
-import { setAuthUser, fetchDBUser, fetchOffers } from '../../actions';
+import { setAuthUser, fetchDBUser, fetchTrades } from '../../actions';
 import * as routes from '../../constants';
 import logo from '../../assets/bartrLogo.png';
 import './index.css'
@@ -25,7 +25,7 @@ const NavigationAuth = () =>
     <div className="buttonsGroup">
       <Link to={routes.HOME}><button className="navButton">Home</button></Link>
       <Link to={routes.ACCOUNT}><button className="navButton">Account</button></Link>
-      <Link to={routes.OFFERS}><button className="navButton">Offers</button></Link>
+      <Link to={routes.TRADES}><button className="navButton">Trades</button></Link>
       <Link to={routes.CHAT}><button className="navButton">Chat</button></Link>
       <Link to={routes.SETTINGS}><button className="navButton">Settings</button></Link>
       <SignOutButton />
@@ -59,7 +59,7 @@ class NavigationHeader extends Component {
       else if (!this.props.authState) {
         this.props.setAuthUser(authUser);
         this.props.fetchDBUser();
-        this.props.fetchOffers();
+        this.props.fetchTrades();
       }
     });    
   }
@@ -104,5 +104,5 @@ const mapStateToProps = (store) => ({
 
 export default compose(
   withRouter,
-  connect(mapStateToProps, { setAuthUser, fetchDBUser, fetchOffers }),
+  connect(mapStateToProps, { setAuthUser, fetchDBUser, fetchTrades }),
 )(NavigationHeader);

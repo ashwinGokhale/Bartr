@@ -19,7 +19,7 @@ import AccountPage from '../Account';
 import SettingsPage from '../Settings';
 import CreatePostPage from '../CreatePost';
 import DisplayPostsPage from '../DisplayPosts';
-import OffersPage from '../OffersPage';
+import TradesPage from '../TradesPage';
 import SupportPage from '../Support';
 import TermsPage from '../Terms';
 import AboutUsPage from '../AboutUs';
@@ -56,7 +56,7 @@ const App = () =>
           <Route exact path={routes.ABOUTUS} component={AboutUsPage} />
           <Route exact path={routes.USER} component={UserPage} />
           <Route exact path={routes.POST} component={PostPage} />
-          <Route exact path={routes.OFFERS} component={OffersPage} />
+          <Route exact path={routes.TRADES} component={TradesPage} />
           <Route component={NoMatch} />
         </Switch>
         <hr/>

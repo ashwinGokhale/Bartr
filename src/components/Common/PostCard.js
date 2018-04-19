@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
-import { createOffer } from '../../actions';
+import { createTrade } from '../../actions';
 import * as routes from '../../constants';
 import withAuthorization from '../Session/withAuthorization';
 
@@ -12,7 +12,7 @@ class PostCard extends Component {
         console.log('Post Card props:', this.props);
         const userPosts = 
             (this.props.userPosts && this.props.userPosts.length) ? 
-            this.props.userPosts.filter(post => !this.props.offers.find(trade => post.postId === trade.buyer.postId)) : 
+            this.props.userPosts.filter(post => !this.props.trades.find(trade => post.postId === trade.buyer.postId)) : 
             []
         
         console.log('Post Card userPosts:', userPosts);
@@ -27,10 +27,10 @@ class PostCard extends Component {
         if (!this.state.postId) return;
         const url = `/trades/${this.props.post.postId}-${this.state.postId}`;
         console.log(`Making trade on /trades/${this.props.post.postId}-${this.state.postId}`);
-        const data = await this.props.createOffer(this.props.post.postId, this.state.postId);
+        const data = await this.props.createTrade(this.props.post.postId, this.state.postId);
         console.log('Data:', data);
         if (data.error) this.setState({error: data.error});
-        else this.props.history.push(routes.OFFERS);
+        else this.props.history.push(routes.TRADES);
     }
 
 
@@ -94,11 +94,11 @@ class PostCard extends Component {
 
 const mapStateToProps = (state) => ({
     ...state.sessionState.dbUser,
-    offers: state.tradesState.open.buyer,
+    trades: state.tradesState.open.buyer,
 	userPostsError: state.postsState.userPostsError
 });
 
 export default compose(
   	withAuthorization(),
-	connect(mapStateToProps, { createOffer })
+	connect(mapStateToProps, { createTrade })
 )(PostCard);
