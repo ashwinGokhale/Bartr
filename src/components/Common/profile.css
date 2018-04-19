@@ -67,6 +67,25 @@ fieldset.rating {
   width: 100%;
 }
 
+.tradePage {
+  background-color: rgb(238, 237, 237);
+  width: 100%;
+  overflow-y: scroll;
+}
+
+.tradePageTop {
+  position: relative;
+  height: 70vh;
+  width: 50%;
+}
+
+.tradePageBottom {
+  position: absolute;
+  top: 60px;
+  width: 100%;
+  bottom: 34px;
+  overflow-y: scroll;
+}
 .postCardLeft {
   height: 100%;
   width: 60vw;
@@ -188,4 +207,34 @@ fieldset.rating {
 
 .makeOfferShiftDown {
   margin-top: 8vh;
+}
+
+.tradePageTitles {
+  color:rgb(50, 63, 78);
+  margin-bottom: 0;
+  font-size: 2vw;
+}
+
+.tradeFor {
+  height: 4vh;
+  width: 100%;
+  text-align: center;
+}
+
+.tradeForBetween {
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  font-size: 2vw;
+  color: rgb(104, 104, 104);
+}
+
+.tradeButtons {
+  color: white;
+  background-color: rgb(78, 138, 205);
+  border: white solid 0.1vw;
+  border-radius: 0.3vw;
+  height: 5.5%;
+  width: 15%;
+  margin-left: 25%;
+  margin-bottom: 1%;
 }
