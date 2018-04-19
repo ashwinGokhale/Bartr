@@ -32,30 +32,30 @@ class PostCard extends Component {
             <div className="postCardShiftDown">
                 <div className="postCardLeft">
                     <div className="postCardInfoRow round">
-                        <label><strong>Title</strong></label>
+                        <h3 className="postCardTitles">Title</h3>
                         <label>{post.title}</label><br/>
 
-                        <label><strong>Description</strong></label>
+                        <h3 className="postCardTitles">Description</h3>
                         <label>{post.description}</label><br/>
 
-                        <label><strong>Type</strong></label>
+                        <h3 className="postCardTitles">Type</h3>
                         <label>{post.type === 'good' ? 'Good' : 'Service'}</label><br/>
 
-                        <label><strong>Created By:</strong></label>
+                        <h3 className="postCardTitles">Created By</h3>
                         <Link to={`/user/${post.userId}`}><label>{post.displayName}</label></Link><br/>
 
-                        <label><strong>Created On:</strong></label>
+                        <h3 className="postCardTitles">Created On</h3>
                         <label>{new Date(post.createdAt).toDateString()}</label><br/>
 
-                        <label><strong>Tags</strong></label>
+                        <h3 className="postCardTitles">Tags</h3>
                         { post.tags.map((tag, i) => [<label key={i}>{tag} </label>])} <br/>
                     </div>
                     <div className="postCardSubmitRow round">
                         {
                             !self &&
                             <div>
-                                <h3>Make an Offer</h3>
-                                <select onChange={e => this.setState({postId: e.target.value})}>
+                                <h3 className="floatLeft offerTitle" >Make an Offer:</h3>
+                                <select className="floatLeft offerDropDown" onChange={e => this.setState({postId: e.target.value})}>
                                 {userPosts.map((userPost, i) => <option key={i} value={userPost.postId} >{userPost.title}</option>)}
                                 </select>
                                 <input className="postCardSubmit" type='submit' name='submit' value='Submit' onClick={this.onSubmit} />
@@ -68,7 +68,7 @@ class PostCard extends Component {
                 <div className="postCardRight">
                     <div className="postCardPhotosColumn round">
                         <div className="postCardPhotosTitle">
-                            <label className="centerTitle">Photos</label>
+                            <h3 className="centerTitle">Photos</h3>
                         </div>
                         <div className="postCardPhotosScroll">
                             { post.photoUrls.map((url, i) => [<img className="centerImage" style={{maxWidth:'15vw',maxHeight: '23vw'}} key={i} src={url} alt={`postPhoto${i}`} />])} <br/>

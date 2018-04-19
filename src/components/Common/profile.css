@@ -119,7 +119,7 @@ fieldset.rating {
 .centerTitle {
   font-size: 2.5vw;
   line-height: 2vw;
-  margin-left: 9vw;
+  margin-left: 7.2vw;
   color: rgb(94, 94, 94);
 }
 
@@ -134,7 +134,17 @@ fieldset.rating {
 }
 
 .postCardSubmit {
-  width: 10%;
+  float: right;
+  margin-right: 2vw;
+  width: 18%;
+  transform: translateY(-90%);
+  -webkit-transform: translateY(-90%);
+  color: white;
+  background-color: rgb(78, 138, 205);
+  border: white 1px solid;
+  border-radius: 0.25vw;
+  height: 4vh;
+  font-size: 1.25vw;
 }
 
 .centerImage {
@@ -144,4 +154,34 @@ fieldset.rating {
   border: gray solid 1.5px;
   margin-bottom: 2vh;
   border-radius: 0.5vw;
+}
+
+.offerTitle {
+  font-size: 2.2vw;
+  color: rgb(94, 94, 94);
+  transform: translateY(15%);
+  -webkit-transform: translateY(15%);
+}
+
+.offerDropDown {
+  margin-left: 17vw;
+  transform: translateY(-90%);
+  -webkit-transform: translateY(-90%);
+  height: 3.75vh;
+  width: 20vw;
+  font-size: 1.25vw;
+  color: white;
+  background-color: rgb(196, 196, 196);
+  border-radius: 0.25vw;
+}
+
+.offerDropDown:focus {
+  outline: none;
+}
+
+.postCardTitles {
+  font-size: 2vw;
+  color: rgb(69, 89, 112);
+  margin-top: 1.5vh;
+  text-decoration: underline;
 }
