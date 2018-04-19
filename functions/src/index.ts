@@ -81,22 +81,10 @@ export const ratingUpdated = functions.firestore.document('/ratings/{rating}').o
 	});
 });
 
-// export const authUserCreated = functions.auth.user().onCreate(user => 
-// 	firebase.firestore().doc(`/users/${user.uid}`).set({
-// 		uid: user.uid,
-// 		photoUrl: user.photoURL,
-// 		displayName: user.displayName,
-// 		contactInfo: {
-// 			email: user.email,
-// 			address: '',
-// 			hideAddress: false,
-// 			phoneNumber: user.phoneNumber || '',
-// 			hidePhoneNumber: false
-// 		},
-// 		totalRatings: 5,
-// 		numRatings: 1,
-// 		lat: 0, 
-// 		lng: 0 ,
-// 		radius: 25000
-// 	})
-// );
+export const tradeDeleted = functions.firestore.document('/trades/{id}').onDelete(async (event, context) => {
+	const [sellerPostId, buyerPostId] = context.params.id.split('_');
+	return Promise.all([
+		firebase.firestore().doc(`/posts/${sellerPostId}`).update('state', 'OPEN'),
+		firebase.firestore().doc(`/posts/${buyerPostId}`).update('state', 'OPEN')
+	]).catch(err => console.error(err));
+});

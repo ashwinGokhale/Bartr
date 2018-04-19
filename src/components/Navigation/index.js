@@ -4,7 +4,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { SignOutButton } from '../Common';
 import { firebase } from '../../firebase';
-import { setAuthUser, fetchDBUser } from '../../actions';
+import { setAuthUser, fetchDBUser, fetchOffers } from '../../actions';
 import * as routes from '../../constants';
 import logo from '../../assets/bartrLogo.png';
 import './index.css'
@@ -25,6 +25,7 @@ const NavigationAuth = () =>
     <div className="buttonsGroup">
       <Link to={routes.HOME}><button className="navButton">Home</button></Link>
       <Link to={routes.ACCOUNT}><button className="navButton">Account</button></Link>
+      <Link to={routes.OFFERS}><button className="navButton">Offers</button></Link>
       <Link to={routes.CHAT}><button className="navButton">Chat</button></Link>
       <Link to={routes.SETTINGS}><button className="navButton">Settings</button></Link>
       <SignOutButton />
@@ -50,7 +51,6 @@ class NavigationHeader extends Component {
 
   componentWillMount = () => {
     firebase.auth.onAuthStateChanged(authUser => {
-      // console.log('Auth state has changed to:', condition(authUser));
       console.log('Auth State:', this.props.authState);
       if (!(!!authUser)) {
         this.props.setAuthUser(authUser);
@@ -59,6 +59,7 @@ class NavigationHeader extends Component {
       else if (!this.props.authState) {
         this.props.setAuthUser(authUser);
         this.props.fetchDBUser();
+        this.props.fetchOffers();
       }
     });    
   }
@@ -103,5 +104,5 @@ const mapStateToProps = (store) => ({
 
 export default compose(
   withRouter,
-  connect(mapStateToProps, { setAuthUser, fetchDBUser }),
+  connect(mapStateToProps, { setAuthUser, fetchDBUser, fetchOffers }),
 )(NavigationHeader);

@@ -18,7 +18,7 @@ router.get("/", async (req: utils.Req, res: utils.Res) => {
 router.get('/:uid', async (req: utils.Req, res: utils.Res) => {
 	try {
 		const userSnap = await firebase.firestore().doc(`/users/${req.params.uid}`).get();
-		console.log('UserSnap:', userSnap.data());
+		// console.log('UserSnap:', userSnap.data());
 		return utils.successRes(res, userSnap.data());
 	} catch (error) {
 		console.error('Error:', error);
@@ -72,7 +72,7 @@ router.post('/:uid', async (req: utils.Req, res: utils.Res) => {
 
 router.put('/:uid', async (req: utils.Req, res: utils.Res) => {
 	try {
-		console.log('Put user body:', req.body);
+		// console.log('Put user body:', req.body);
 		const tok = req.token;
 		if (tok.uid !== req.params.uid) return utils.errorRes(res, 401, 'Unauthorized');
 
@@ -92,7 +92,7 @@ router.put('/:uid', async (req: utils.Req, res: utils.Res) => {
 					}
 				);
 				if (!data.results.length) return utils.errorRes(res, 400, 'Invalid address: ' + address);
-				console.log('Parsed address coordinates to:', data.results[0].geometry.location);
+				// console.log('Parsed address coordinates to:', data.results[0].geometry.location);
 				lat = data.results[0].geometry.location.lat;
 				lng = data.results[0].geometry.location.lng;
 			} catch (error) {
