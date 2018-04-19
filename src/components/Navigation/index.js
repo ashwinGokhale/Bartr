@@ -25,6 +25,7 @@ const NavigationAuth = () =>
     <div className="buttonsGroup">
       <Link to={routes.HOME}><button className="navButton">Home</button></Link>
       <Link to={routes.ACCOUNT}><button className="navButton">Account</button></Link>
+      <Link to={routes.OFFERS}><button className="navButton">Offers</button></Link>
       <Link to={routes.CHAT}><button className="navButton">Chat</button></Link>
       <Link to={routes.SETTINGS}><button className="navButton">Settings</button></Link>
       <SignOutButton />
@@ -50,7 +51,6 @@ class NavigationHeader extends Component {
 
   componentWillMount = () => {
     firebase.auth.onAuthStateChanged(authUser => {
-      // console.log('Auth state has changed to:', condition(authUser));
       console.log('Auth State:', this.props.authState);
       if (!(!!authUser)) {
         this.props.setAuthUser(authUser);

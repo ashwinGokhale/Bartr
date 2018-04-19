@@ -21,6 +21,8 @@ export const router = express.Router();
     1.  Trade is created w/ both user's IDs and state of PENDING
 */
 router.post('/:seller-:buyer', async (req: utils.Req, res: utils.Res) => {
+    console.log('Seller ID:', req.params.seller);
+    console.log('Buyer ID:', req.params.buyer);
     const [sellerPost, buyerPost, trans, existingTrans] = await Promise.all([
         firebase.firestore().doc(`/posts/${req.params.seller}`).get(),
         firebase.firestore().doc(`/posts/${req.params.buyer}`).get(),
@@ -46,16 +48,15 @@ router.post('/:seller-:buyer', async (req: utils.Req, res: utils.Res) => {
         batchUpdate.update(buyerPost.ref, 'state', 'PENDING');
         await batchUpdate.commit();
 
-        // Batch delete all other trades on this post
+        // Batch delete all other trade on this post
         const batchDelete = firebase.firestore().batch();
         const trades = await firebase.firestore().collection('/trades')
                                     .where('state', '==', 'OPEN')
-                                    .where('seller.postId', '<', req.params.seller)
-                                    .where('seller.postId', '>', req.params.seller)
+                                    .where('seller.postId', '==', existingTrans.data().seller.postId)
                                     .get();
 
         trades.forEach(trade => batchDelete.delete(trade.ref));
-        await batchDelete.commit();
+        const del = await batchDelete.commit();
 
         return utils.successRes(res, existingTrans.data());
     }
@@ -126,7 +127,6 @@ router.post('/accept/:id', async (req: utils.Req, res: utils.Res) => {
     const trades = await firebase.firestore().collection('/trades')
                                 .where('state', '==', 'OPEN')
                                 .where('seller.postId', '==', sellerPostId)
-                                // .where('seller.postId', '>', sellerPostId)
                                 .get();
 
     trades.forEach(trade => batchDelete.delete(trade.ref));

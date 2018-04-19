@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { fetchUserPosts, fetchPost } from '../../actions';
+import { fetchUserPosts, fetchPost, fetchOffers } from '../../actions';
 import withAuthorization from '../Session/withAuthorization';
 import { PostCard } from '../Common';
 
@@ -18,6 +18,7 @@ class PostPage extends Component {
     const { id } = this.props.match.params;
     console.log('Rendering post:', id);
     await this.props.fetchUserPosts();
+    await this.props.fetchOffers();
     try {
       const post = await fetchPost(id);
       console.log('PostPage post data:', post);
@@ -28,11 +29,10 @@ class PostPage extends Component {
     }
   }
 
-  render = () => {
-    const { post } = this.state;
-
-    return (post ? <PostCard post={post} userPosts={this.props.userPosts} self={this.props.authUser.uid === post.userId}/> : <div>Loading...</div>)
-  }
+  render = () => 
+    this.state.post ?
+      <PostCard post={this.state.post} userPosts={this.props.userPosts} self={this.props.authUser.uid === this.state.post.userId}/> :
+      <div>Loading...</div>
 }
 
 const mapStateToProps = (state) => ({
@@ -41,5 +41,5 @@ const mapStateToProps = (state) => ({
 
 export default compose(
   withAuthorization(),
-  connect(mapStateToProps, { fetchUserPosts })
+  connect(mapStateToProps, { fetchUserPosts, fetchOffers })
 )(PostPage);
