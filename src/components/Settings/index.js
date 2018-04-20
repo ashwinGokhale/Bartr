@@ -85,9 +85,9 @@ class SettingsPage extends Component {
 				contactInfo: {
 					email: dbUser.contactInfo.email,	
 					address: address || dbUser.contactInfo.address,
-					hideAddress: hideAddress || dbUser.contactInfo.hideAddress,
+					hideAddress: hideAddress, //|| dbUser.contactInfo.hideAddress,
 					phoneNumber: phoneNumber || dbUser.contactInfo.phoneNumber,
-					hidePhoneNumber: hidePhoneNumber || dbUser.contactInfo.hidePhoneNumber
+					hidePhoneNumber: hidePhoneNumber //|| dbUser.contactInfo.hidePhoneNumber
 				}
 			})
 		}

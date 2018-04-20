@@ -70,26 +70,28 @@ router.post('/:uid', async (req: utils.Req, res: utils.Res) => {
 	}
 });
 
-router.put('/verify', utils.authorized, async (req, res) => {
+router.put('/verify', utils.authorized, async (req: utils.Req, res: utils.Res) => {
 	try{
 		const tok = await utils.getIDToken(req.headers.token);
 		if(!tok) return utils.errorRes(res, 401, 'Invalid token');
-		// if (tok.uid !== req.params.uid) return utils.errorRes(res, 401, 'Unauthorized');
-		const userGet = await firebase.firestore().doc(`/users/${tok.uid}`).get();
+		const userRef = firebase.firestore().doc(`/users/${tok.uid}`);
+		const userGet = await userRef.get();
 		if(userGet.data().totalRatings > 4 ){
 			console.log(userGet.data().totalRatings);
-			const userSnap = await firebase.firestore().doc(`/users/${tok.uid}`).set(
+			const userSnap = await userRef.set(
 				{verified: true},
 				{merge: true}
 			);
 	   }
+
+	   return utils.successRes(res, (await userRef.get()).data());
 	}catch (error){
 		console.error('Error: ', error);
 		return utils.errorRes(res, 400, error);
 	}
 });
 
-router.put('/:uid', utils.authorized, async (req, res) => {
+router.put('/:uid', utils.authorized, async (req: utils.Req, res: utils.Res) => {
 	try {
 		console.log('Put user body:', req.body);
 		// const tok = await utils.getIDToken(req.headers.token);
@@ -111,12 +113,21 @@ router.put('/:uid', utils.authorized, async (req, res) => {
 		// Build contact info to update
 		if (req.body.contactInfo) {
 			const contactBuilder = {};
+			const hideAddress = req.body.contactInfo.hideAddress;
+			const hidePhoneNumber = req.body.contactInfo.hidePhoneNumber;
+
+
 			Object.assign(
 				contactBuilder,
 				req.body.contactInfo.address && { address: req.body.contactInfo.address },
 				req.body.contactInfo.phoneNumber && { phoneNumber: req.body.contactInfo.phoneNumber },
-				'hideAddress' in req.body.contactInfo && { hideAddress: req.body.contactInfo.hideAddress ? true : false },
-				'hidePhoneNumber' in req.body.contactInfo && { hidePhoneNumber: req.body.contactInfo.hidePhoneNumber ? true : false }
+				'hideAddress' in req.body.contactInfo && 
+				typeof(hideAddress) == typeof(true) &&
+				{ hideAddress },
+
+				'hidePhoneNumber' in req.body.contactInfo && 
+				typeof(hidePhoneNumber) == typeof(true) &&
+				{ hidePhoneNumber }
 			);
 
 			if (Object.keys(contactBuilder).length) Object.assign(userBuilder, {contactInfo: contactBuilder});
