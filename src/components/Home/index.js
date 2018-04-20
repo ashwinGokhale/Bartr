@@ -30,21 +30,6 @@ class HomePage extends Component {
             </div>
             
             <Link className="createPostHome" to={CREATE_POST}>Create Post</Link>
-            
-            <div className="filters">
-              <div className="filtersCard">
-                <h4>Filters</h4>
-                <hr></hr>
-                <div className="filterItem">
-                  <input type="checkbox" className="radio" id="radioItems"></input>
-                   <p className="radioTag">Items</p>                
-                </div>
-                <div className="filterItem">
-                  <input type="checkbox" className="radio" id="radioServices"></input>
-                  <p className="radioTag">Services</p>
-                </div>
-              </div>
-            </div>
           </div>
           <div className="column rightSide">
             <div className="postFeed">

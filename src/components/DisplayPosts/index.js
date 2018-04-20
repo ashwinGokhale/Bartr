@@ -96,7 +96,7 @@ class DisplayPosts extends React.Component {
 
     return (
       <div className="displayPostWrapper">
-        <div className="displayPostLeft">
+        {/* <div className="displayPostLeft">
           <div className="displayPostFilterCard">
             <center><h3 className="displayPostFilterTitle">Filters</h3></center>
             <hr></hr>
@@ -109,7 +109,7 @@ class DisplayPosts extends React.Component {
               <p className="displayPostFilterTag inlineBlock">Services</p>
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="displayPostRight">
           <div className="displayPostFeed">
               <div id="div1">
