@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { fetchUserPosts, fetchPost, fetchTrades } from '../../actions';
+import { fetchUserPosts, fetchPost, fetchTrades, editPost } from '../../actions';
 import withAuthorization from '../Session/withAuthorization';
 import { PostCardEdit } from '../Common';
 
