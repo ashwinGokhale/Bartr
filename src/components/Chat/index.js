@@ -54,8 +54,10 @@ class Chat extends Component {
         this.interval = setInterval(this.getMessage, 1000);
     }
 
-    updateWhoChat(e) {
-        this.setState({ selectValue: e.target.value })
+
+    updateWhoChat(e){
+        this.setState({selectValue: e.target.value})
+        document.getElementById('dropDown').key=e.target.value;
     }
 
     updateMessage(event) {
@@ -72,34 +74,14 @@ class Chat extends Component {
         this.getMessage()
     }
 
-    getMessage() {
 
-
-        if (this.state.displayName != null && this.state.selectValue != null) {
-            var docName;
-            if (this.state.selectValue > this.state.displayName) {
-                docName = this.state.selectValue.toString().replace(/\s+/g, '') + "_" + this.state.displayName.toString().replace(/\s+/g, '');
-            } else {
-                docName = this.state.displayName.toString().replace(/\s+/g, '') + "_" + this.state.selectValue.toString().replace(/\s+/g, '');
-            }
-            var checkDoc = firebase.firestore().collection("chat").doc(docName).collection("messages");
-
-            checkDoc.orderBy('date').get()
-                .then((querySnapshot) => {
-                    if (!querySnapshot.empty) {
-                        this.setState({
-                            messages: []
-                        })
-
-                        querySnapshot.forEach(data => {
-                            var newMessage = data.data().displayName + ": " + data.data().message;
-                            var joined = this.state.messages.concat(newMessage);
-                            this.setState({
-                                messages: joined
-                            })
-                        });
-                    }
-                });
+    getMessage(){
+      if(this.state.displayName != null && this.state.selectValue != null){
+          var docName;
+        if(this.state.selectValue > this.state.displayName){
+            docName = this.state.selectValue.toString().replace(/\s+/g, '') + "_" + this.state.displayName.toString().replace(/\s+/g, '');
+        }else{
+            docName = this.state.displayName.toString().replace(/\s+/g, '') + "_" + this.state.selectValue.toString().replace(/\s+/g, '');
         }
     }
 
@@ -148,8 +130,9 @@ class Chat extends Component {
 
         )}</div>
 
-        const curUsers = <select id="dropDown" key={this.state.selectValue} onChange={this.updateWhoChat}>{dataUI.map((users, j) =>
-            <option key={users}>{users}</option>)}</select>
+
+        const curUsers = <select id="dropDown" onChange={this.updateWhoChat}>{dataUI.map((users, j) =>
+        <option key={users}>{users}</option>)}</select>
 
         return (
             <div className="chatBox">

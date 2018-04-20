@@ -10,6 +10,7 @@ class PostCard extends Component {
     constructor(props) {
         super(props);
         console.log('Post Card props:', this.props);
+        // TODO: Fix this
         const userPosts = 
             (this.props.userPosts && this.props.userPosts.length) ? 
             this.props.userPosts.filter(post => !this.props.trades.find(trade => post.postId === trade.buyer.postId)) : 
@@ -62,7 +63,7 @@ class PostCard extends Component {
                         { !!this.state.error ? <p className="warning" style={{'color': 'red'}}>ERROR: {this.state.error}</p> : null }  
 
                         {
-                            !self &&
+                            !self && post.state === 'OPEN' &&
                             <div className="makeOfferShiftDown">
                                 <h3 className="floatLeft offerTitle" >Make an Offer:</h3>
                                 <select className="floatLeft offerDropDown"onChange={e => this.setState({postId: e.target.value})}>

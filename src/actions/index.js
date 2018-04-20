@@ -387,8 +387,8 @@ export const rejectTrade = (id) => async (dispatch, getState) => {
 		console.log('Rejected Trade:', trade);
 		let open = getState().tradesState.open;
 		const newOpen = {
-			buyer: open.buyer,
-			seller: open.seller.filter(post => post.buyer.postId !== trade.buyer.postId)
+			buyer: open.buyer.filter(offer => offer.id !== trade.id),
+			seller: open.seller.filter(offer => offer.id !== trade.id)
 		};
 		console.log('Old open state:', open);
 		console.log('New open state:', newOpen);
@@ -405,21 +405,29 @@ export const closeTrade = (id) => async (dispatch, getState) => {
 	try {
 		const token = await auth.currentUser.getIdToken();
 		const { data } = await axios.post(
-			`/api/trades/reject/${id}`,
+			`/api/trades/close/${id}`,
 			null,
 			{headers: {token}}
 		);
 
 		const trade = data.responseData;
-		console.log('Rejected Trade:', trade);
-		let open = getState().tradesState.open;
-		const newOpen = {
-			buyer: open.buyer,
-			seller: open.seller.filter(post => post.buyer.postId !== trade.buyer.postId)
+		const state = getState();
+		console.log('Closed Trade:', trade);
+		const accepted = getState().tradesState.accepted;
+		const newAccepted = {
+			buyer: accepted.buyer.filter(offer => offer.id !== trade.id),
+			seller: accepted.seller.filter(offer => offer.id !== trade.id)
 		};
-		console.log('Old open state:', open);
-		console.log('New open state:', newOpen);
-		dispatch(onSetOpenTrades(newOpen));
+		console.log('Old accepted state:', accepted);
+		console.log('New accepted state:', newAccepted);
+
+		// Trade is in closed state
+		if (trade.seller.closed && trade.buyer.closed)
+			dispatch(onAddCompletedTrades(trade));
+		else 
+			dispatch(onAddClosedTrades(trade));
+		
+		dispatch(onSetAccepetedTrades(newAccepted));
 		return trade;
 	} catch (error) {
 		console.error(error.response.data);

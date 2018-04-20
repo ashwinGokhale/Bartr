@@ -81,10 +81,10 @@ export const ratingUpdated = functions.firestore.document('/ratings/{rating}').o
 	});
 });
 
-export const tradeDeleted = functions.firestore.document('/trades/{id}').onDelete(async (event, context) => {
-	const [sellerPostId, buyerPostId] = context.params.id.split('_');
-	return Promise.all([
-		firebase.firestore().doc(`/posts/${sellerPostId}`).update('state', 'OPEN'),
-		firebase.firestore().doc(`/posts/${buyerPostId}`).update('state', 'OPEN')
-	]).catch(err => console.error(err));
-});
+// export const tradeDeleted = functions.firestore.document('/trades/{id}').onDelete(async (event, context) => {
+// 	const [sellerPostId, buyerPostId] = context.params.id.split('_');
+// 	return Promise.all([
+// 		firebase.firestore().doc(`/posts/${sellerPostId}`).update('state', 'OPEN'),
+// 		firebase.firestore().doc(`/posts/${buyerPostId}`).update('state', 'OPEN')
+// 	]).catch(err => console.error(err));
+// });
