@@ -15,7 +15,7 @@ export const TERMS = '/terms';
 export const ABOUTUS = '/aboutUs';
 export const USER = '/user/:id';
 export const POST = '/post/:id';
-export const EDIT_POST = '/post/edit';
+export const EDIT_POST = '/post/edit/:id';
 
 
 export default {
