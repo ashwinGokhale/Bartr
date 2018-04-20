@@ -93,7 +93,8 @@ class PostCardEdit extends Component {
 		 else {
 		 	//if (!this.state.address.length)
 		 	//	return this.setState({ error: 'Post must have an address' })
-		 	//else
+             //else
+             
 		 		data.append('address', this.state.address)
 		 }
 
