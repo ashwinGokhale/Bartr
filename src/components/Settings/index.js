@@ -195,7 +195,7 @@ class SettingsPage extends Component {
 						<div className="warningForm">
 							{ !!this.state.error ? <p className="warning" style={{'color': 'red'}}>ERROR: {this.state.error}</p> : null }
 						</div>
-						<input className="submit" type='submit' name='submit' value='Update' onClick={this.onSubmit.bind(this)} />
+						<input className="submitSetting" type='submit' name='submit' value='Update' onClick={this.onSubmit.bind(this)} />
 						<input className="delete" type="button" value="Delete Account" onClick={e => this.props.deleteAccount()} />
 					</form>
 					<br/>

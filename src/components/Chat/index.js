@@ -12,6 +12,13 @@ class Chat extends Component{
     constructor(props, context){
         super(props, context)
         let { dbUser } = this.props;
+        this.getMessage = this.getMessage.bind(this)
+        this.getAllUserNames = this.getAllUserNames.bind(this)
+        this.updateWhoChat = this.updateWhoChat.bind(this)
+        this.updateMessage = this.updateMessage.bind(this)
+        this.submitMessage = this.submitMessage.bind(this)
+        this.changeSelect = this.changeSelect.bind(this)
+
         this.state={
             messages: [],
             uname:'',
@@ -20,6 +27,20 @@ class Chat extends Component{
             selectValue: dbUser.displayName,
             displayName:''
         }
+    }
+
+
+    getAllUserNames(){
+        var doc = firebase.firestore().collection("users")
+        .get()
+        .then(snapshot => {
+            snapshot.forEach(data => {
+                var joined = this.state.usersAr.concat(data.data().displayName);
+                this.setState({
+                    usersAr: joined
+                })                
+            })
+        });
     }
 
     componentDidMount(){
@@ -33,17 +54,9 @@ class Chat extends Component{
             this.interval = setInterval(this.getMessage, 1000);
     }
 
-    getAllUserNames = () => {
-        var doc = firebase.firestore().collection("users")
-        .get()
-        .then(snapshot => {
-            snapshot.forEach(data => {
-                var joined = this.state.usersAr.concat(data.data().displayName);
-                this.setState({
-                    usersAr: joined
-                })                
-            })
-        });
+    updateWhoChat(e){        
+        this.setState({selectValue: e.target.value})
+        document.getElementById('dropDown').key=e.target.value;
     }
 
     updateWhoChat = (e) => {
@@ -57,7 +70,7 @@ class Chat extends Component{
         })
     }
 
-    changeSelect = () => {
+    changeSelect(){
         console.log("Chat selected");
         this.setState({
             messages: []
@@ -65,7 +78,7 @@ class Chat extends Component{
         this.getMessage()
     }
 
-    getMessage = () => {
+    getMessage(){
       if(this.state.displayName != null && this.state.selectValue != null){
           var docName;
         if(this.state.selectValue > this.state.displayName){
@@ -94,8 +107,7 @@ class Chat extends Component{
     }
   }
 
-    submitMessage = (name) => {
-        console.log('Submitting message');
+    submitMessage(name){
         if(this.state.displayName != null && this.state.selectValue != null){
         var data = {
             displayName: this.state.displayName,
@@ -129,31 +141,37 @@ class Chat extends Component{
         const currentMessage = <div id="div1" className="scrollBox">{this.state.messages.map((message, i) =>
             {
                 if(message.toString().startsWith(this.state.displayName)){
-                    return <div key={i} className="container">
-                     <p >{message}</p>
+                    return <div className="container">
+                     <p key={i}>{message}</p>
                     </div>
                 }else{
-                    return <div key={i} className="container darker">
-                    <p >{message}</p>
+                    return <div className="container darker">
+                    <p key={i}>{message}</p>
                     </div>
                 }
             }
             
         )}</div>
 
+        const curUsers = <select id="dropDown" className="chatDropDown" onChange={this.updateWhoChat}>{dataUI.map((users, j) =>
+        <option key={users}>{users}</option>)}</select>
+
         return (
-            <div className="chatBoxFormat">
-                <h1>Chat App</h1>
-                {<select id="dropDown" onChange={this.updateWhoChat}>
-                        {dataUI.map(users => <option key={users}>{users}</option>)}
-                </select>}
-                <button onClick={this.changeSelect}>Chat</ button>
-                <br />
-                {currentMessage}
-                <br />
-                <input onChange={this.updateMessage} type="text" placeholder="myMessage" />
-                <br />
-                <button onClick={this.submitMessage}>Submit Message</button>
+            <div className="chatWrapper">
+                <div className="chatBoxFormat">
+                    <div className="chatTitleBox">
+                        <h3 className="chatTitle">Chatting with</h3>
+                        <div className="chatCurrentUser">{curUsers}</div>
+                    </div>
+                    {/*<button onClick={this.changeSelect}>Chat</ button>*/}
+                    <br />
+                    {currentMessage}
+                    <br />
+                    <div className="chatInputBox">
+                        <input className="chatText" onChange={this.updateMessage} type="text" placeholder="Type a message" />
+                        <button className="chatSubmit" onClick={this.submitMessage}>Send</button>
+                    </div>
+                </div>
             </div>
         )   
     }

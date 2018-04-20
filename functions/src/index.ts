@@ -39,11 +39,11 @@ const handleChange = async (type: string, index: algoliasearch.AlgoliaIndex, eve
 			const batch = firebase.firestore().batch();
 			if (type === 'posts') {
 				// Delete all trades involved w/ this post
+
 				const [buyerTrades, sellerTrades] = await Promise.all([
 					firebase.firestore().collection('/trades').where('buyer.postId', '==', context.params.id).get(),
 					firebase.firestore().collection('/trades').where('seller.postId', '==', context.params.id).get()
 				]);
-
 				buyerTrades.forEach(async trade => {
 					try {
 						const post = await firebase.firestore().doc(`/posts/${trade.data().seller.postId}`).get();
