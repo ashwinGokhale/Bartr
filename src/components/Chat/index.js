@@ -12,12 +12,6 @@ class Chat extends Component {
     constructor(props, context) {
         super(props, context)
         let { dbUser } = this.props;
-        this.getMessage = this.getMessage.bind(this)
-        this.getAllUserNames = this.getAllUserNames.bind(this)
-        this.updateWhoChat = this.updateWhoChat.bind(this)
-        this.updateMessage = this.updateMessage.bind(this)
-        this.submitMessage = this.submitMessage.bind(this)
-        this.changeSelect = this.changeSelect.bind(this)
         this.state = {
             messages: [],
             uname: '',
@@ -29,63 +23,52 @@ class Chat extends Component {
     }
 
 
-    getAllUserNames() {
-        var doc = firebase.firestore().collection("users")
-            .get()
-            .then(snapshot => {
-                snapshot.forEach(data => {
-                    var joined = this.state.usersAr.concat(data.data().displayName);
-                    this.setState({
-                        usersAr: joined
-                    })
-                })
-            });
+    getAllUserNames = async () => {
+        const users = await firebase.firestore().collection("users").get();
+        users.forEach(data => this.setState({usersAr: [...this.state.usersAr, data.data().displayName]}));  
     }
 
 
-    componentDidMount() {
+    componentDidMount = async () => {
         console.log('component mounted');
-        this.getAllUserNames();
+        await this.getAllUserNames();
         const { dbUser } = this.props;
         this.setState({
             displayName: dbUser.displayName
-        })
+        });
 
         this.interval = setInterval(this.getMessage, 1000);
     }
 
 
-    updateWhoChat(e){
+    updateWhoChat = (e) => {
         this.setState({selectValue: e.target.value})
         document.getElementById('dropDown').key=e.target.value;
     }
 
-    updateMessage(event) {
-        this.setState({
-            myMessage: event.target.value
-        })
-    }
+    updateMessage = (e) => this.setState({myMessage: e.target.value});
 
-    changeSelect() {
+    changeSelect = () => {
         console.log("Chat selected");
         this.setState({
             messages: []
-        })
-        this.getMessage()
+        });
+        this.getMessage();
     }
 
 
-    getMessage(){
-      if(this.state.displayName != null && this.state.selectValue != null){
-          var docName;
-        if(this.state.selectValue > this.state.displayName){
-            docName = this.state.selectValue.toString().replace(/\s+/g, '') + "_" + this.state.displayName.toString().replace(/\s+/g, '');
-        }else{
-            docName = this.state.displayName.toString().replace(/\s+/g, '') + "_" + this.state.selectValue.toString().replace(/\s+/g, '');
+    getMessage = () => {
+        if(this.state.displayName != null && this.state.selectValue != null) {
+            var docName;
+            if(this.state.selectValue > this.state.displayName) {
+                docName = this.state.selectValue.toString().replace(/\s+/g, '') + "_" + this.state.displayName.toString().replace(/\s+/g, '');
+            } else {
+                docName = this.state.displayName.toString().replace(/\s+/g, '') + "_" + this.state.selectValue.toString().replace(/\s+/g, '');
+            }
         }
     }
 
-    submitMessage(name) {
+    submitMessage = (name) => {
         if (this.state.displayName != null && this.state.selectValue != null) {
             var data = {
                 displayName: this.state.displayName,
@@ -114,7 +97,7 @@ class Chat extends Component {
         }
     }
 
-    render() {
+    render = () => {
         let dataUI = this.state.usersAr;
         const currentMessage = <div id="div1" className="scrollBox">{this.state.messages.map((message, i) => {
             if (message.toString().startsWith(this.state.displayName)) {
@@ -163,6 +146,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default compose(
-    withAuthorization((authUser) => !!authUser),
+    withAuthorization(),
     connect(mapStateToProps, { fetchDBUser })
 )(Chat);

@@ -183,7 +183,7 @@ router.post('/close/:id', async (req: utils.Req, res: utils.Res) => {
         userType = 'buyer';
     else
         return utils.errorRes(res, 401, 'Unauthorized');
-        
+
     if (userType == 'seller')
         return utils.closeSeller(res, trade, buyerPost, sellerPost);
     else
@@ -193,7 +193,6 @@ router.post('/close/:id', async (req: utils.Req, res: utils.Res) => {
 router.get('/', async (req: utils.Req, res: utils.Res) => {
     try {
         const [sellerOpen, sellerAccepted, sellerClosed, sellerCompleted, buyerOpen, buyerAccepted, buyerClosed, buyerCompleted] = await Promise.all([
-            // utils.getTrades('OPEN', req.token.uid, false),
             firebase.firestore().collection('/trades')
                 .where('state', '==', 'OPEN')
 				.where('seller.userId', '==', req.token.uid)
