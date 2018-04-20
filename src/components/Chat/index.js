@@ -29,9 +29,9 @@ class Chat extends Component {
     }
 
 
-    componentDidMount = async () => {
+    componentDidMount = () => {
         console.log('component mounted');
-        await this.getAllUserNames();
+        this.getAllUserNames();
         const { dbUser } = this.props;
         this.setState({
             displayName: dbUser.displayName

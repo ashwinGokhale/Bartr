@@ -6,6 +6,7 @@ export const FEED_POSTS_SET = 'FEED_POSTS_SET';
 export const FEED_POSTS_ERROR = 'FEED_POSTS_ERROR';
 export const USER_POSTS_SET = 'USER_POSTS_SET';
 export const USER_POSTS_ADD = 'USER_POSTS_ADD';
+export const USER_POSTS_UPDATED = 'USER_POSTS_UPDATED';
 export const USER_POSTS_ERROR = 'USER_POSTS_ERROR';
 export const USER_POST_DELETED = 'USER_POST_DELETED';
 
@@ -37,6 +38,7 @@ export const onSetFeedPosts = (feedPosts) => ({ type: FEED_POSTS_SET, feedPosts 
 export const onErrorFeedPosts = (error) => ({ type: FEED_POSTS_ERROR, error });
 export const onSetUserPosts = (userPosts) => ({ type: USER_POSTS_SET, userPosts });
 export const onAddUserPost = (post) => ({ type: USER_POSTS_ADD, post });
+export const onUpdateUserPost = (post) => ({ type: USER_POSTS_UPDATED, post });
 export const onDeleteUserPost = (postId) => ({ type: USER_POST_DELETED, postId });
 export const onErrorUserPosts = (error) => ({ type: USER_POSTS_ERROR, error });
 
@@ -128,6 +130,25 @@ export const createPost = (post) => {
 			console.log('Created user post:', responseData);
 			
 			dispatch(onAddUserPost(responseData))
+		} catch (error) {
+			console.error('Error:', error.response.data.error);
+			dispatch(onErrorUserPosts(error.response.data.error));
+		}
+	}
+}
+
+export const editPost = (post) => {
+	return async dispatch => {
+		try {
+			const token = await auth.currentUser.getIdToken()
+			// Get DB user and input into Redux store
+			console.log(`Updating user posts w/ user id: ${auth.currentUser.uid}`)
+			const { data: {responseData} } = await axios.put(`/api/posts/${post.postId}`, post, {
+				headers: {token}
+			})
+
+			console.log('Updated user post:', responseData);
+			dispatch(onUpdateUserPost(responseData));
 		} catch (error) {
 			console.error('Error:', error.response.data.error);
 			dispatch(onErrorUserPosts(error.response.data.error));
