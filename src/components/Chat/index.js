@@ -35,10 +35,14 @@ class Chat extends Component{
         .get()
         .then(snapshot => {
             snapshot.forEach(data => {
-                var joined = this.state.usersAr.concat(data.data().displayName);
-                this.setState({
-                    usersAr: joined
-                })                
+                if(this.state.displayName == data.data().displayName || data.data().displayName == '' || data.data().displayName == null){
+
+                }else{
+                    var joined = this.state.usersAr.concat(data.data().displayName);
+                    this.setState({
+                        usersAr: joined
+                    })            
+                }    
             })
         });
     }
@@ -54,10 +58,10 @@ class Chat extends Component{
             this.interval = setInterval(this.getMessage, 1000);
     }
 
-    updateWhoChat(e){        
+    /*updateWhoChat(e){        
         this.setState({selectValue: e.target.value})
         document.getElementById('dropDown').key=e.target.value;
-    }
+    }*/
 
     updateWhoChat = (e) => {
         this.setState({selectValue: e.target.value})
