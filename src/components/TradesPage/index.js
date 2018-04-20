@@ -30,6 +30,8 @@ class TradesPage extends Component {
         { this.props.closed.buyer.length ? this.props.closed.buyer.map((trade, i) => <TradeItem key={i} trade={trade} />) : <div>None</div> }
         <h3>Recieved Closed Trades:</h3>
         { this.props.closed.seller.length ? this.props.closed.seller.map((trade, i) => <TradeItem key={i} seller trade={trade} />) : <div>None</div> }
+        <h3>Completed Trades:</h3>
+        { this.props.completed.length ? this.props.completed.seller.map((trade, i) => <TradeItem key={i} seller trade={trade} />) : <div>None</div> }
       </div>
     );
   }

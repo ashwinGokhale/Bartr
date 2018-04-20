@@ -10,6 +10,7 @@ class PostCard extends Component {
     constructor(props) {
         super(props);
         console.log('Post Card props:', this.props);
+        // TODO: Fix this
         const userPosts = 
             (this.props.userPosts && this.props.userPosts.length) ? 
             this.props.userPosts.filter(post => !this.props.trades.find(trade => post.postId === trade.buyer.postId)) : 
