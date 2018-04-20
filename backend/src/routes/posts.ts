@@ -111,7 +111,7 @@ router.put('/:postId', multer.array('photos', 12), utils.authorized, async (req:
 		const postRef = await firebase.firestore().doc(`/posts/${req.params.postId}`);
 		const postData = await postRef.get();
 		if (!postData.exists) return utils.errorRes(res, 400, 'Post does not exist');
-		if (postData.data().userId !== req.token.uid) return utils.errorRes(res, 401, 'Cannot modify other user\'s posts');
+		if (postData.data().userId !== req.token.uid) return utils.errorRes(res, 401, "Cannot modify other user's posts");
 		let lat = parseInt(req.body.lat, 10);
 		let lng = parseInt(req.body.lng, 10);
 		if (req.body.address) {

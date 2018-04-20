@@ -395,6 +395,16 @@ describe('-- API Tests --', () => {
 			.catch(err => done(err));
 		});
 
+		it('Should not be able to edit other users posts', done => {
+			api
+			.put(`/posts/${postIdTwo}`)
+			.set({token})
+			.field('title', 'My title')
+			.expect(401)
+			.then(response => done())
+			.catch(err => done(err));
+		});
+
 		it('Should edit the post for testUser', done => {
 			const testUserPost = {
 				title: "Changed test user post title",
