@@ -56,6 +56,7 @@ class Chat extends Component{
 
     updateWhoChat(e){
         this.setState({selectValue: e.target.value})
+        document.getElementById('dropDown').key=e.target.value;
     }
 
     updateMessage(event){
@@ -73,10 +74,6 @@ class Chat extends Component{
     }
 
     getMessage(){
-
-      var objDiv = document.getElementById("div1");
-      objDiv.scrollTop = objDiv.scrollHeight;  
-
       if(this.state.displayName != null && this.state.selectValue != null){
           var docName;
         if(this.state.selectValue > this.state.displayName){
@@ -151,7 +148,7 @@ class Chat extends Component{
             
         )}</div>
 
-        const curUsers = <select id="dropDown" key={this.state.selectValue} onChange={this.updateWhoChat}>{dataUI.map((users, j) =>
+        const curUsers = <select id="dropDown" onChange={this.updateWhoChat}>{dataUI.map((users, j) =>
         <option key={users}>{users}</option>)}</select>
 
         return (
