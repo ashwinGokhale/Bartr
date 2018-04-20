@@ -22,15 +22,15 @@ class TradesPage extends Component {
         { this.props.open.buyer.length ? this.props.open.buyer.map((trade, i) => <TradeItem key={i} trade={trade} />) : <div>None</div> }
         <h2 className="tradePageTitles">Recieved Offers</h2>
         { this.props.open.seller.length ? this.props.open.seller.map((trade, i) => <TradeItem key={i} seller trade={trade} />) : <div>None</div> }
-        <h2 className="tradePageTitles">Your Accepted Trades</h2>
+        <h2 className="tradePageTitles">Trades You Accepted </h2>
         { this.props.accepted.buyer.length ? this.props.accepted.buyer.map((trade, i) => <TradeItem key={i} trade={trade} />) : <div>None</div> }
         <h2 className="tradePageTitles">Recieved Accepted Trades</h2>
         { this.props.accepted.seller.length ? this.props.accepted.seller.map((trade, i) => <TradeItem key={i} seller trade={trade} />) : <div>None</div> }
-        <h2 className="tradePageTitles">Your Closed Trades</h2>
+        <h2 className="tradePageTitles">Trades You Closed</h2>
         { this.props.closed.buyer.length ? this.props.closed.buyer.map((trade, i) => <TradeItem key={i} trade={trade} />) : <div>None</div> }
         <h2 className="tradePageTitles">Recieved Closed Trades</h2>
         { this.props.closed.seller.length ? this.props.closed.seller.map((trade, i) => <TradeItem key={i} seller trade={trade} />) : <div>None</div> }
-        <h3>Completed Trades:</h3>
+        <h2 className="tradePageTitles">Completed Trades</h2>
         { this.props.completed.length ? this.props.completed.map((trade, i) => <TradeItem key={i} seller trade={trade} />) : <div>None</div> }
       </div>
     );

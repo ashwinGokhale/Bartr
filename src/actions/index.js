@@ -422,8 +422,15 @@ export const closeTrade = (id) => async (dispatch, getState) => {
 		console.log('New accepted state:', newAccepted);
 
 		// Trade is in closed state
-		if (trade.seller.closed && trade.buyer.closed)
+		if (trade.seller.closed && trade.buyer.closed) {
+			const closed = getState().tradesState.closed;
+			const newClosed = {
+				buyer: closed.buyer.filter(offer => offer.id !== trade.id),
+				seller: closed.seller.filter(offer => offer.id !== trade.id)
+			};
+			dispatch(onSetClosedTrades(newClosed));
 			dispatch(onAddCompletedTrades(trade));
+		}
 		else 
 			dispatch(onAddClosedTrades(trade));
 		

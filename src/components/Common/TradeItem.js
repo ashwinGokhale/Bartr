@@ -46,7 +46,7 @@ class TradeItem extends Component {
 				{
 					((seller && !trade.seller.closed) || (!seller && !trade.buyer.closed)) &&
 					tradeType === 'ACCEPTED' &&
-					<input onClick={this.onSubmit} type="button" id="CLOSE" value="Close Trade" />
+					<input className="tradeButtons" onClick={this.onSubmit} type="button" id="CLOSE" value="Close Trade" />
 				}
 				<br/><hr/>
 			</div>
