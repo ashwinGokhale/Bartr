@@ -12,12 +12,6 @@ class Chat extends Component{
     constructor(props, context){
         super(props, context)
         let { dbUser } = this.props;
-        this.getMessage = this.getMessage.bind(this)
-        this.getAllUserNames = this.getAllUserNames.bind(this)
-        this.updateWhoChat = this.updateWhoChat.bind(this)
-        this.updateMessage = this.updateMessage.bind(this)
-        this.submitMessage = this.submitMessage.bind(this)
-        this.changeSelect = this.changeSelect.bind(this)
         this.state={
             messages: [],
             uname:'',
@@ -28,8 +22,18 @@ class Chat extends Component{
         }
     }
 
+    componentDidMount(){
+            console.log('component mounted');
+            this.getAllUserNames();
+            const { dbUser } = this.props;
+            this.setState({
+                displayName: dbUser.displayName
+            })
 
-    getAllUserNames(){
+            this.interval = setInterval(this.getMessage, 1000);
+    }
+
+    getAllUserNames = () => {
         var doc = firebase.firestore().collection("users")
         .get()
         .then(snapshot => {
@@ -42,30 +46,18 @@ class Chat extends Component{
         });
     }
 
-  
-    componentDidMount(){
-            console.log('component mounted');
-            this.getAllUserNames();
-            const { dbUser } = this.props;
-            this.setState({
-                displayName: dbUser.displayName
-            })
-
-            this.interval = setInterval(this.getMessage, 1000);
-    }
-
-    updateWhoChat(e){
+    updateWhoChat = (e) => {
         this.setState({selectValue: e.target.value})
         document.getElementById('dropDown').key=e.target.value;
     }
 
-    updateMessage(event){
+    updateMessage = (event) => {
         this.setState({
             myMessage: event.target.value
         })
     }
 
-    changeSelect(){
+    changeSelect = () => {
         console.log("Chat selected");
         this.setState({
             messages: []
@@ -73,7 +65,7 @@ class Chat extends Component{
         this.getMessage()
     }
 
-    getMessage(){
+    getMessage = () => {
       if(this.state.displayName != null && this.state.selectValue != null){
           var docName;
         if(this.state.selectValue > this.state.displayName){
@@ -102,7 +94,8 @@ class Chat extends Component{
     }
   }
 
-    submitMessage(name){
+    submitMessage = (name) => {
+        console.log('Submitting message');
         if(this.state.displayName != null && this.state.selectValue != null){
         var data = {
             displayName: this.state.displayName,
@@ -136,25 +129,24 @@ class Chat extends Component{
         const currentMessage = <div id="div1" className="scrollBox">{this.state.messages.map((message, i) =>
             {
                 if(message.toString().startsWith(this.state.displayName)){
-                    return <div className="container">
-                     <p key={i}>{message}</p>
+                    return <div key={i} className="container">
+                     <p >{message}</p>
                     </div>
                 }else{
-                    return <div className="container darker">
-                    <p key={i}>{message}</p>
+                    return <div key={i} className="container darker">
+                    <p >{message}</p>
                     </div>
                 }
             }
             
         )}</div>
 
-        const curUsers = <select id="dropDown" onChange={this.updateWhoChat}>{dataUI.map((users, j) =>
-        <option key={users}>{users}</option>)}</select>
-
         return (
             <div className="chatBoxFormat">
                 <h1>Chat App</h1>
-                {curUsers}
+                {<select id="dropDown" onChange={this.updateWhoChat}>
+                        {dataUI.map(users => <option key={users}>{users}</option>)}
+                </select>}
                 <button onClick={this.changeSelect}>Chat</ button>
                 <br />
                 {currentMessage}
