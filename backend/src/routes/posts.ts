@@ -25,8 +25,8 @@ const multer = Multer({
 
 // Get post by id
 router.get("/geo", async (req: utils.Req, res: utils.Res) => {
-	console.log('Geo Body:', req.body);
-	console.log('Lat:', req.body.lat ? req.body.lat : 'NONE');
+	// console.log('Geo Body:', req.body);
+	// console.log('Lat:', req.body.lat ? req.body.lat : 'NONE');
 	if (!req.query.radius) return utils.errorRes(res, 400, 'Query must have a Radius');
 	if (isNaN(req.query.radius)) return utils.errorRes(res, 400, 'Radius must be a number');
 	if (!req.query.lat) return utils.errorRes(res, 400, 'Query must have a Latitude');
@@ -48,12 +48,11 @@ router.get("/geo", async (req: utils.Req, res: utils.Res) => {
 // Get all posts by user
 router.get('/user/:uid', async (req: utils.Req, res: utils.Res) =>  {
 	try {
-		const resp = await firebase.firestore().collection('/posts')
-							.where('userId', '==', req.params.uid)
-							.where('state', '==', 'PENDING')
-							.get();
+		let query = firebase.firestore().collection('/posts').where('userId', '==', req.params.uid);
+		if (req.token.uid !== req.params.uid) query = query.where('state', '==', 'OPEN');
+		const resp = await query.get();
 		const data = resp.docs.map(doc => doc.data());
-		console.log('User Posts:', data);
+		// console.log('User Posts:', data);
 		return utils.successRes(res, data);
 	} catch (error) {
 		console.error('Error:', error);
@@ -174,7 +173,7 @@ router.post('/', multer.array('photos', 12), async (req: utils.Req, res: utils.R
 	if(!Array.isArray(req.body.tags))
 		req.body.tags = JSON.parse(req.body.tags);
 
-	console.log('Post body:', req.body);
+	// console.log('Post body:', req.body);
 	try {
 		// const tok = await utils.getIDToken(req.headers.token);
 		// if (!tok) return utils.errorRes(res, 401, 'Invalid token');

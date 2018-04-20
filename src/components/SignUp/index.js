@@ -22,7 +22,6 @@ class SignUpPage extends Component {
 const INITIAL_STATE = {
   displayName: '',
   email: '',
-  phoneNumber: '',
   passwordOne: '',
   passwordTwo: '',
   error: null,
@@ -36,7 +35,7 @@ class SignUpForm extends Component {
 
   onSubmit = async (event) => {
     event.preventDefault();
-    const { displayName, email, phoneNumber, passwordOne } = this.state;
+    const { displayName, email, passwordOne } = this.state;
     const { history } = this.props;
     try {
       const authUser = await auth.createUserWithEmailAndPassword(email, passwordOne);
@@ -46,8 +45,7 @@ class SignUpForm extends Component {
             uid: authUser.uid,
             displayName,
             photoUrl: authUser.photoURL || 'none',
-            email,
-            phoneNumber
+            email
         },
         token
       )
@@ -61,9 +59,9 @@ class SignUpForm extends Component {
   }
 
   render() {
-    const { displayName, email, phoneNumber, passwordOne, passwordTwo, error } = this.state;
+    const { displayName, email, passwordOne, passwordTwo, error } = this.state;
 
-    const isInvalid = passwordOne !== passwordTwo || passwordOne === '' || displayName === '' || phoneNumber === '' || email === '';
+    const isInvalid = passwordOne !== passwordTwo || passwordOne === '' || displayName === '' || email === '';
 
     return (
       <div className="signUpBackground">
@@ -86,14 +84,14 @@ class SignUpForm extends Component {
               type="email"
               placeholder="Email Address"
             />
-            <input
+            {/* <input
               className="textBoxReg"
               spellCheck="false"
               value={phoneNumber}
               onChange={event => this.setState({ phoneNumber: event.target.value })}
               type="tel"
               placeholder="Phone Number"
-            />
+            /> */}
             <input
               className="textBoxReg"
               value={passwordOne}
@@ -114,7 +112,7 @@ class SignUpForm extends Component {
               Sign Up
             </button>
           </div>
-          { error && <p>{error.message}</p> }
+          { error && <p className="signUpError">{error.message}</p> }
         </form>
       </div>
     );

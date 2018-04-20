@@ -11,7 +11,14 @@ h1 { font-size: 1.5em; margin: 10px; }
 
 .rating { 
   border: none;
-  float: left;
+  padding-left: 0.8vw;
+}
+
+fieldset.rating {
+  margin-left: 0;
+  position: relative;
+  bottom: 1vw;
+  right: 0.75vw;
 }
 
 .rating > input { display: none; } 
@@ -35,9 +42,199 @@ h1 { font-size: 1.5em; margin: 10px; }
 
 .rating > input:checked ~ label,
 .rating:not(:checked) > label:hover, 
-.rating:not(:checked) > label:hover ~ label { color: #FFD700;  } 
+.rating:not(:checked) > label:hover ~ label { color: rgb(163, 216, 195);  } 
 
 .rating > input:checked + label:hover, 
 .rating > input:checked ~ label:hover,
 .rating > label:hover ~ input:checked ~ label,  selection 
-.rating > input:checked ~ label:hover ~ label { color: #FFED85;  }
+.rating > input:checked ~ label:hover ~ label { color: rgb(163, 216, 195);  }
+
+.ratingTitle {
+  font-size: 1vw;
+  color: gray;
+  position: relative;
+  bottom: 1vh;
+  left: 4.5vw;
+  margin-bottom: 0;
+  margin-top: 3vh;
+}
+
+.postCardShiftDown {
+  position: absolute;
+  top: 60px;
+  bottom: 24px;
+  background-color: rgb(238, 237, 237) !important;
+  width: 100%;
+}
+
+.tradePage {
+  background-color: rgb(238, 237, 237);
+  width: 100%;
+  overflow-y: scroll;
+}
+
+.tradePageTop {
+  position: relative;
+  height: 70vh;
+  width: 50%;
+}
+
+.tradePageBottom {
+  position: absolute;
+  top: 60px;
+  width: 100%;
+  bottom: 34px;
+  overflow-y: scroll;
+}
+.postCardLeft {
+  height: 100%;
+  width: 60vw;
+  float: left;
+  background-color: rgb(238, 237, 237);
+}
+
+.postCardRight {
+  height: 100%;
+  width: 40vw;
+  float: left;
+  background-color: rgb(238, 237, 237);
+}
+
+.postCardPhotosColumn {
+  height: 88%;
+  margin-top: 7%;
+  width: 60%;
+  margin-left: 20%;
+  background-color: white;
+}
+
+.postCardInfoRow {
+  height: 87%;
+  margin-top: 5%;
+  width: 85%;
+  margin-left: 10%;
+  background-color: white;
+}
+
+.postCardSubmitRow {
+  height: 15%;
+  margin-top: 5%;
+  width: 100%;
+  margin-left: 0;
+  background-color: white;
+}
+
+.round {
+  border-radius: 0.5vw;
+}
+
+.postCardPhotosTitle {
+  padding-top: 8%;
+  height: 7%;
+  width: 100%;
+  border-bottom: rgb(94, 94, 94) 1px solid;
+}
+
+.centerTitle {
+  font-size: 2.5vw;
+  line-height: 2vw;
+  margin-left: 7.2vw;
+  color: rgb(94, 94, 94);
+}
+
+.postCardPhotosScroll {
+  height: 80%;
+  width:95%;
+  margin-top: 2%;
+  padding-left: 3%;
+  padding-top: 5%;
+  white-space: nowrap;
+  overflow-y: scroll;
+}
+
+.postCardSubmit {
+  float: right;
+  margin-right: 2vw;
+  width: 18%;
+  transform: translateY(-90%);
+  -webkit-transform: translateY(-90%);
+  color: white;
+  background-color: rgb(78, 138, 205);
+  border: white 1px solid;
+  border-radius: 0.25vw;
+  height: 4vh;
+  font-size: 1.25vw;
+}
+
+.centerImage {
+  transform: translateX(20%);
+  -webkit-transform: translateX(20%);
+  display: block;
+  border: gray solid 1.5px;
+  margin-bottom: 2vh;
+  border-radius: 0.5vw;
+}
+
+.offerTitle {
+  font-size: 2.2vw;
+  color: rgb(94, 94, 94);
+  transform: translateY(15%);
+  -webkit-transform: translateY(15%);
+}
+
+.offerDropDown {
+  margin-left: 17vw;
+  transform: translateY(-90%);
+  -webkit-transform: translateY(-90%);
+  height: 3.75vh;
+  width: 20vw;
+  font-size: 1.25vw;
+  color: white;
+  background-color: rgb(196, 196, 196);
+  border-radius: 0.25vw;
+}
+
+.offerDropDown:focus {
+  outline: none;
+}
+
+.postCardTitles {
+  font-size: 2vw;
+  color: rgb(69, 89, 112);
+  margin-top: 1.5vh;
+  text-decoration: underline;
+}
+
+.makeOfferShiftDown {
+  margin-top: 8vh;
+}
+
+.tradePageTitles {
+  color:rgb(50, 63, 78);
+  margin-bottom: 0;
+  font-size: 2vw;
+}
+
+.tradeFor {
+  height: 4vh;
+  width: 100%;
+  text-align: center;
+}
+
+.tradeForBetween {
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  font-size: 2vw;
+  color: rgb(104, 104, 104);
+}
+
+.tradeButtons {
+  color: white;
+  background-color: rgb(78, 138, 205);
+  border: white solid 0.1vw;
+  border-radius: 0.3vw;
+  height: 5.5%;
+  width: 15%;
+  margin-left: 25%;
+  margin-bottom: 1%;
+}

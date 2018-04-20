@@ -7,8 +7,7 @@ export const router = express.Router();
     4 Possible states for trades:
         1.  OPEN
         2.  ACCEPTED
-        3.  REJECTED
-        4.  CLOSED
+        3.  CLOSED
 
     3 Possible states for posts
         1.  OPEN
@@ -18,13 +17,16 @@ export const router = express.Router();
     seller: ID of post that is receiving an offer
     buyer:  ID of post that is initiating the offer
 
-    1.  Transaction is created w/ both user's IDs and state of PENDING
+    1.  Trade is created w/ both user's IDs and state of PENDING
 */
-router.post('/:seller_:buyer', async (req: utils.Req, res: utils.Res) => {
-    const [sellerPost, buyerPost, trans] = await Promise.all([
+router.post('/:seller-:buyer', async (req: utils.Req, res: utils.Res) => {
+    console.log('Seller ID:', req.params.seller);
+    console.log('Buyer ID:', req.params.buyer);
+    const [sellerPost, buyerPost, trans, existingTrans] = await Promise.all([
         firebase.firestore().doc(`/posts/${req.params.seller}`).get(),
         firebase.firestore().doc(`/posts/${req.params.buyer}`).get(),
-        firebase.firestore().doc(`/trades/${req.params.seller}_${req.params.buyer}`).get()
+        firebase.firestore().doc(`/trades/${req.params.seller}_${req.params.buyer}`).get(),
+        firebase.firestore().doc(`/trades/${req.params.buyer}_${req.params.seller}`).get()
     ]);
 
     if (!sellerPost.exists) return utils.errorRes(res, 400, `Post: ${req.params.seller} does not exist`);
@@ -36,7 +38,29 @@ router.post('/:seller_:buyer', async (req: utils.Req, res: utils.Res) => {
 
     if (sellerPost.data().userId === buyerPost.data().userId) return utils.errorRes(res, 400, 'Cannot make offer on your own post');
 
-    const newTransaction = {
+    if (existingTrans.exists) {
+        console.log('Existing trade already exists. Accepting the offer');
+        // Update the states to accepted
+        const batchUpdate = firebase.firestore().batch();
+        batchUpdate.update(existingTrans.ref, 'state', 'ACCEPTED');
+        batchUpdate.update(sellerPost.ref, 'state', 'PENDING');
+        batchUpdate.update(buyerPost.ref, 'state', 'PENDING');
+        await batchUpdate.commit();
+
+        // Batch delete all other trade on this post
+        const batchDelete = firebase.firestore().batch();
+        const trades = await firebase.firestore().collection('/trades')
+                                    .where('state', '==', 'OPEN')
+                                    .where('seller.postId', '==', existingTrans.data().seller.postId)
+                                    .get();
+
+        trades.forEach(trade => batchDelete.delete(trade.ref));
+        const del = await batchDelete.commit();
+
+        return utils.successRes(res, existingTrans.data());
+    }
+
+    const newTrade = {
         id: `${req.params.seller}_${req.params.buyer}`,
         seller: {
             postId: req.params.seller,
@@ -48,23 +72,25 @@ router.post('/:seller_:buyer', async (req: utils.Req, res: utils.Res) => {
             postId: req.params.buyer,
             userId: req.token.uid,
             post: buyerPost.data(),
-            cloased: false
+            closed: false
         },
-        state: 'PENDING',
+        state: 'OPEN',
         createdAt: new Date(),
     };
 
-    trans.ref.set(newTransaction);
-    return utils.successRes(res, newTransaction);
+    await trans.ref.set(newTrade);
+    return utils.successRes(res, newTrade);
 })
 
 
 /**
  * id:  ID of trade
  * 
+ * Only seller can accept an offer
+ * 
  * Offer is accepted
  * 1.   Both posts' statuses are changed to ACCEPTED
- * 2.   Transaction record status is changed to ACCEPTED
+ * 2.   Trade record status is changed to ACCEPTED
  */
 router.post('/accept/:id', async (req: utils.Req, res: utils.Res) => {
     const [sellerPostId, buyerPostId] = req.params.id.split('_');
@@ -74,7 +100,7 @@ router.post('/accept/:id', async (req: utils.Req, res: utils.Res) => {
         firebase.firestore().doc(`/posts/${buyerPostId}`).get()
     ]);
 
-    if (!trade.exists) return utils.errorRes(res, 400, 'Transaction no longer exists');
+    if (!trade.exists) return utils.errorRes(res, 400, 'Trade no longer exists');
     if (!sellerPost.exists) return utils.errorRes(res, 400, `Post: ${sellerPostId} does not exist`);
     if (!buyerPost.exists) return utils.errorRes(res, 400, `Post: ${buyerPostId} does not exist`);
 
@@ -85,6 +111,8 @@ router.post('/accept/:id', async (req: utils.Req, res: utils.Res) => {
         trade.data().seller.userId !== sellerPost.data().userId && 
         trade.data().buyer.userId !== buyerPost.data().userId
     ) return utils.errorRes(res, 401, 'Unauthorized');
+
+    if (sellerPost.data().userId !== req.token.uid) return utils.errorRes(res, 401, 'Unauthorized to accept offer');
 
     // Update the states to accepted
     const batchUpdate = firebase.firestore().batch();
@@ -97,32 +125,40 @@ router.post('/accept/:id', async (req: utils.Req, res: utils.Res) => {
     const batchDelete = firebase.firestore().batch();
     const trades = await firebase.firestore().collection('/trades')
                                 .where('state', '==', 'OPEN')
-                                .where('seller.userId', '<', sellerPostId)
-                                .where('seller.userId', '>', sellerPostId)
+                                .where('seller.postId', '==', sellerPostId)
                                 .get();
 
     trades.forEach(trade => batchDelete.delete(trade.ref));
-    await batchDelete.commit();
+    const del = await batchDelete.commit();
+    console.log('Deleted:', del.length, 'Trades');
 
-    return utils.successRes(res, `Transaction: ${req.params.id} -- ACCEPTED`);
+    return utils.successRes(res, (await trade.ref.get()).data());
 });
 
 /**
  * Offer is rejected
- * 1.   Transaction record is deleted
+ * 1.   Trade record is deleted
  */
 router.post('/reject/:id', async (req: utils.Req, res: utils.Res) => {
-    const trade = await firebase.firestore().doc(`/trades/${req.params.id}`).get();
+    const [, buyerId] = req.params.id.split('_');
+    const [trade, buyerPost] = await Promise.all([
+        firebase.firestore().doc(`/trades/${req.params.id}`).get(),
+        firebase.firestore().doc(`/posts/${buyerId}`).get()
+    ]);
+    
     if (!trade.exists) return utils.errorRes(res, 400, 'Offer does not exist');
 
-    await trade.ref.update('state', 'REJECTED');
+    const data = trade.data();
+    await Promise.all([
+        trade.ref.delete(),
+        buyerPost.exists ? buyerPost.ref.update('state', 'OPEN') : null
+    ]);
 
-    return utils.successRes(res, `Transaction: ${req.params.id} -- REJECTED`);
+    return utils.successRes(res, data);
 });
 
-
 /**
- * Transaction is completed
+ * Trade is completed
  */
 router.post('/close/:id', async (req: utils.Req, res: utils.Res) => {
     const [sellerPostId, buyerPostId] = req.params.id.split('_');
@@ -132,7 +168,7 @@ router.post('/close/:id', async (req: utils.Req, res: utils.Res) => {
         firebase.firestore().doc(`/posts/${buyerPostId}`).get()
     ]);
 
-    if (!trade.exists) return utils.errorRes(res, 400, 'Transaction no longer exists');
+    if (!trade.exists) return utils.errorRes(res, 400, 'Trade no longer exists');
     if (!sellerPost.exists) return utils.errorRes(res, 400, `Post: ${sellerPostId} does not exist`);
     if (!buyerPost.exists) return utils.errorRes(res, 400, `Post: ${buyerPostId} does not exist`);
 
@@ -164,12 +200,62 @@ router.post('/close/:id', async (req: utils.Req, res: utils.Res) => {
 
     await batchUpdate.commit();
 
-    return utils.successRes(res, `Transaction: ${req.params.id} -- COMPLETED`);
+    return utils.successRes(res, `Trade: ${req.params.id} -- COMPLETED`);
 });
 
-router.get('/pending', async (req: utils.Req, res: utils.Res) => {
+router.get('/', async (req: utils.Req, res: utils.Res) => {
     try {
-        return utils.successRes(res, await utils.getTransactions('PENDING', req.token.uid, req.query.buyer === 'true'));
+        const [sellerOpen, sellerAccepted, sellerClosed, sellerCompleted, buyerOpen, buyerAccepted, buyerClosed, buyerCompleted] = await Promise.all([
+            utils.getTrades('OPEN', req.token.uid, false),
+            utils.getTrades('ACCEPTED', req.token.uid, false),
+            firebase.firestore().collection('/trades')
+                .where('seller.closed', '==', true)
+                .get(),
+            utils.getTrades('CLOSED', req.token.uid, false),
+
+            utils.getTrades('OPEN', req.token.uid, true),
+            utils.getTrades('ACCEPTED', req.token.uid, true),
+            firebase.firestore().collection('/trades')
+                .where('buyer.closed', '==', true)
+                .get(),
+            utils.getTrades('CLOSED', req.token.uid, true)
+        ]);
+
+        // const [buyerOpen, buyerAccepted, buyerClosed] = await Promise.all([
+        //     utils.getTrades('OPEN', req.token.uid, true),
+        //     utils.getTrades('ACCEPTED', req.token.uid, true),
+        //     firebase.firestore().collection('/trades')
+        //         .where('buyer.closed', '==', true)
+        //         .get()
+        //     // utils.getTrades('CLOSED', req.token.uid, true)
+        // ]);
+
+        const trades = {
+            open: {
+                seller: sellerOpen,
+                buyer: buyerOpen
+            },
+            accepted: {
+                seller: sellerAccepted,
+                buyer: buyerAccepted
+            },
+            closed: {
+                seller: sellerClosed.docs.map(doc => doc.data()),
+                buyer: buyerClosed.docs.map(doc => doc.data())
+            },
+            completed: sellerCompleted.concat(buyerCompleted)
+        };
+
+        return utils.successRes(res, trades);
+        
+    } catch (error) {
+        return utils.errorRes(res, 500, error);
+    }
+})
+
+router.get('/open', async (req: utils.Req, res: utils.Res) => {
+    try {
+        return utils.successRes(res, await utils.getTrades('OPEN', req.token.uid, req.query.buyer === 'true'));
     } catch (error) {
         return utils.errorRes(res, 500, error);
     }
@@ -177,15 +263,7 @@ router.get('/pending', async (req: utils.Req, res: utils.Res) => {
 
 router.get('/accepted', async (req: utils.Req, res: utils.Res) => {
     try {
-        return utils.successRes(res, await utils.getTransactions('ACCEPTED', req.token.uid, req.query.buyer === 'true'));
-    } catch (error) {
-        return utils.errorRes(res, 500, error);
-    }
-});
-
-router.get('/rejected', async (req: utils.Req, res: utils.Res) => {
-    try {
-        return utils.successRes(res, await utils.getTransactions('REJECTED', req.token.uid, req.query.buyer === 'true'));
+        return utils.successRes(res, await utils.getTrades('ACCEPTED', req.token.uid, req.query.buyer === 'true'));
     } catch (error) {
         return utils.errorRes(res, 500, error);
     }
@@ -193,7 +271,7 @@ router.get('/rejected', async (req: utils.Req, res: utils.Res) => {
 
 router.get('/closed', async (req: utils.Req, res: utils.Res) => {
     try {
-        return utils.successRes(res, await utils.getTransactions('CLOSED', req.token.uid, req.query.buyer === 'true'));
+        return utils.successRes(res, await utils.getTrades('CLOSED', req.token.uid, req.query.buyer === 'true'));
     } catch (error) {
         return utils.errorRes(res, 500, error);
     }

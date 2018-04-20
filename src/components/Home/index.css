@@ -186,7 +186,12 @@ h4 {
 .listingTitle {
     font-size: 1.4vmax;
     overflow-x: hidden;
-    margin-right: 3vw;
+    margin-right: 7vw;
+    color: white;
+}
+
+a {
+    text-decoration-color: white;
 }
 
 .floatRight {

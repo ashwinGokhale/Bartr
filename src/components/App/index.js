@@ -18,8 +18,9 @@ import Chat from '../Chat';
 import AccountPage from '../Account';
 import SettingsPage from '../Settings';
 import CreatePostPage from '../CreatePost';
+import EditPostPage from '../EditPost';
 import DisplayPostsPage from '../DisplayPosts';
-import OffersPage from '../OffersPage';
+import TradesPage from '../TradesPage';
 import SupportPage from '../Support';
 import TermsPage from '../Terms';
 import AboutUsPage from '../AboutUs';
@@ -51,19 +52,23 @@ const App = () =>
           <Route exact path={routes.SETTINGS} component={SettingsPage} />
           <Route exact path={routes.CHAT} component={Chat} />
           <Route exact path={routes.CREATE_POST} component={CreatePostPage} />
+<<<<<<< HEAD
           <Route exact path={routes.VERIFICATION_PAGE} component={VerificationPage} />
+=======
+          <Route exact path={routes.EDIT_POST} component={EditPostPage} />
+>>>>>>> 80b61850b8fcd7282c1675248e7f6b20bf2a9690
           <Route exact path={routes.DISPLAY_POSTS} component={DisplayPostsPage} />
           <Route exact path={routes.SUPPORT} component={SupportPage} />
           <Route exact path={routes.TERMS} component={TermsPage} />
           <Route exact path={routes.ABOUTUS} component={AboutUsPage} />
           <Route exact path={routes.USER} component={UserPage} />
           <Route exact path={routes.POST} component={PostPage} />
-          <Route exact path={routes.OFFERS} component={OffersPage} />
+          <Route exact path={routes.TRADES} component={TradesPage} />
           <Route component={NoMatch} />
         </Switch>
         <hr/>
       </div>
-      <Footer/>
+      {<Footer/>}
     </div>
   </Router>
 

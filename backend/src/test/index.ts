@@ -12,7 +12,7 @@ const algolia = algoliasearch(
 );
 const index = algolia.initIndex('posts');
 
-const ENDPOINT = 'http://localhost:5000/api';
+const ENDPOINT = 'http://localhost:4000/api';
 const assert = chai.assert;
 const should = chai.should;
 const expect = chai.expect;
@@ -38,12 +38,8 @@ describe('-- API Tests --', () => {
 		try {
 			user = await firebase.auth().signInWithEmailAndPassword('apitests@tests.com','tests123');
 			token = await user.getIdToken(true);
-			testUser = await firebase.auth().createUserWithEmailAndPassword('apiuserstests@tests.com','tests123');	
-			testToken = await testUser.getIdToken(true);
-			// console.log('User:', user);
-			// console.log('Token:', token);
-			// console.log('Test User:', testUser);
-			// console.log('Test Token:', testToken);
+			// testUser = await firebase.auth().createUserWithEmailAndPassword('apiuserstests@tests.com','tests123');	
+			// testToken = await testUser.getIdToken(true);
 
 		} catch (error) {
 			console.error(error);
@@ -126,6 +122,21 @@ describe('-- API Tests --', () => {
 			});
 
 			
+		});
+
+		describe('Endpoint: /trades', () => {
+			it('Should test /trades/some-thing', done => {
+				api
+				.post('/trades/some-thing')
+				.set({token})
+				.expect(400, done);
+			});
+
+			it('Should 401 Unauthorized', done => {
+				api
+				.post('/trades/some-thing')
+				.expect(401, done);
+			});
 		});
 	});
 

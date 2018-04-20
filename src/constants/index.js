@@ -9,12 +9,14 @@ export const CHAT = '/chat';
 export const CREATE_POST = '/post/create';
 export const VERIFICATION_PAGE = '/verify';
 export const DISPLAY_POSTS = '/posts';
-export const OFFERS = '/offers';
+export const TRADES = '/trades';
 export const SUPPORT = '/support';
 export const TERMS = '/terms';
 export const ABOUTUS = '/aboutUs';
 export const USER = '/user/:id';
 export const POST = '/post/:id';
+export const EDIT_POST = '/post/edit';
+
 
 export default {
 	LANDING,
@@ -31,4 +33,5 @@ export default {
 	SUPPORT,
 	TERMS,
 	ABOUTUS,
+	EDIT_POST,
 }
