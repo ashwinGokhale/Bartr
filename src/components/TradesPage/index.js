@@ -18,7 +18,7 @@ class TradesPage extends Component {
     console.log('Trades Page props', this.props);
     return (
       <div className="tradePage tradePageBottom">
-        <h2 style={{'margin': '0', 'color':'rgb(50, 63, 78)', 'font-size': '2vw'}}>Sent Offers</h2>
+        <h2 style={{'margin': '0', 'color':'rgb(50, 63, 78)', 'fontSize': '2vw'}}>Sent Offers</h2>
         { this.props.open.buyer.length ? this.props.open.buyer.map((trade, i) => <TradeItem key={i} trade={trade} />) : <div>None</div> }
         <h2 className="tradePageTitles">Recieved Offers</h2>
         { this.props.open.seller.length ? this.props.open.seller.map((trade, i) => <TradeItem key={i} seller trade={trade} />) : <div>None</div> }
@@ -31,7 +31,7 @@ class TradesPage extends Component {
         <h2 className="tradePageTitles">Recieved Closed Trades</h2>
         { this.props.closed.seller.length ? this.props.closed.seller.map((trade, i) => <TradeItem key={i} seller trade={trade} />) : <div>None</div> }
         <h3>Completed Trades:</h3>
-        { this.props.completed.length ? this.props.completed.seller.map((trade, i) => <TradeItem key={i} seller trade={trade} />) : <div>None</div> }
+        { this.props.completed.length ? this.props.completed.map((trade, i) => <TradeItem key={i} seller trade={trade} />) : <div>None</div> }
       </div>
     );
   }

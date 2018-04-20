@@ -63,7 +63,7 @@ class PostCard extends Component {
                         { !!this.state.error ? <p className="warning" style={{'color': 'red'}}>ERROR: {this.state.error}</p> : null }  
 
                         {
-                            !self &&
+                            !self && post.state === 'OPEN' &&
                             <div className="makeOfferShiftDown">
                                 <h3 className="floatLeft offerTitle" >Make an Offer:</h3>
                                 <select className="floatLeft offerDropDown"onChange={e => this.setState({postId: e.target.value})}>
