@@ -33,6 +33,9 @@ describe('-- API Tests --', () => {
 	let token;
 	let testUser: firebase.User;
 	let testToken;
+	let postId: string;
+	let postIdTwo: string;
+	let trade;
 
 	before(async() => {
 		try {
@@ -158,121 +161,6 @@ describe('-- API Tests --', () => {
 		});
 	});
 
-	describe('\n-- Test /posts  --', () => {
-		let postId: string;
-		it('Should create a post', done => {
-			const testPost = {
-				title: "Unit test",
-				description: 'Unit test',
-				type: 'good',
-				tags: ["unit", "test"],
-				_geoloc: { lat: 40, lng: -40 },
-				address: '305 N University St, West Lafayette, IN 47907',
-			};
-
-			api
-			.post('/posts')
-			.set({token})
-			.field('title', testPost.title)
-			.field('description', testPost.description)
-			.field('type', testPost.type)
-			.field('address', testPost.address)
-			.field('tags', testPost.tags)
-			.attach('photos', '../src/assets/bartrLogo.png')
-			.expect(200)
-			.then(response => {
-				const data = response.body.responseData;
-				assert.property(data, 'photoUrls');
-				assert.property(data, 'title');
-				assert.property(data, 'description');
-				assert.property(data, 'tags');
-				assert.property(data, 'state');
-				assert.property(data, 'type');
-				assert.property(data, 'tags');
-				assert.property(data, 'userId');
-				assert.property(data, 'postId');
-				assert.property(data, 'createdAt');
-				assert.property(data, 'lastModified');
-				assert.property(data, '_geoloc');
-				assert.propertyVal(data, 'title', testPost.title);
-				assert.propertyVal(data, 'description', testPost.description);
-				assert.propertyVal(data, 'type', testPost.type);
-				expect(data.tags).to.deep.equal(testPost.tags);
-				postId = data.postId;
-				done();
-			})
-			.catch(err => done(err));
-		});
-
-		it('Should query posts', done => {
-			api
-			.get('/posts/geo')
-			.query({
-				radius: 25000,
-				lat: 40.4242796,
-				lng: -86.9293319
-			})
-			.set({token})
-			.expect(200)
-			.then(response => {
-				const data: object[] = response.body.responseData;
-				assert.typeOf(data, 'array', 'Response data is an array');
-				data.forEach(post => {
-					assert.property(post, 'photoUrls');
-					assert.property(post, 'title');
-					assert.property(post, 'description');
-					assert.property(post, 'tags');
-					assert.property(post, 'state');
-					assert.property(post, 'tags');
-					assert.property(post, 'userId');
-					assert.property(post, 'postId');
-					assert.property(post, 'createdAt');
-					assert.property(post, 'lastModified');
-					assert.property(post, '_geoloc');
-				});
-				done();
-			})
-			.catch(error => done(error));
-		});
-
-		it('Should fail to delete another user\'s post', done => {
-			assert.isNotNull(postId, 'Post ID');
-			api
-			.delete(`/posts/${postId}`)
-			.set({token:testToken})
-			.expect(401)
-			.then(response => {
-				assert.propertyVal(response.body, 'error', 'Unauthorized');
-				done();
-			})
-			.catch(err => done(err));
-		});
-
-		it('Should delete a post', done => {
-			assert.isNotNull(postId, 'Post ID');
-			api
-			.delete(`/posts/${postId}`)
-			.set({token})
-			.expect(200)
-			.then(response => {
-				const data = response.body.responseData;
-				assert.property(data, 'photoUrls');
-				assert.property(data, 'title');
-				assert.property(data, 'description');
-				assert.property(data, 'tags');
-				assert.property(data, 'state');
-				assert.property(data, 'userId');
-				assert.property(data, 'postId');
-				assert.property(data, 'createdAt');
-				assert.property(data, 'lastModified');
-				assert.property(data, '_geoloc');
-				done();
-			})
-			.catch(err => done(err));
-		});
-	});
-
-
 	describe('\n-- Test /users --', () => {
 		it('Should create the user', done => {
 			api
@@ -336,29 +224,143 @@ describe('-- API Tests --', () => {
 			})
 			.catch(err => done(err));
 		});
+	});
 
-		it('Should delete the user', done => {
+	describe('\n-- Test /posts  --', () => {
+		it('Should create a post for user', done => {
+			const testPost = {
+				title: "Unit test",
+				description: 'Unit test',
+				type: 'good',
+				tags: ["unit", "test"],
+				_geoloc: { lat: 40, lng: -40 },
+				address: '305 N University St, West Lafayette, IN 47907',
+			};
+
 			api
-			.delete(`/users/${testUser.uid}`)
-			.set({token:testToken})
+			.post('/posts')
+			.set({token})
+			.field('title', testPost.title)
+			.field('description', testPost.description)
+			.field('type', testPost.type)
+			.field('address', testPost.address)
+			.field('tags', testPost.tags)
+			.attach('photos', '../src/assets/bartrLogo.png')
 			.expect(200)
 			.then(response => {
 				const data = response.body.responseData;
-				assert.property(data, 'contactInfo');
-				assert.property(data, 'displayName');
-				assert.property(data, 'lat');
-				assert.property(data, 'lng');
-				assert.property(data, 'radius');
-				assert.property(data, 'photoUrl');
-				assert.property(data, 'uid');
-				assert.propertyVal(data, 'uid', testUser.uid);
+				assert.property(data, 'photoUrls');
+				assert.property(data, 'title');
+				assert.property(data, 'description');
+				assert.property(data, 'tags');
+				assert.property(data, 'state');
+				assert.property(data, 'type');
+				assert.property(data, 'tags');
+				assert.property(data, 'userId');
+				assert.property(data, 'postId');
+				assert.property(data, 'createdAt');
+				assert.property(data, 'lastModified');
+				assert.property(data, '_geoloc');
+				assert.propertyVal(data, 'title', testPost.title);
+				assert.propertyVal(data, 'description', testPost.description);
+				assert.propertyVal(data, 'type', testPost.type);
+				expect(data.tags).to.deep.equal(testPost.tags);
+				postId = data.postId;
+				done();
+			})
+			.catch(err => done(err));
+		});
+
+		it('Should create a post for testUser', done => {
+			const testUserPost = {
+				title: "Test User Unit Test",
+				description: 'Test User Unit Test',
+				type: 'good',
+				tags: ['Test',  'User', 'Unit', 'Test'],
+				_geoloc: { lat: 40, lng: -40 },
+				address: '305 N University St, West Lafayette, IN 47907',
+			};
+
+			api
+			.post('/posts')
+			.set({token: testToken})
+			.field('title', testUserPost.title)
+			.field('description', testUserPost.description)
+			.field('type', testUserPost.type)
+			.field('address', testUserPost.address)
+			.field('tags', testUserPost.tags)
+			.attach('photos', '../src/assets/bartrLogo.png')
+			.expect(200)
+			.then(response => {
+				const data = response.body.responseData;
+				assert.property(data, 'photoUrls');
+				assert.property(data, 'title');
+				assert.property(data, 'description');
+				assert.property(data, 'tags');
+				assert.property(data, 'state');
+				assert.property(data, 'type');
+				assert.property(data, 'tags');
+				assert.property(data, 'userId');
+				assert.property(data, 'postId');
+				assert.property(data, 'createdAt');
+				assert.property(data, 'lastModified');
+				assert.property(data, '_geoloc');
+				assert.propertyVal(data, 'title', testUserPost.title);
+				assert.propertyVal(data, 'description', testUserPost.description);
+				assert.propertyVal(data, 'type', testUserPost.type);
+				expect(data.tags).to.deep.equal(testUserPost.tags);
+				postIdTwo = data.postId;
+				done();
+			})
+			.catch(err => done(err));
+		});
+
+		it('Should query posts', done => {
+			api
+			.get('/posts/geo')
+			.query({
+				radius: 25000,
+				lat: 40.4242796,
+				lng: -86.9293319
+			})
+			.set({token})
+			.expect(200)
+			.then(response => {
+				const data: object[] = response.body.responseData;
+				assert.typeOf(data, 'array', 'Response data is an array');
+				data.forEach(post => {
+					assert.property(post, 'photoUrls');
+					assert.property(post, 'title');
+					assert.property(post, 'description');
+					assert.property(post, 'tags');
+					assert.property(post, 'state');
+					assert.property(post, 'tags');
+					assert.property(post, 'userId');
+					assert.property(post, 'postId');
+					assert.property(post, 'createdAt');
+					assert.property(post, 'lastModified');
+					assert.property(post, '_geoloc');
+				});
+				done();
+			})
+			.catch(error => done(error));
+		});
+
+		it('Should fail to delete another user\'s post', done => {
+			assert.isNotNull(postId, 'Post ID');
+			api
+			.delete(`/posts/${postId}`)
+			.set({token:testToken})
+			.expect(401)
+			.then(response => {
+				assert.propertyVal(response.body, 'error', 'Unauthorized');
 				done();
 			})
 			.catch(err => done(err));
 		});
 	});
 
-	describe("\n\n\n--Test Algolia Queries--\n", () => {
+	describe("\n--Test Algolia Queries--\n", () => {
 		const algoliaPost = {
 			tags: ["unit", "test"],
 			title: "Unit test",
@@ -420,4 +422,182 @@ describe('-- API Tests --', () => {
 			.catch(err => done(err));
 		});
 	});
+
+	describe('\n-- Test /ratings  --\n', () => {
+		let originalRating: number;
+		it('Should rate another user', done => {
+			api
+			.post('/ratings')
+			.set({token})
+			.send({
+				userID: testUser.uid,
+				raterID: user.uid,
+				value: 5
+			})
+			.expect(200)
+			.then(res => {
+				originalRating = res.body.responseData.value;
+				done();
+			})
+			.catch(error => {
+				console.error(error);
+				done();
+			});
+		});
+
+		it('Should rate change the ratings for another user', done => {
+			api
+			.post('/ratings')
+			.set({token})
+			.send({
+				userID: testUser.uid,
+				raterID: user.uid,
+				value: 3
+			})
+			.expect(200)
+			.then(res => {
+				assert.notEqual(res.body.responseData.value, originalRating);
+				done();
+			})
+			.catch(error => {
+				console.error(error);
+				done();
+			});
+		});
+	});
+
+	describe('\n -- Trades Tests -- \n', () => {
+		it('Should make an offer on testUser post', done => {
+			api
+			.post(`/trades/${postIdTwo}-${postId}`)
+			.set({token})
+			.expect(200)
+			.then(res => {
+				console.log(res.body.responseData);
+				trade = res.body.responseData;
+				done();
+			})
+			.catch(error => {
+				console.error(error);
+				done();
+			});
+		});
+
+		it('Should accept offer on testUser post', done => {
+			api
+			.post(`/trades/accept/${trade.id}`)
+			.set({token: testToken})
+			.expect(200)
+			.then(res => {
+				console.log(res.body.responseData);
+				trade = res.body.responseData;
+				done();
+			})
+			.catch(error => {
+				console.error(error);
+				done();
+			});
+		});
+
+		it('Should close offer on user side', done => {
+			api
+			.post(`/trades/close/${trade.id}`)
+			.set({token})
+			.expect(200)
+			.then(res => {
+				console.log(res.body.responseData);
+				trade = res.body.responseData;
+				done();
+			})
+			.catch(error => {
+				console.error(error);
+				done();
+			});
+		});
+
+		it('Should close offer on testUser side', done => {
+			api
+			.post(`/trades/close/${trade.id}`)
+			.set({token: testToken})
+			.expect(200)
+			.then(res => {
+				console.log(res.body.responseData);
+				trade = res.body.responseData;
+				done();
+			})
+			.catch(error => {
+				console.error(error);
+				done();
+			});
+		});
+	})
+
+	after(() => {
+		describe('\n -- Clean up Tests -- \n', () => {
+			it('Should delete a post for user', done => {
+				assert.isNotNull(postId, 'Post ID');
+				api
+				.delete(`/posts/${postId}`)
+				.set({token})
+				.expect(200)
+				.then(response => {
+					const data = response.body.responseData;
+					assert.property(data, 'photoUrls');
+					assert.property(data, 'title');
+					assert.property(data, 'description');
+					assert.property(data, 'tags');
+					assert.property(data, 'state');
+					assert.property(data, 'userId');
+					assert.property(data, 'postId');
+					assert.property(data, 'createdAt');
+					assert.property(data, 'lastModified');
+					assert.property(data, '_geoloc');
+					done();
+				})
+				.catch(err => done(err));
+			});
+	
+			it('Should delete a post for testUser', done => {
+				assert.isNotNull(postIdTwo, 'Post ID');
+				api
+				.delete(`/posts/${postIdTwo}`)
+				.set({token: testToken})
+				.then(response => {
+					const data = response.body.responseData;
+					assert.property(data, 'photoUrls');
+					assert.property(data, 'title');
+					assert.property(data, 'description');
+					assert.property(data, 'tags');
+					assert.property(data, 'state');
+					assert.property(data, 'userId');
+					assert.property(data, 'postId');
+					assert.property(data, 'createdAt');
+					assert.property(data, 'lastModified');
+					assert.property(data, '_geoloc');
+					done();
+				})
+				.catch(err => done(err));
+			});
+	
+			it('Should delete the user', done => {
+				api
+				.delete(`/users/${testUser.uid}`)
+				.set({token:testToken})
+				.expect(200)
+				.then(response => {
+					const data = response.body.responseData;
+					assert.property(data, 'contactInfo');
+					assert.property(data, 'displayName');
+					assert.property(data, 'lat');
+					assert.property(data, 'lng');
+					assert.property(data, 'radius');
+					assert.property(data, 'photoUrl');
+					assert.property(data, 'uid');
+					assert.propertyVal(data, 'uid', testUser.uid);
+					done();
+				})
+				.catch(err => done(err));
+			});
+		});
+	})
 });

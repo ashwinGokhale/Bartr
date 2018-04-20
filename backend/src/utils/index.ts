@@ -122,7 +122,10 @@ export const getIDToken = async (userToken) => {
 export const authorized = async (req: Req, res: Res, next) => {
 	const userToken: string = req.headers.token as string;
 	const token = await getIDToken(userToken);
-	if (!userToken || !token) return errorRes(res, 401, 'Unauthorized');
+	if (!token) {
+		console.log('Request:\n\tBody:', req.body, '\n\tHeaders:', req.headers, '\n\tHad no token');
+		return errorRes(res, 401, 'Unauthorized');
+	}
 	req.token = token;
 	return next();
 };
