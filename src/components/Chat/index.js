@@ -8,7 +8,7 @@ import { fetchDBUser } from '../../actions';
 import './chat.css'
 
 class Chat extends Component{
-
+    //constructor
     constructor(props, context){
         super(props, context)
         let { dbUser } = this.props;

@@ -1,14 +1,6 @@
 .chatBoxFormat {
-    top: 10vh;
-    bottom: 9vh;
-    left: 30%;
-    right: 30%;
-    background: rgba(0, 0, 0, 0.5);
-    color: #fff;
     position: absolute;
-    box-sizing: border-box;
-    border-radius: 1em 1em 1em 1em;
-    padding: 6vh 1vw 0vh 1vw;
+    top: 60px;
 }
 
 .container {
@@ -23,8 +15,8 @@
 
 .scrollBox {
     overflow: auto; 
-    width:80%; 
-    height:50%;
+    width:500px; 
+    height:500px;
 }
 
 /* Darker chat container */
@@ -66,45 +58,4 @@
 .time-left {
     float: left;
     color: #999;
-}
-
-.centerChatHeader {
-    text-align: center;
-}
-
-.centerChatButton {
-    text-align: center;
-    font-size: 1.1vw;
-    border: 0.0em solid white;
-    border-radius: 0.75em;
-    background-color:  rgb(78, 138, 205);
-    color: white;
-    padding: 0.4em 1em;
-    outline: 0;
-    height: 5vh;
-    width: 15vw;
-    margin-bottom: 6em;
-}
-
-.chatSelect {
-    text-align: center;
-    font-size: 1.1vw;
-    border: 0.0em solid white;
-    border-radius: 0.75em;
-    background-color:  rgb(78, 138, 205);
-    color: white;
-    padding: 0.4em 1em;
-    outline: 0;
-    height: 3vh;
-    width: 5vw;
-    margin-bottom: 6em;
-}
-
-.whiteBox {
-    text-align: center;
-    color: white;
-    background: white;
-    border-radius: 1em 1em 1em 1em;
-    heigth: 70%;
-    width: 80%;
 }
