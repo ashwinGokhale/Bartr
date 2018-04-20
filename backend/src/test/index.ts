@@ -77,6 +77,21 @@ describe('-- API Tests --', () => {
 			});
 		});
 
+		describe('Endpoint: /users/verify', () => {
+			it('Should test /users/verify', done => {
+				api
+				.put('/users/verify')
+				// .set({token})
+				.expect(401, done);
+			});
+
+			it('Should 401 Unauthorized', done => {
+				api
+				.get('/users/verify')
+				.expect(401, done);
+			});
+		});
+
 		describe('Endpoint: /posts', () => {
 			it('Should test /posts', done => {
 				api
