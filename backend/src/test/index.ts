@@ -530,74 +530,72 @@ describe('-- API Tests --', () => {
 				done();
 			});
 		});
-	})
+	});
 
-	after(() => {
-		describe('\n -- Clean up Tests -- \n', () => {
-			it('Should delete a post for user', done => {
-				assert.isNotNull(postId, 'Post ID');
-				api
-				.delete(`/posts/${postId}`)
-				.set({token})
-				.expect(200)
-				.then(response => {
-					const data = response.body.responseData;
-					assert.property(data, 'photoUrls');
-					assert.property(data, 'title');
-					assert.property(data, 'description');
-					assert.property(data, 'tags');
-					assert.property(data, 'state');
-					assert.property(data, 'userId');
-					assert.property(data, 'postId');
-					assert.property(data, 'createdAt');
-					assert.property(data, 'lastModified');
-					assert.property(data, '_geoloc');
-					done();
-				})
-				.catch(err => done(err));
-			});
-	
-			it('Should delete a post for testUser', done => {
-				assert.isNotNull(postIdTwo, 'Post ID');
-				api
-				.delete(`/posts/${postIdTwo}`)
-				.set({token: testToken})
-				.then(response => {
-					const data = response.body.responseData;
-					assert.property(data, 'photoUrls');
-					assert.property(data, 'title');
-					assert.property(data, 'description');
-					assert.property(data, 'tags');
-					assert.property(data, 'state');
-					assert.property(data, 'userId');
-					assert.property(data, 'postId');
-					assert.property(data, 'createdAt');
-					assert.property(data, 'lastModified');
-					assert.property(data, '_geoloc');
-					done();
-				})
-				.catch(err => done(err));
-			});
-	
-			it('Should delete the user', done => {
-				api
-				.delete(`/users/${testUser.uid}`)
-				.set({token:testToken})
-				.expect(200)
-				.then(response => {
-					const data = response.body.responseData;
-					assert.property(data, 'contactInfo');
-					assert.property(data, 'displayName');
-					assert.property(data, 'lat');
-					assert.property(data, 'lng');
-					assert.property(data, 'radius');
-					assert.property(data, 'photoUrl');
-					assert.property(data, 'uid');
-					assert.propertyVal(data, 'uid', testUser.uid);
-					done();
-				})
-				.catch(err => done(err));
-			});
+	describe('\n -- Clean up Tests -- \n', () => {
+		it('Should delete a post for user', done => {
+			assert.isNotNull(postId, 'Post ID');
+			api
+			.delete(`/posts/${postId}`)
+			.set({token})
+			.expect(200)
+			.then(response => {
+				const data = response.body.responseData;
+				assert.property(data, 'photoUrls');
+				assert.property(data, 'title');
+				assert.property(data, 'description');
+				assert.property(data, 'tags');
+				assert.property(data, 'state');
+				assert.property(data, 'userId');
+				assert.property(data, 'postId');
+				assert.property(data, 'createdAt');
+				assert.property(data, 'lastModified');
+				assert.property(data, '_geoloc');
+				done();
+			})
+			.catch(err => done(err));
 		});
-	})
+
+		it('Should delete a post for testUser', done => {
+			assert.isNotNull(postIdTwo, 'Post ID');
+			api
+			.delete(`/posts/${postIdTwo}`)
+			.set({token: testToken})
+			.then(response => {
+				const data = response.body.responseData;
+				assert.property(data, 'photoUrls');
+				assert.property(data, 'title');
+				assert.property(data, 'description');
+				assert.property(data, 'tags');
+				assert.property(data, 'state');
+				assert.property(data, 'userId');
+				assert.property(data, 'postId');
+				assert.property(data, 'createdAt');
+				assert.property(data, 'lastModified');
+				assert.property(data, '_geoloc');
+				done();
+			})
+			.catch(err => done(err));
+		});
+
+		it('Should delete the user', done => {
+			api
+			.delete(`/users/${testUser.uid}`)
+			.set({token:testToken})
+			.expect(200)
+			.then(response => {
+				const data = response.body.responseData;
+				assert.property(data, 'contactInfo');
+				assert.property(data, 'displayName');
+				assert.property(data, 'lat');
+				assert.property(data, 'lng');
+				assert.property(data, 'radius');
+				assert.property(data, 'photoUrl');
+				assert.property(data, 'uid');
+				assert.propertyVal(data, 'uid', testUser.uid);
+				done();
+			})
+			.catch(err => done(err));
+		});
+	});
 });

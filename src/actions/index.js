@@ -143,7 +143,7 @@ export const editPost = (post) => {
 			const token = await auth.currentUser.getIdToken()
 			// Get DB user and input into Redux store
 			console.log(`Updating user posts w/ user id: ${auth.currentUser.uid}`)
-			const { data: {responseData} } = await axios.put(`/api/posts/${post.postId}`, post, {
+			const { data: {responseData} } = await axios.put(`/api/posts/${post.get('postId')}`, post, {
 				headers: {token}
 			})
 
