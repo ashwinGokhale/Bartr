@@ -8,7 +8,7 @@ import { fetchDBUser } from '../../actions';
 import './chat.css'
 
 class Chat extends Component{
-
+    //constructor
     constructor(props, context){
         super(props, context)
         let { dbUser } = this.props;
@@ -34,12 +34,10 @@ class Chat extends Component{
         .get()
         .then(snapshot => {
             snapshot.forEach(data => {
-                if(data.data().displayName != this.state.displayName){
-                    var joined = this.state.usersAr.concat(data.data().displayName);
-                    this.setState({
-                        usersAr: joined
-                    })       
-                }         
+                var joined = this.state.usersAr.concat(data.data().displayName);
+                this.setState({
+                    usersAr: joined
+                })                
             })
         });
     }
