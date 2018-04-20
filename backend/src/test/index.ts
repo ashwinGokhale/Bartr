@@ -193,7 +193,7 @@ describe('-- API Tests --', () => {
 			.catch(err => done(err));
 		});
 
-		it('Should get the user', done => {
+		it('Should get the testUser', done => {
 			api
 			.get(`/users/${testUser.uid}`)
 			.set({token:testToken})
@@ -210,6 +210,43 @@ describe('-- API Tests --', () => {
 				assert.propertyVal(data, 'uid', testUser.uid);
 				done();
 			})
+			.catch(err => done(err));
+		});
+
+		it('Should get the user', done => {
+			api
+			.get(`/users/${user.uid}`)
+			.set({token:testToken})
+			.expect(200)
+			.then(response => {
+				const data = response.body.responseData;
+				assert.property(data, 'contactInfo');
+				assert.property(data, 'displayName');
+				assert.property(data, 'lat');
+				assert.property(data, 'lng');
+				assert.property(data, 'radius');
+				assert.property(data, 'photoUrl');
+				assert.property(data, 'uid');
+				assert.propertyVal(data, 'uid', user.uid);
+				done();
+			})
+			.catch(err => done(err));
+		});
+
+		it('Should fail to get the user: doesntexist', done => {
+			api
+			.get('/users/doesntexist')
+			.set({token})
+			.expect(400)
+			.then(response => done())
+			.catch(err => done(err));
+		});
+
+		it('Should fail to get the user b/c of no token', done => {
+			api
+			.get('/users/doesntexist')
+			.expect(401)
+			.then(response => done())
 			.catch(err => done(err));
 		});
 
@@ -290,6 +327,91 @@ describe('-- API Tests --', () => {
 			.field('address', testUserPost.address)
 			.field('tags', testUserPost.tags)
 			.attach('photos', '../src/assets/bartrLogo.png')
+			.expect(200)
+			.then(response => {
+				const data = response.body.responseData;
+				assert.property(data, 'photoUrls');
+				assert.property(data, 'title');
+				assert.property(data, 'description');
+				assert.property(data, 'tags');
+				assert.property(data, 'state');
+				assert.property(data, 'type');
+				assert.property(data, 'tags');
+				assert.property(data, 'userId');
+				assert.property(data, 'postId');
+				assert.property(data, 'createdAt');
+				assert.property(data, 'lastModified');
+				assert.property(data, '_geoloc');
+				assert.propertyVal(data, 'title', testUserPost.title);
+				assert.propertyVal(data, 'description', testUserPost.description);
+				assert.propertyVal(data, 'type', testUserPost.type);
+				expect(data.tags).to.deep.equal(testUserPost.tags);
+				postIdTwo = data.postId;
+				done();
+			})
+			.catch(err => done(err));
+		});
+
+		it('Should create a post for user', done => {
+			const testPost = {
+				title: "Changed user post title",
+				description: 'Changed user post description',
+				type: 'service',
+				tags: ['Changed', 'user', 'the', 'tags'],
+				address: '1275 Third Street, West Lafayette, IN 47906',
+			};
+
+			api
+			.put(`/posts/${postId}`)
+			.set({token})
+			.field('title', testPost.title)
+			.field('description', testPost.description)
+			.field('type', testPost.type)
+			.field('address', testPost.address)
+			.field('tags', testPost.tags)
+			.attach('photos', '../src/assets/bartrLogo.png')
+			.expect(200)
+			.then(response => {
+				const data = response.body.responseData;
+				assert.property(data, 'photoUrls');
+				assert.property(data, 'title');
+				assert.property(data, 'description');
+				assert.property(data, 'tags');
+				assert.property(data, 'state');
+				assert.property(data, 'type');
+				assert.property(data, 'tags');
+				assert.property(data, 'userId');
+				assert.property(data, 'postId');
+				assert.property(data, 'createdAt');
+				assert.property(data, 'lastModified');
+				assert.property(data, '_geoloc');
+				assert.propertyVal(data, 'title', testPost.title);
+				assert.propertyVal(data, 'description', testPost.description);
+				assert.propertyVal(data, 'type', testPost.type);
+				expect(data.tags).to.deep.equal(testPost.tags);
+				postId = data.postId;
+				done();
+			})
+			.catch(err => done(err));
+		});
+
+		it('Should edit the post for testUser', done => {
+			const testUserPost = {
+				title: "Changed test user post title",
+				description: 'Changed test user post description',
+				type: 'service',
+				tags: ['Changed',  'the', 'tags'],
+				address: '1275 Third Street, West Lafayette, IN 47906',
+			};
+
+			api
+			.put(`/posts/${postIdTwo}`)
+			.set({token: testToken})
+			.field('title', testUserPost.title)
+			.field('description', testUserPost.description)
+			.field('type', testUserPost.type)
+			.field('address', testUserPost.address)
+			.field('tags', testUserPost.tags)
 			.expect(200)
 			.then(response => {
 				const data = response.body.responseData;
@@ -473,7 +595,6 @@ describe('-- API Tests --', () => {
 			.set({token})
 			.expect(200)
 			.then(res => {
-				console.log(res.body.responseData);
 				trade = res.body.responseData;
 				done();
 			})
@@ -489,7 +610,6 @@ describe('-- API Tests --', () => {
 			.set({token: testToken})
 			.expect(200)
 			.then(res => {
-				console.log(res.body.responseData);
 				trade = res.body.responseData;
 				done();
 			})
@@ -505,7 +625,6 @@ describe('-- API Tests --', () => {
 			.set({token})
 			.expect(200)
 			.then(res => {
-				console.log(res.body.responseData);
 				trade = res.body.responseData;
 				done();
 			})
@@ -521,7 +640,6 @@ describe('-- API Tests --', () => {
 			.set({token: testToken})
 			.expect(200)
 			.then(res => {
-				console.log(res.body.responseData);
 				trade = res.body.responseData;
 				done();
 			})

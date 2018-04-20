@@ -17,6 +17,7 @@ router.get("/", async (req: utils.Req, res: utils.Res) => {
 router.get('/:uid', async (req: utils.Req, res: utils.Res) => {
 	try {
 		const userSnap = await firebase.firestore().doc(`/users/${req.params.uid}`).get();
+		if (!userSnap.exists) return utils.errorRes(res, 400, `User: ${req.params.uid} does not exist`);
 		console.log('UserSnap:', userSnap.data());
 		return utils.successRes(res, userSnap.data());
 	} catch (error) {
