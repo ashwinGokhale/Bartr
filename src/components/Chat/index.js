@@ -7,16 +7,9 @@ import { fetchDBUser } from '../../actions';
 
 import './chat.css'
 
-<<<<<<< HEAD
-
-class Chat extends Component{
-    //constructor
-    constructor(props, context){
-=======
 class Chat extends Component {
 
     constructor(props, context) {
->>>>>>> b17e98e4b7475cc43bad666bfa13b761994ac205
         super(props, context)
         let { dbUser } = this.props;
         this.state = {
