@@ -2,10 +2,14 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PostItem from '../Common/PostItem';
 import { createRating } from '../../actions';
+import firebase from 'firebase';
+import { fetchDBUser } from '../../actions';
 import defaultPhoto from '../../assets/default.png';
+import logo from '../../assets/bartrCircle.png';
 import './profile.css'
 
 export default class ProfilePage extends Component {
+
 	starHandler = async (e, num) => {
 		console.log('Value:', e.target.value);
 		console.log('Num:', num);
@@ -56,6 +60,7 @@ export default class ProfilePage extends Component {
 
 					<img className="profilePhoto" src={dbUser.photoUrl !== 'none' ? dbUser.photoUrl : defaultPhoto}></img>
 					{ !!dbUser && <h5 className="userName">{dbUser.displayName}</h5> }
+					{ <img className="verPic" src={logo} visible="true"></ img> }
 					{ !currentUser && <this.Rating/>}
 				</div>
 				</div>

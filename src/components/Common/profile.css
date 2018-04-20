@@ -9,6 +9,13 @@ fieldset {
 /* body{ margin: 20px; } */
 h1 { font-size: 1.5em; margin: 10px; }
 
+.verPic {
+  width: 30px;
+  height: 30px;
+  border-color: rgba(0, 0, 0, 0);
+  padding-left: 23%;
+}
+
 .rating { 
   border: none;
   padding-left: 0.8vw;
