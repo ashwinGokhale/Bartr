@@ -30,7 +30,7 @@
     border-right-width: 0px;
     border-top-width: 0px;
     border-bottom-width: 0px;
-    width: 7vw;
+    width: 6vw;
     height: 99%;
     color: white !important;
     justify-content: center;
@@ -79,7 +79,7 @@ button:active, button:focus {
 .searchBar {
     display: inline-flex;
     position: absolute;
-    right: 36vw;
+    right: 37vw;
     left: 220px;
     height: 50px;
     padding-top: 1.5vh;

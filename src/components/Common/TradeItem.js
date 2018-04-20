@@ -30,15 +30,17 @@ class TradeItem extends Component {
 		const tradeType = trade.state;
 		console.log('Trade item props:', this.props);
 		return (
-			<div>
+			<div className="tradePage tradePageTop">
 				<PostItem post={trade.seller.post}/>
-                <label><strong>For</strong></label>
+                <div className="tradeFor">
+					<h3 className="tradeForBetween">For</h3>
+				</div>
                 <PostItem post={trade.buyer.post}/>
 				{
 					seller && tradeType === 'OPEN' &&
 					<span>
-						<input onClick={this.onSubmit} type="button" id="ACCEPT" value="Accept Offer" />
-						<input onClick={this.onSubmit} type="button" id="REJECT" value="Reject Offer" />
+						<input className="tradeButtons" onClick={this.onSubmit} type="button" id="ACCEPT" value="Accept Offer" />
+						<input className="tradeButtons" onClick={this.onSubmit} type="button" id="REJECT" value="Reject Offer" />
 					</span>
 				}
 				{

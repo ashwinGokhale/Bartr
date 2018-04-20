@@ -18,11 +18,13 @@ import Chat from '../Chat';
 import AccountPage from '../Account';
 import SettingsPage from '../Settings';
 import CreatePostPage from '../CreatePost';
+import EditPostPage from '../EditPost';
 import DisplayPostsPage from '../DisplayPosts';
 import TradesPage from '../TradesPage';
 import SupportPage from '../Support';
 import TermsPage from '../Terms';
 import AboutUsPage from '../AboutUs';
+import VerificationPage from '../Verification';
 import * as routes from '../../constants';
 
 import './index.css';
@@ -50,6 +52,8 @@ const App = () =>
           <Route exact path={routes.SETTINGS} component={SettingsPage} />
           <Route exact path={routes.CHAT} component={Chat} />
           <Route exact path={routes.CREATE_POST} component={CreatePostPage} />
+          <Route exact path={routes.VERIFICATION_PAGE} component={VerificationPage} />
+          <Route exact path={routes.EDIT_POST} component={EditPostPage} />
           <Route exact path={routes.DISPLAY_POSTS} component={DisplayPostsPage} />
           <Route exact path={routes.SUPPORT} component={SupportPage} />
           <Route exact path={routes.TERMS} component={TermsPage} />
@@ -61,7 +65,7 @@ const App = () =>
         </Switch>
         <hr/>
       </div>
-      {/* <Footer/> */}
+      {<Footer/>}
     </div>
   </Router>
 
