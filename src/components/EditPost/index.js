@@ -30,6 +30,22 @@ class EditPostPage extends Component {
     }
   }
 
+
+	onChange = (e) => {
+		e.preventDefault();
+		if (e.target.id === 'photos') {
+			this.setState({photos: e.target.files})
+			var x = document.getElementById("uploads");
+			if(e.target.files.length >= 2) {
+				x.innerHTML = e.target.files.length + " files";
+			} else {
+				x.innerHTML = e.target.files[0].name
+			}
+		}
+		else
+			this.setState({[e.target.id] : e.target.value})
+	}
+
   render = () => 
     this.state.post ?
       <PostCardEdit post={this.state.post} userPosts={this.props.userPosts} self={this.props.authUser.uid === this.state.post.userId}/> :
