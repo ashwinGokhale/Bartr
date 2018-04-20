@@ -1,5 +1,6 @@
 .app {
-  padding-top: 0px;
-  height: 100%;
+  padding-top: 40px !important;
+  height: 9%;
   padding: 0;
+  background-color: rgb(238, 237, 237)
 }
