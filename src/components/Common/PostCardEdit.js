@@ -140,7 +140,6 @@ class PostCardEdit extends Component {
         this.setState({ tags: tags });
     }
 
-
     render = () => {
         const { post, self } = this.props;
         const { userPosts } = this.state;
@@ -173,17 +172,17 @@ class PostCardEdit extends Component {
                 <div className="postInformation">
                     <label><strong>Post Type:</strong></label>
                     <label>Good</label>
-                    <input type="radio" name="postType" onChange={(e) => { this.setState({ type: 'good' }) }} />
+                    <input type="radio" name="postType" checked={this.state.type === 'good'} onChange={(e) => { this.setState({ type: 'good' }) }} />
                     <label>Service</label>
-                    <input type="radio" name="postType" onChange={(e) => { this.setState({ type: 'service' }) }} />
+                    <input type="radio" name="postType" checked={this.state.type === 'service'} onChange={(e) => { this.setState({ type: 'service' }) }} />
                     <br />
                     <br />
 
                     <label><strong>Location: </strong></label>
                     <label>Current</label>
-                    <input type="radio" name="location" onChange={(e) => { this.setState({ currentLocation: true }) }} />
+                    <input type="radio" name="location" checked={this.state.currentLocation === true} onChange={(e) => { this.setState({ currentLocation: true }) }} />
                     <label>Address</label>
-                    <input type="radio" name="location" onChange={(e) => { this.setState({ currentLocation: false }) }} />
+                    <input type="radio" name="location" checked={this.state.currentLocation === false} onChange={(e) => { this.setState({ currentLocation: false }) }} />
 
                     {
                         !this.state.currentLocation ?
@@ -195,7 +194,7 @@ class PostCardEdit extends Component {
                         {!!this.state.error ? <p className="warning" style={{ 'color': 'red' }}>ERROR: {this.state.error}</p> : null}
                     </div>
                     <br />
-                    <input type="submit" className="createAccountPost" value="Create Post" />
+                    <input type="submit" className="createAccountPost" value="Update Post" />
                 </div>
             </form>
 
