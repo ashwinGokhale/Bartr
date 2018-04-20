@@ -32,6 +32,7 @@
         "no-console":false,
         "curly":false,
         "semicolon": [true, "always"],
+        "indent": [true, "tabs", 4],
         "no-empty-interface": {"severity": "warning"},
         "no-import-side-effect": {"severity": "warning"},
         "no-var-keyword": {"severity": "warning"},
@@ -73,6 +74,7 @@
         "no-console":false,
         "curly":false,
         "semicolon": [true, "always"],
+        "indent": [true, "tabs", 4],
         "no-empty-interface": {"severity": "warning"},
         "no-import-side-effect": {"severity": "warning"},
         "no-var-keyword": {"severity": "warning"},
@@ -84,7 +86,5 @@
         "prefer-const": {"severity": "warning"},
         "trailing-comma": {"severity": "warning"}
     },
-    
-    "defaultSeverity": "error",
     "rulesDirectory": []
 }

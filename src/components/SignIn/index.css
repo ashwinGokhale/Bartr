@@ -1,14 +1,15 @@
 .signInButton {
     text-align: center;
-    font-size: inherit;
+    font-size: 1.1vw;
     border: 0.0em solid white;
-    border-radius: 1em 1em 1em 1em;
+    border-radius: 0.75em;
     background-color:  rgb(78, 138, 205);
     color: white;
     padding: 0.4em 1em;
     outline: 0;
-    height: 40px;
-    width: 200px;
+    height: 5vh;
+    width: 15vw;
+    margin-bottom: 6em;
 }
 
 .pageBackground {
@@ -24,17 +25,16 @@
 }
 
 .loginBackground {
-    width: 320px;
-    height: 420px;
+    top: 15vh;
+    bottom: 15vh;
+    left: 39%;
+    right: 39%;
     background: rgba(0, 0, 0, 0.5);
     color: #fff;
-    top: 50%;
-    left: 50%;
     position: absolute;
-    transform: translate(-50%, -50%);
     box-sizing: border-box;
     border-radius: 0.5em 0.5em 0.5em 0.5em;
-    padding: 40px 10px;
+    padding: 6vh 1vw 0vh 1vw;
 }
 
 .emailBar p {
@@ -55,9 +55,7 @@
     border-bottom: 1px solid white;
     background: transparent;
     outline: none;
-    height: 40px;
     color: white;
-    font-size: 16px;
 }
 
 .emailBar a {
@@ -67,26 +65,20 @@
 }
 
 .textBox {
-    font-size: 16pt;
-    height: 30px;
-    width: 300px;
-}
-
-.textBoxPass {
-    font-size: 16pt;
-    height: 30px;
-    width: 300px;
+    font-size: 1.25vw;
+    height: 6vh;
+    width: 98%;
 }
 
 .loginHeader {
     text-align: center;
     font-family: Arial, Helvetica, sans-serif;
     font-weight: 100;
+    font-size: 2.8vw;
     color: white;
 }
 
 .centerLogIn {
     text-align: center;
     margin: auto;
-    padding-top: 30px;
 }

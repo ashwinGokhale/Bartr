@@ -2,17 +2,12 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import axios from 'axios';
-
 import { auth } from '../../firebase';
-import { setAuthUser, createUser } from '../../actions'
+import { createUser } from '../../actions'
 import * as routes from '../../constants';
 import './index.css';
 
 class SignUpPage extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     return (
@@ -43,7 +38,7 @@ class SignUpForm extends Component {
     const { displayName, email, passwordOne } = this.state;
     const { history } = this.props;
     try {
-      const authUser = await auth.createUserWithEmailAndPassword(email, passwordOne)
+      const authUser = await auth.createUserWithEmailAndPassword(email, passwordOne);
       const token = await auth.currentUser.getIdToken();
       const data = await this.props.createUser(
         {
@@ -66,11 +61,7 @@ class SignUpForm extends Component {
   render() {
     const { displayName, email, passwordOne, passwordTwo, error } = this.state;
 
-    const isInvalid =
-      passwordOne !== passwordTwo ||
-      passwordOne === '' ||
-      displayName === '' ||
-      email === '';
+    const isInvalid = passwordOne !== passwordTwo || passwordOne === '' || displayName === '' || email === '';
 
     return (
       <div className="signUpBackground">
@@ -78,26 +69,40 @@ class SignUpForm extends Component {
         <form onSubmit={this.onSubmit}>
           <div className="signUpInfo">
             <input
+              className="textBoxReg"
+              spellCheck="false"
               value={displayName}
-              onChange={event => this.setState({ displayName: event.target.value})}
+              onChange={event => this.setState({ displayName: event.target.value })}
               type="text"
               placeholder="Full Name"
             />
             <input
+              className="textBoxReg"
+              spellCheck="false"
               value={email}
-              onChange={event => this.setState( {email: event.target.value} )}
-              type="text"
+              onChange={event => this.setState({ email: event.target.value })}
+              type="email"
               placeholder="Email Address"
             />
+            {/* <input
+              className="textBoxReg"
+              spellCheck="false"
+              value={phoneNumber}
+              onChange={event => this.setState({ phoneNumber: event.target.value })}
+              type="tel"
+              placeholder="Phone Number"
+            /> */}
             <input
+              className="textBoxReg"
               value={passwordOne}
-              onChange={event => this.setState( {passwordOne: event.target.value} )}
+              onChange={event => this.setState({ passwordOne: event.target.value })}
               type="password"
               placeholder="Password"
             />
             <input
+              className="textBoxReg"
               value={passwordTwo}
-              onChange={event => this.setState( {passwordTwo: event.target.value} )}
+              onChange={event => this.setState({ passwordTwo: event.target.value })}
               type="password"
               placeholder="Confirm Password"
             />
@@ -107,14 +112,14 @@ class SignUpForm extends Component {
               Sign Up
             </button>
           </div>
-          { error && <p>{error.message}</p> }
+          { error && <p className="signUpError">{error.message}</p> }
         </form>
       </div>
     );
   }
 }
 
-const SignUpLink = () =>
+export const SignUpLink = () =>
   <div>
     <div>
       Don't have an account?
@@ -122,9 +127,6 @@ const SignUpLink = () =>
       <Link className="formats" to={routes.SIGN_UP}>Sign Up</Link>
     </div>
   </div>
-
-// export default withRouter(SignUpPage);
-// connect(null, { createUser })(SignUpForm)
 
 export default compose(
   withRouter,

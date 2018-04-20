@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "module": "commonjs",
+    "noImplicitReturns": true,
+    "outDir": "lib",
+    "sourceMap": true,
+    "target": "es5",
+    "allowJs": true,
+    "removeComments": true
+  },
+  "compileOnSave": true,
+  "include": [
+    "src"
+  ]
+}

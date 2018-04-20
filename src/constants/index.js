@@ -7,11 +7,17 @@ export const ACCOUNT = '/account';
 export const SETTINGS = '/settings';
 export const CHAT = '/chat';
 export const CREATE_POST = '/post/create';
-export const DISPLAY_POSTS = '/posts'
+export const VERIFICATION_PAGE = '/verify';
+export const DISPLAY_POSTS = '/posts';
+export const TRADES = '/trades';
 export const SUPPORT = '/support';
 export const TERMS = '/terms';
-export const ABOUTUS = '/aboutUs'
-export const authCondition = (authUser) => !!authUser;
+export const ABOUTUS = '/aboutUs';
+export const USER = '/user/:id';
+export const POST = '/post/:id';
+export const EDIT_POST = '/post/edit/:id';
+
+
 export default {
 	LANDING,
 	SIGN_UP,
@@ -22,10 +28,10 @@ export default {
 	ACCOUNT,
 	SETTINGS,
 	CREATE_POST,
+	VERIFICATION_PAGE,
 	DISPLAY_POSTS,
 	SUPPORT,
 	TERMS,
 	ABOUTUS,
-	authCondition
-
+	EDIT_POST,
 }

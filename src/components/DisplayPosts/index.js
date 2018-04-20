@@ -2,11 +2,10 @@ import React, {Component} from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { SignOutButton } from '../Common';
 import * as routes from '../../constants';
 import logo from '../../assets/bartrLogo.png';
 import withAuthorization from '../Session/withAuthorization';
-import './index.css'
+import './index.css';
 
 const algoliasearch = require('algoliasearch');
 const algolia = algoliasearch(
@@ -20,10 +19,25 @@ class DisplayPosts extends React.Component {
   constructor(props, context){
     super(props, context)
     this.doSearch = this.doSearch.bind(this)
+    this.createTags = this.createTags.bind(this)
     this.state={
       posts:[]
     }
     this.doSearch();
+  }
+
+  createTags(param) {
+    var toReturn;
+    if(param[0] === undefined) {
+      return;
+    }
+
+    for(var i = 0; i < param.length; i++) {
+      if(i != param.length - 1) {
+        param[i] = param[i] + ', ';
+      }
+    }
+    return param;
   }
 
   doSearch(){
@@ -57,33 +71,59 @@ class DisplayPosts extends React.Component {
     
   }
 
-  render() {
+  render() {  
+    {
     const currentPosts = this.state.posts.map((posts, i) =>
-    <div key={i} className="makePost">
-      <img className="image" src={posts.photoUrls} alt="goodsForGoods.png"></img>
-      <br></br>
-      Title: {posts.title}
-      <br></br>
-      Tags: {posts.tags}
-      <br></br>
-      Description: {posts.description}      
-      <br></br>
-      <br></br>
-    </div>
-   )
-    return (
-      <div id="div1" class="textfieldSupport">
-          <ol>
-              {currentPosts}
-          </ol>
+      <div key={i} className="placeHolder">
+        <div className="postTitle">
+          <h3 className="listingTitle">{posts.title}</h3>
+        </div>
+        <div className="postInfo">
+          <div className="postPicture">
+            <img className="itemPicture" alt="item/service.png" src={posts.photoUrls}></img>
+          </div>
+          <div className="postDescription">
+            <ul className="descriptionDetails">
+              {posts.description}
+            </ul>
+            <div className="displayPostTags">
+              <p className="tagsLabel">Tags: {this.createTags(posts.tags)}</p>
+            </div>
+          </div>
+        </div>
       </div>
     )
+
+    return (
+      <div className="displayPostWrapper">
+        <div className="displayPostLeft">
+          <div className="displayPostFilterCard">
+            <center><h3 className="displayPostFilterTitle">Filters</h3></center>
+            <hr></hr>
+            <div className="filterBox">
+              <input className="displayPostCheckbox inlineBlock" type="checkbox"/>
+              <p className="displayPostFilterTag inlineBlock">Goods</p>
+            </div>
+            <div className="filterBox">
+              <input className="displayPostCheckbox inlineBlock"type="checkbox"/>
+              <p className="displayPostFilterTag inlineBlock">Services</p>
+            </div>
+          </div>
+        </div>
+        <div className="displayPostRight">
+          <div className="displayPostFeed">
+              <div id="div1">
+                <div>
+                  {currentPosts}
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+      )
+    }
   }
 }
-
-const mapStateToProps = (store) => ({
-  authUser: store.sessionState.authUser,
-});
 
 export default compose (
   withRouter,

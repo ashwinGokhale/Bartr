@@ -180,3 +180,7 @@ label {
     height: 16px;
     font-size: 17px;
 }
+
+.adjustDown {
+    padding-top: 70px;
+}

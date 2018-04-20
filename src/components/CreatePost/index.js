@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
 import { WithContext as ReactTags } from 'react-tag-input';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import withAuthorization from '../Session/withAuthorization';
-import { authCondition } from '../../constants';
 import * as routes from '../../constants';
 import { updateDBUser, createPost } from '../../actions';
-import axios from 'axios';
-import insertHere from '../../assets/insertHere.png';
-import './index.css'
+import './index.css';
 
 class CreatePostPage extends Component {
 	constructor(props) {
@@ -74,7 +70,7 @@ class CreatePostPage extends Component {
 					enableHighAccuracy: true,
 					timeout: 5000,
 					maximumAge: 0
-				  });
+				});
 				const { latitude, longitude } = position.coords;
 				data.append('lat', latitude);
 				data.append('lng', longitude);
@@ -102,7 +98,9 @@ class CreatePostPage extends Component {
 			data.append('title', this.state.title);
 			data.append('description', this.state.description);
 			data.append('type', this.state.type);
-			this.props.createPost(data);
+			console.log('About to create a post:', data);
+			await this.props.createPost(data);
+			this.props.history.push(routes.HOME);
 		} catch (error) {
 			console.error(error)
 			this.setState({ error: JSON.stringify(error) })
@@ -138,7 +136,7 @@ class CreatePostPage extends Component {
 	render() {
 		return (
 			<form onSubmit={this.onSubmit} encType="multipart/form-data" className="createPost">
-			
+				<div className="adjustDown"/>
 				<label><strong>Title</strong></label><br />
 				<input className="titleAccount" placeholder="Add a title..." id="title" onChange={this.onChange} /><br/>
 				<label><strong>Description</strong></label><br/>
@@ -201,6 +199,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default compose(
-  	withAuthorization(authCondition),
+  	withAuthorization(),
 	connect(mapStateToProps, { updateDBUser, createPost })
 )(CreatePostPage);

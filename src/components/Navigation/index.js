@@ -3,6 +3,8 @@ import { compose } from 'recompose';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { SignOutButton } from '../Common';
+import { firebase } from '../../firebase';
+import { setAuthUser, fetchDBUser, fetchTrades } from '../../actions';
 import * as routes from '../../constants';
 import logo from '../../assets/bartrLogo.png';
 import './index.css'
@@ -15,13 +17,20 @@ const algolia = algoliasearch(
 const index = algolia.initIndex('posts');
 
 const NavigationAuth = () =>
-  <div className="buttonsGroup">
-    <Link to={routes.HOME}><button className="navButton">Home</button></Link>
-    <Link to={routes.ACCOUNT}><button className="navButton">Account</button></Link>
-    <Link to={routes.CHAT}><button className="navButton">Chat</button></Link>
-    <Link to={routes.SETTINGS}><button className="navButton">Settings</button></Link>
-    <SignOutButton />
-  </div>
+  <span>
+    {/* <div className="searchBar">
+      <input onChange={this.updateTag} type="text" className="searchBarInput" placeholder="Search..."/>
+      <span onClick={this.doSearch} role="img" aria-label="Search" className="searchBarButton">🔍</span>
+    </div> */}
+    <div className="buttonsGroup">
+      <Link to={routes.HOME}><button className="navButton">Home</button></Link>
+      <Link to={routes.ACCOUNT}><button className="navButton">Account</button></Link>
+      <Link to={routes.TRADES}><button className="navButton">Trades</button></Link>
+      <Link to={routes.CHAT}><button className="navButton">Chat</button></Link>
+      <Link to={routes.SETTINGS}><button className="navButton">Settings</button></Link>
+      <SignOutButton />
+    </div>
+  </span>
 
 const NavigationNonAuth = () =>
   <div className="buttonsGroup">
@@ -38,6 +47,21 @@ class NavigationHeader extends Component {
     this.state={
       curTag:''
     }
+  }
+
+  componentWillMount = () => {
+    firebase.auth.onAuthStateChanged(authUser => {
+      console.log('Auth State:', this.props.authState);
+      if (!(!!authUser)) {
+        this.props.setAuthUser(authUser);
+        this.props.history.push(routes.LOGIN);
+      }
+      else if (!this.props.authState) {
+        this.props.setAuthUser(authUser);
+        this.props.fetchDBUser();
+        this.props.fetchTrades();
+      }
+    });    
   }
 
   updateTag(event){
@@ -58,6 +82,7 @@ class NavigationHeader extends Component {
   }
 
   render() {
+    console.log('Navigation Props:', this.props);
     return (
       <div className="navBar">
         <Link to={this.props.authUser ? routes.HOME : routes.LANDING}>
@@ -74,9 +99,10 @@ class NavigationHeader extends Component {
 }
 
 const mapStateToProps = (store) => ({
-  authUser: store.sessionState.authUser,
+  ...store.sessionState,
 });
 
 export default compose(
   withRouter,
-  connect(mapStateToProps))(NavigationHeader);
+  connect(mapStateToProps, { setAuthUser, fetchDBUser, fetchTrades }),
+)(NavigationHeader);
