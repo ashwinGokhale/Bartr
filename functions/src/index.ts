@@ -36,7 +36,7 @@ const handleChange = async (type: string, index: algoliasearch.AlgoliaIndex, eve
 	// Document deleted
 	else {
 		try {
-			const batchDelete = firebase.firestore().batch();
+			const batch = firebase.firestore().batch();
 			if (type === 'posts') {
 				// Delete all trades involved w/ this post
 				const [buyerPosts, sellerPosts] = await Promise.all([
@@ -44,24 +44,34 @@ const handleChange = async (type: string, index: algoliasearch.AlgoliaIndex, eve
 					firebase.firestore().collection('/trades').where('seller.postId', '==', context.params.id).get()
 				]);
 
-				buyerPosts.forEach(doc => batchDelete.delete(doc.ref));
-				sellerPosts.forEach(doc => batchDelete.delete(doc.ref));
+				buyerPosts.forEach(doc => batch.delete(doc.ref));
+				sellerPosts.forEach(doc => batch.delete(doc.ref));
 			}
 			else {
 				// Delete all trades involved with this user
+				// Mark the posts as OPEN
 				const trades = await firebase.firestore().collection('/trades').where('buyer.postId', '==', context.params.id).get();
-				trades.forEach(trade => batchDelete.delete(trade.ref));
+				trades.forEach(async trade => {
+					let post: FirebaseFirestore.DocumentSnapshot;
+					if (trade.data().buyer.postId !== context.params.id)
+						post = await firebase.firestore().doc(`/posts/${trade.data().buyer.postId}`).get();
+					else 
+						post = await firebase.firestore().doc(`/posts/${trade.data().seller.postId}`).get();
+					
+					batch.update(post.ref, 'state', 'OPEN');
+					batch.delete(trade.ref);
+				});
 
 				// Reverse all ratings involved w/ this user
 				const ratings = await firebase.firestore().collection('/ratings').where('rater', '==', context.params.id).get();
-				ratings.forEach(rating => batchDelete.delete(rating.ref));
+				ratings.forEach(rating => batch.delete(rating.ref));
 			}
 
 			// Delete post from Algolia
 			console.log('Deleting:', context.params.id, 'from Algolia');
 
 			return Promise.all([
-				batchDelete.commit(),
+				batch.commit(),
 				index.deleteObject(context.params.id)
 			]);
 			

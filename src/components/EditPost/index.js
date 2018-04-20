@@ -5,7 +5,7 @@ import { fetchUserPosts, fetchPost, fetchTrades } from '../../actions';
 import withAuthorization from '../Session/withAuthorization';
 import { PostCardEdit } from '../Common';
 
-class PostPage extends Component {
+class EditPostPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,7 +22,7 @@ class PostPage extends Component {
     try {
       const post = await fetchPost(id);
       post.tags = post.tags.map((tag, i) => ({id: i+1, text: tag}));
-      console.log('PostPage post data:', post);
+      console.log('EditPage post data:', post);
       this.setState({post});
     } catch (error) {
       console.error('Error fetching post:', id);
@@ -43,4 +43,4 @@ const mapStateToProps = (state) => ({
 export default compose(
   withAuthorization(),
   connect(mapStateToProps, { fetchUserPosts, fetchTrades })
-)(PostPage);
+)(EditPostPage);

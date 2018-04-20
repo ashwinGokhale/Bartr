@@ -1,4 +1,4 @@
-import { FEED_POSTS_SET, FEED_POSTS_ERROR, USER_POSTS_SET, USER_POST_DELETED, USER_POSTS_ADD, USER_POSTS_ERROR } from '../actions';
+import { FEED_POSTS_SET, FEED_POSTS_ERROR, USER_POSTS_SET, USER_POST_DELETED, USER_POSTS_ADD, USER_POSTS_UPDATED, USER_POSTS_ERROR } from '../actions';
 
 function postsReducer(state = {
 	feedPosts: [],
@@ -35,6 +35,15 @@ function postsReducer(state = {
 			return {
 				...state,
 				userPosts: [...state.userPosts, action.post]
+			}
+		}
+		case USER_POSTS_UPDATED: {
+			return {
+				...state,
+				userPosts: state.userPosts.map(post => {
+					if (post.postId !== action.post.postId) return post;
+        			return action.post;
+				})
 			}
 		}
 		case USER_POSTS_ERROR: {
