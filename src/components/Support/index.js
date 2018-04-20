@@ -1,4 +1,12 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { compose } from 'recompose';
+import { Link } from 'react-router-dom';
+import { VERIFICATION_PAGE } from '../../constants';
+import defaultPhoto from '../../assets/default.png';
+import insertHere from '../../assets/insertHere.png';
+import withAuthorization from '../Session/withAuthorization';
+import PostItem from '../Common/PostItem';
+import { fetchFeedPosts, fetchDBUser } from '../../actions';
 import './index.css';
 
 export default () => 
@@ -22,5 +30,8 @@ export default () =>
         <h1 className="questionText"> Whats the catch? </h1>
         <div className="answerText"> No catch at all, the Bartr website is completely free to use, so go ahead and create your account today! </div>
       </div>
+        <h1 className="questionText"> How do I get verified? </h1>
+        <div className="answerText">If you would like to become a verified barterer on Bartr, you will have to fill out the <Link to={VERIFICATION_PAGE}>verification application</Link>.
+                     We will verify your previous transactions and your user ratings to determine if you are eligible to be verified.</div>
+        </div>
   </div>
-</div>

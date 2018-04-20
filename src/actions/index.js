@@ -6,6 +6,7 @@ export const FEED_POSTS_SET = 'FEED_POSTS_SET';
 export const FEED_POSTS_ERROR = 'FEED_POSTS_ERROR';
 export const USER_POSTS_SET = 'USER_POSTS_SET';
 export const USER_POSTS_ADD = 'USER_POSTS_ADD';
+export const USER_POSTS_UPDATED = 'USER_POSTS_UPDATED';
 export const USER_POSTS_ERROR = 'USER_POSTS_ERROR';
 export const USER_POST_DELETED = 'USER_POST_DELETED';
 
@@ -37,6 +38,7 @@ export const onSetFeedPosts = (feedPosts) => ({ type: FEED_POSTS_SET, feedPosts 
 export const onErrorFeedPosts = (error) => ({ type: FEED_POSTS_ERROR, error });
 export const onSetUserPosts = (userPosts) => ({ type: USER_POSTS_SET, userPosts });
 export const onAddUserPost = (post) => ({ type: USER_POSTS_ADD, post });
+export const onUpdateUserPost = (post) => ({ type: USER_POSTS_UPDATED, post });
 export const onDeleteUserPost = (postId) => ({ type: USER_POST_DELETED, postId });
 export const onErrorUserPosts = (error) => ({ type: USER_POSTS_ERROR, error });
 
@@ -135,6 +137,25 @@ export const createPost = (post) => {
 	}
 }
 
+export const editPost = (post) => {
+	return async dispatch => {
+		try {
+			const token = await auth.currentUser.getIdToken()
+			// Get DB user and input into Redux store
+			console.log(`Updating user posts w/ user id: ${auth.currentUser.uid}`)
+			const { data: {responseData} } = await axios.put(`/api/posts/${post.postId}`, post, {
+				headers: {token}
+			})
+
+			console.log('Updated user post:', responseData);
+			dispatch(onUpdateUserPost(responseData));
+		} catch (error) {
+			console.error('Error:', error.response.data.error);
+			dispatch(onErrorUserPosts(error.response.data.error));
+		}
+	}
+}
+
 export const deletePost = (id) => {
 	return async dispatch => {
 		try {
@@ -203,6 +224,26 @@ export const updateDBUser = (user) => {
 		} catch (error) {
 			console.error(error);
 			return error;
+		}
+	}
+}
+
+export const updateVerified = (user) => {
+	return async dispatch => {
+		try {
+			const token = await auth.currentUser.getIdToken()
+			console.log('Updating verification status:', auth.currentUser.uid)
+			const response = await axios.put(
+				'/api/users/verify',
+				user,
+				{headers: {token}}
+			)
+			dispatch(onSetDBUser(user))
+			console.log(response.data.responseData)
+			return response.data.responseData
+		} catch (error){
+			console.error(error)
+			return error
 		}
 	}
 }
@@ -367,8 +408,8 @@ export const rejectTrade = (id) => async (dispatch, getState) => {
 		console.log('Rejected Trade:', trade);
 		let open = getState().tradesState.open;
 		const newOpen = {
-			buyer: open.buyer,
-			seller: open.seller.filter(post => post.buyer.postId !== trade.buyer.postId)
+			buyer: open.buyer.filter(offer => offer.id !== trade.id),
+			seller: open.seller.filter(offer => offer.id !== trade.id)
 		};
 		console.log('Old open state:', open);
 		console.log('New open state:', newOpen);
@@ -385,21 +426,36 @@ export const closeTrade = (id) => async (dispatch, getState) => {
 	try {
 		const token = await auth.currentUser.getIdToken();
 		const { data } = await axios.post(
-			`/api/trades/reject/${id}`,
+			`/api/trades/close/${id}`,
 			null,
 			{headers: {token}}
 		);
 
 		const trade = data.responseData;
-		console.log('Rejected Trade:', trade);
-		let open = getState().tradesState.open;
-		const newOpen = {
-			buyer: open.buyer,
-			seller: open.seller.filter(post => post.buyer.postId !== trade.buyer.postId)
+		const state = getState();
+		console.log('Closed Trade:', trade);
+		const accepted = getState().tradesState.accepted;
+		const newAccepted = {
+			buyer: accepted.buyer.filter(offer => offer.id !== trade.id),
+			seller: accepted.seller.filter(offer => offer.id !== trade.id)
 		};
-		console.log('Old open state:', open);
-		console.log('New open state:', newOpen);
-		dispatch(onSetOpenTrades(newOpen));
+		console.log('Old accepted state:', accepted);
+		console.log('New accepted state:', newAccepted);
+
+		// Trade is in closed state
+		if (trade.seller.closed && trade.buyer.closed) {
+			const closed = getState().tradesState.closed;
+			const newClosed = {
+				buyer: closed.buyer.filter(offer => offer.id !== trade.id),
+				seller: closed.seller.filter(offer => offer.id !== trade.id)
+			};
+			dispatch(onSetClosedTrades(newClosed));
+			dispatch(onAddCompletedTrades(trade));
+		}
+		else 
+			dispatch(onAddClosedTrades(trade));
+		
+		dispatch(onSetAccepetedTrades(newAccepted));
 		return trade;
 	} catch (error) {
 		console.error(error.response.data);
