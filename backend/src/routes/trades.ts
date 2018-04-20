@@ -238,10 +238,8 @@ router.get('/', async (req: utils.Req, res: utils.Res) => {
             
             firebase.firestore().collection('/trades')
                 .where('seller.userId', '==', req.token.uid)
-                .where('CLOSED', '==', true)
+                .where('state', '==', 'CLOSED')
                 .get(),
-            
-            
             
             firebase.firestore().collection('/trades')
                 .where('state', '==', 'OPEN')
@@ -261,7 +259,7 @@ router.get('/', async (req: utils.Req, res: utils.Res) => {
             
             firebase.firestore().collection('/trades')
                 .where('buyer.userId', '==', req.token.uid)
-                .where('CLOSED', '==', true)
+                .where('state', '==', 'CLOSED')
                 .get(),
         ]);
 
