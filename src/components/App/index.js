@@ -38,30 +38,6 @@ const NoMatch = ({ location }) => (
 
 const App = () =>
   <Router>
-<<<<<<< HEAD
-    <div className="app">
-      <Navigation />
-      <Switch>
-        <Route exact path={routes.LANDING} component={LandingPage} />
-        <Route exact path={routes.SIGN_UP} component={SignUpPage} />
-        <Route exact path={routes.LOGIN} component={SignInPage} />
-        <Route exact path={routes.PASSWORD_FORGET} component={PasswordForgetPage} />
-        <Route exact path={routes.HOME} component={HomePage} />
-        <Route exact path={routes.ACCOUNT} component={AccountPage} />
-        <Route exact path={routes.SETTINGS} component={SettingsPage} />
-        <Route exact path={routes.CHAT} component={Chat} />
-        <Route exact path={routes.CREATE_POST} component={CreatePostPage} />
-        <Route exact path={routes.VERIFICATION_PAGE} component={VerificationPage} />
-        <Route exact path={routes.DISPLAY_POSTS} component={DisplayPostsPage} />
-        <Route exact path={routes.SUPPORT} component={SupportPage} />
-        <Route exact path={routes.TERMS} component={TermsPage} />
-        <Route exact path={routes.ABOUTUS} component={AboutUsPage} />
-        <Route exact path="/user/:userid" component={UserPage} />
-        <Route component={NoMatch} />
-      </Switch>
-      <hr/>
-
-=======
     <div>
     <Navigation />
       <div className="app">
@@ -75,6 +51,7 @@ const App = () =>
           <Route exact path={routes.SETTINGS} component={SettingsPage} />
           <Route exact path={routes.CHAT} component={Chat} />
           <Route exact path={routes.CREATE_POST} component={CreatePostPage} />
+          <Route exact path={routes.VERIFICATION_PAGE} component={VerificationPage} />
           <Route exact path={routes.DISPLAY_POSTS} component={DisplayPostsPage} />
           <Route exact path={routes.SUPPORT} component={SupportPage} />
           <Route exact path={routes.TERMS} component={TermsPage} />
@@ -86,7 +63,6 @@ const App = () =>
         </Switch>
         <hr/>
       </div>
->>>>>>> 120cdbcb67737403a345ab992e09ded0559daf56
       <Footer/>
     </div>
   </Router>

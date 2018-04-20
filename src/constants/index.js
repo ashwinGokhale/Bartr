@@ -8,7 +8,6 @@ export const SETTINGS = '/settings';
 export const CHAT = '/chat';
 export const CREATE_POST = '/post/create';
 export const VERIFICATION_PAGE = '/verify';
-export const DISPLAY_POSTS = '/posts'
 export const DISPLAY_POSTS = '/posts';
 export const OFFERS = '/offers';
 export const SUPPORT = '/support';
