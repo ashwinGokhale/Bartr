@@ -21,7 +21,7 @@ class PostItem extends Component {
 						type === 'user' ? <button className="deletePostButton" onClick={this.onClick}>X</button> : null
 					}{
 						//type === 'user' ? <button className="editPostButton" onClick={this.onClick}>Edit</button> : null
-						type === 'user' ? <Link to={routes.EDIT_POST}><button className="editPostButton">Edit</button></Link> : null
+						type === 'user' ? <Link to={`/post/edit/${post.postId}`}><button className="editPostButton">Edit</button></Link> : null
 
 					}</div>
 					

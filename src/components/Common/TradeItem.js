@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { compose } from 'recompose';
-import { acceptTrade, rejectTrade } from '../../actions';
+import { acceptTrade, rejectTrade, closeTrade } from '../../actions';
 import PostItem from './PostItem';
 
 class TradeItem extends Component {
@@ -18,6 +18,10 @@ class TradeItem extends Component {
 		else if (id === 'REJECT') {
 			const data = await this.props.rejectTrade(this.props.trade.id);
 			console.log('Just rejected offer:', data);
+		}
+		else if (id === 'CLOSE') {
+			const data = await this.props.closeTrade(this.props.trade.id);
+			console.log('Just closed offer:', data);
 		}
 	}
 
@@ -39,10 +43,11 @@ class TradeItem extends Component {
 						<input className="tradeButtons" onClick={this.onSubmit} type="button" id="REJECT" value="Reject Offer" />
 					</span>
 				}
-				{/* {
-					seller && tradeType === 'OPEN' &&
-					<input onClick={this.onSubmit} type="button" id="REJECT" value="Reject Offer" />
-				} */}
+				{
+					((seller && !trade.seller.closed) || (!seller && !trade.buyer.closed)) &&
+					tradeType === 'ACCEPTED' &&
+					<input onClick={this.onSubmit} type="button" id="CLOSE" value="Close Trade" />
+				}
 				<br/><hr/>
 			</div>
 		)
@@ -50,5 +55,5 @@ class TradeItem extends Component {
 }
 
 export default compose(
-	connect(null, { acceptTrade, rejectTrade })
+	connect(null, { acceptTrade, rejectTrade, closeTrade })
 )(TradeItem);

@@ -45,6 +45,8 @@ router.post('/:seller-:buyer', async (req: utils.Req, res: utils.Res) => {
         batchUpdate.update(existingTrans.ref, 'state', 'ACCEPTED');
         batchUpdate.update(sellerPost.ref, 'state', 'PENDING');
         batchUpdate.update(buyerPost.ref, 'state', 'PENDING');
+        batchUpdate.update(existingTrans.ref, 'seller.post.state', 'PENDING');
+        batchUpdate.update(existingTrans.ref, 'buyer.post.state', 'PENDING');
         await batchUpdate.commit();
 
         // Batch delete all other trade on this post
@@ -108,8 +110,8 @@ router.post('/accept/:id', async (req: utils.Req, res: utils.Res) => {
     if (buyerPost.data().state !== 'OPEN') return utils.errorRes(res, 400, `Post: ${buyerPostId} is not available for trading`);
 
     if (
-        trade.data().seller.userId !== sellerPost.data().userId && 
-        trade.data().buyer.userId !== buyerPost.data().userId
+        trade.data().seller.userId !== req.token.uid && 
+        trade.data().buyer.userId !== req.token.uid
     ) return utils.errorRes(res, 401, 'Unauthorized');
 
     if (sellerPost.data().userId !== req.token.uid) return utils.errorRes(res, 401, 'Unauthorized to accept offer');
@@ -119,6 +121,8 @@ router.post('/accept/:id', async (req: utils.Req, res: utils.Res) => {
     batchUpdate.update(trade.ref, 'state', 'ACCEPTED');
     batchUpdate.update(sellerPost.ref, 'state', 'PENDING');
     batchUpdate.update(buyerPost.ref, 'state', 'PENDING');
+    batchUpdate.update(trade.ref, 'seller.post.state', 'PENDING');
+    batchUpdate.update(trade.ref, 'buyer.post.state', 'PENDING');
     await batchUpdate.commit();
 
     // Batch delete all other trade on this post
@@ -172,78 +176,80 @@ router.post('/close/:id', async (req: utils.Req, res: utils.Res) => {
     if (!sellerPost.exists) return utils.errorRes(res, 400, `Post: ${sellerPostId} does not exist`);
     if (!buyerPost.exists) return utils.errorRes(res, 400, `Post: ${buyerPostId} does not exist`);
 
-    if (sellerPost.data().state !== 'PENDING') return utils.errorRes(res, 400, `Post: ${sellerPostId} is not available for closing`);
-    if (buyerPost.data().state !== 'PENDING') return utils.errorRes(res, 400, `Post: ${buyerPostId} is not available for closing`);
-
     let userType = '';
-    if (trade.data().seller.userId !== sellerPost.data().userId) 
+    if (trade.data().seller.userId === req.token.uid) 
         userType = 'seller';
-    else if (trade.data().buyer.userId !== buyerPost.data().userId)
+    else if (trade.data().buyer.userId === req.token.uid)
         userType = 'buyer';
     else
         return utils.errorRes(res, 401, 'Unauthorized');
-    
-    // Update the states to accepted
-    const batchUpdate = firebase.firestore().batch();
-    if (userType === 'seller') {
-        batchUpdate.update(trade.ref, 'seller.closed', true);
-        batchUpdate.update(sellerPost.ref, 'state', 'CLOSED');
-        if (trade.data().buyer.closed)
-            batchUpdate.update(trade.ref, 'state', 'CLOSED');
-    }
-    else {
-        batchUpdate.update(trade.ref, 'buyer.closed', true);
-        batchUpdate.update(buyerPost.ref, 'state', 'CLOSED');
-        if (trade.data().seller.closed)
-            batchUpdate.update(trade.ref, 'state', 'CLOSED');
-    }
 
-    await batchUpdate.commit();
-
-    return utils.successRes(res, `Trade: ${req.params.id} -- COMPLETED`);
+    if (userType == 'seller')
+        return utils.closeSeller(res, trade, buyerPost, sellerPost);
+    else
+        return utils.closeBuyer(res, trade, buyerPost, sellerPost);
 });
 
 router.get('/', async (req: utils.Req, res: utils.Res) => {
     try {
         const [sellerOpen, sellerAccepted, sellerClosed, sellerCompleted, buyerOpen, buyerAccepted, buyerClosed, buyerCompleted] = await Promise.all([
-            utils.getTrades('OPEN', req.token.uid, false),
-            utils.getTrades('ACCEPTED', req.token.uid, false),
+            firebase.firestore().collection('/trades')
+                .where('state', '==', 'OPEN')
+				.where('seller.userId', '==', req.token.uid)
+                .get(),
+                
+            firebase.firestore().collection('/trades')
+                .where('state', '==', 'ACCEPTED')
+                .where('seller.userId', '==', req.token.uid)
+                .where('seller.closed', '==', false)
+                .get(),
+            
             firebase.firestore().collection('/trades')
                 .where('seller.closed', '==', true)
+                .where('buyer.closed', '==', false)
                 .get(),
-            utils.getTrades('CLOSED', req.token.uid, false),
-
-            utils.getTrades('OPEN', req.token.uid, true),
-            utils.getTrades('ACCEPTED', req.token.uid, true),
+            
+            firebase.firestore().collection('/trades')
+                .where('seller.userId', '==', req.token.uid)
+                .where('state', '==', 'CLOSED')
+                .get(),
+            
+            firebase.firestore().collection('/trades')
+                .where('state', '==', 'OPEN')
+				.where('buyer.userId', '==', req.token.uid)
+                .get(),
+                
+            firebase.firestore().collection('/trades')
+                .where('state', '==', 'ACCEPTED')
+                .where('buyer.userId', '==', req.token.uid)
+                .where('buyer.closed', '==', false)
+                .get(),
+            
             firebase.firestore().collection('/trades')
                 .where('buyer.closed', '==', true)
+                .where('seller.closed', '==', false)
                 .get(),
-            utils.getTrades('CLOSED', req.token.uid, true)
+            
+            firebase.firestore().collection('/trades')
+                .where('buyer.userId', '==', req.token.uid)
+                .where('state', '==', 'CLOSED')
+                .get(),
         ]);
-
-        // const [buyerOpen, buyerAccepted, buyerClosed] = await Promise.all([
-        //     utils.getTrades('OPEN', req.token.uid, true),
-        //     utils.getTrades('ACCEPTED', req.token.uid, true),
-        //     firebase.firestore().collection('/trades')
-        //         .where('buyer.closed', '==', true)
-        //         .get()
-        //     // utils.getTrades('CLOSED', req.token.uid, true)
-        // ]);
 
         const trades = {
             open: {
-                seller: sellerOpen,
-                buyer: buyerOpen
+                seller: sellerOpen.docs.map(doc => doc.data()),
+                buyer: buyerOpen.docs.map(doc => doc.data())
             },
             accepted: {
-                seller: sellerAccepted,
-                buyer: buyerAccepted
+                seller: sellerAccepted.docs.map(doc => doc.data()),
+                buyer: buyerAccepted.docs.map(doc => doc.data())
             },
             closed: {
                 seller: sellerClosed.docs.map(doc => doc.data()),
                 buyer: buyerClosed.docs.map(doc => doc.data())
             },
-            completed: sellerCompleted.concat(buyerCompleted)
+            completed: sellerCompleted.docs.map(doc => doc.data()).concat(buyerCompleted.docs.map(doc => doc.data()))
         };
 
         return utils.successRes(res, trades);

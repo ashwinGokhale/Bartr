@@ -16,6 +16,10 @@ const algolia = algoliasearch(
 
 const postsIndex = algolia.initIndex('posts');
 
+postsIndex.setSettings({
+	attributesForFaceting: ['state']
+})
+
 const multer = Multer({
 	storage: Multer.memoryStorage(),
 	limits: {
@@ -25,8 +29,6 @@ const multer = Multer({
 
 // Get post by id
 router.get("/geo", async (req: utils.Req, res: utils.Res) => {
-	// console.log('Geo Body:', req.body);
-	// console.log('Lat:', req.body.lat ? req.body.lat : 'NONE');
 	if (!req.query.radius) return utils.errorRes(res, 400, 'Query must have a Radius');
 	if (isNaN(req.query.radius)) return utils.errorRes(res, 400, 'Radius must be a number');
 	if (!req.query.lat) return utils.errorRes(res, 400, 'Query must have a Latitude');
@@ -36,7 +38,8 @@ router.get("/geo", async (req: utils.Req, res: utils.Res) => {
 	try {
 		const posts = await postsIndex.search({
 			aroundLatLng: `${req.query.lat}, ${req.query.lng}`,
-			aroundRadius: req.query.radius
+			aroundRadius: req.query.radius,
+			filters: 'state:"OPEN"'
 		});
 		return utils.successRes(res, posts.hits);
 	} catch (error) {

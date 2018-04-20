@@ -28,6 +28,42 @@ export const getTrades = async (type: string, uid: string, buyer?: boolean) => {
     return transactions.docs.map(doc => doc.data());
 }
 
+export const closeSeller = async (res: Res, trade: FirebaseFirestore.DocumentSnapshot, buyer: FirebaseFirestore.DocumentSnapshot, seller: FirebaseFirestore.DocumentSnapshot) => {
+	if (seller.data().state !== 'PENDING') return errorRes(res, 400, `Post: ${seller.data().postId} is not available for closing`);
+
+	// Update the states to accepted
+    const batchUpdate = firebase.firestore().batch();
+	batchUpdate.update(trade.ref, 'seller.closed', true);
+	batchUpdate.update(trade.ref, 'seller.post.state', 'CLOSED');
+	batchUpdate.update(seller.ref, 'state', 'CLOSED');
+	if (trade.data().buyer.closed) {
+		batchUpdate.update(trade.ref, 'state', 'CLOSED');
+		batchUpdate.update(trade.ref, 'buyer.post.state', 'CLOSED');
+	}
+    
+    await batchUpdate.commit();
+
+    return successRes(res, (await trade.ref.get()).data());
+}
+
+export const closeBuyer = async (res: Res, trade, buyer: FirebaseFirestore.DocumentSnapshot, seller: FirebaseFirestore.DocumentSnapshot) => {
+	if (buyer.data().state !== 'PENDING') return errorRes(res, 400, `Post: ${buyer.data().postId} is not available for closing`);
+
+	// Update the states to accepted
+    const batchUpdate = firebase.firestore().batch();
+	batchUpdate.update(trade.ref, 'buyer.closed', true);
+	batchUpdate.update(trade.ref, 'buyer.post.state', 'CLOSED');
+	batchUpdate.update(buyer.ref, 'state', 'CLOSED');
+	if (trade.data().seller.closed) {
+		batchUpdate.update(trade.ref, 'state', 'CLOSED');
+		batchUpdate.update(trade.ref, 'seller.post.state', 'CLOSED');
+	}
+    
+    await batchUpdate.commit();
+
+    return successRes(res, (await trade.ref.get()).data());
+}
+
 export const uploadImageToStorage = (file: Express.Multer.File, id: string) => 
 	new Promise<string>((resolve, reject) => {
 		if (!file)
