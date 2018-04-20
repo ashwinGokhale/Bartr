@@ -1,38 +1,97 @@
-.chatBoxFormat {
+.chatWrapper {
     position: absolute;
     top: 60px;
+    bottom: 24px;
+    width: 100%;
+    background-color: rgb(238, 237, 237)
 }
 
+.chatBoxFormat {
+    top: 5vh;  
+    bottom: 5vh;
+    left: 30%;
+    right: 30%;
+    /*background: rgb(78, 138, 205);*/
+    background: white;
+    color: black;
+    position: absolute;
+    box-sizing: border-box;
+    border-radius: 0.5em;
+}    
+
+.chatTitleBox {
+    width: 100%;
+    height: 10%;
+    background-color: rgb(78, 138, 205);
+    border-top-left-radius: 0.5em;
+    border-top-right-radius: 0.5em;
+    color: white;
+}
+
+.chatTitle {
+    font-size: 2vw;
+    float: left;
+    margin-top: 1%;
+}
+
+select.chatDropDown {
+    float: left;
+    background-color: rgb(78, 138, 205);
+    color: white;
+    font-size: 2vw;
+    width: 22vw;
+    height: 7vh;
+    padding-top: 1%;
+    padding-left: 2%;
+    border-bottom: white 0.1vw solid !important;
+    border: none;
+    font-weight: 400;
+}
+    
+select:focus {
+    border-bottom: white 0.1vw solid;
+    outline: 0;
+}
 .container {
-    width:200px;
-    border: 2px solid #dedede;
-    background-color: #f1f1f1;
-    border-radius: 5px;
+    width:40%;
+    border: 2px solid rgb(46, 80, 119);
+    background-color: rgb(61, 106, 158);
+    color: white;
+    border-radius: 0.75vw;
     padding: 10px;
     margin: 10px 0;
-    margin-left: 250px;
+    margin-left: 50%;
 }
-
+      
 .scrollBox {
     overflow: auto; 
-    width:500px; 
-    height:500px;
+    width:95%; 
+    height:75%;
+    padding-left: 4%;
 }
-
+    
+    
+    
 /* Darker chat container */
+    
 .darker {
-    border-color: #ccc;
-    background-color: #ddd;
+    border: 2px solid rgb(63, 63, 63);
+    background-color: rgb(175, 175, 175);
     margin-left: 0px;
 }
+    
 /* Clear floats */
+    
 .container::after {
     content: "";
     clear: both;
     display: table;
 }
-
+    
+    
+    
 /* Style images */
+    
 .container img {
     float: left;
     max-width: 60px;
@@ -40,22 +99,107 @@
     margin-right: 20px;
     border-radius: 50%;
 }
-
+    
+    
+    
 /* Style the right image */
+    
 .container img.right {
     float: right;
     margin-left: 20px;
     margin-right:0;
 }
-
+    
+    
+    
 /* Style time text */
+    
 .time-right {
     float: right;
     color: #aaa;
 }
-
+    
+    
+    
 /* Style time text */
-.time-left {
+    
+.time-left { 
     float: left;
-    color: #999;
+    color: #999;    
+}
+ 
+.centerChatHeader {
+    text-align: center;
+}
+    
+.centerChatButton {
+    text-align: center;
+    font-size: 1.1vw;
+    border: 0.0em solid white;
+    border-radius: 0.75em;
+    background-color: rgb(78, 138, 205);
+    color: white;
+    padding: 0.4em 1em;
+    outline: 0;
+    height: 5vh;
+    width: 15vw;
+    margin-bottom: 6em;
+}   
+    
+.chatSelect {
+    text-align: center;
+    font-size: 1.1vw;
+    border: 0.0em solid white;
+    border-radius: 0.75em;
+    background-color: rgb(78, 138, 205);
+    color: white;
+    padding: 0.4em 1em;
+    outline: 0;
+    height: 3vh;
+    width: 5vw;
+    margin-bottom: 6em;
+}  
+    
+.whiteBox {
+    text-align: center;
+    color: white;
+    background: white;
+    border-radius: 1em 1em 1em 1em;
+    height: 70%;
+    width: 80%;
+}
+
+.chatInputBox {
+    border-top: rgb(190, 190, 190) solid 0.1vw;
+    width: 100%;
+    height: 10%;
+}
+
+.chatText {
+    float: left;
+    border-radius: 0.4vw;
+    border: rgb(78, 138, 205) solid 0.1vw;
+    margin-top: 1.2%;
+    height: 4vh;
+    width: 74%;
+    margin-left: 2%;
+    padding-left: 1%;
+    color: rgb(73, 73, 73);
+}
+
+.chatText:focus {
+    outline: none;
+}
+
+.chatSubmit {
+    float: left;
+    border-radius: 0.4vw;
+    margin-left: 1%;
+    margin-top: 1%;
+    border: white solid 0.1vw;
+    width: 20%;
+    height: 5vh;
+    font-size: 1.25vw;
+    background-color: rgb(78, 138, 205);
+    color: white;
 }

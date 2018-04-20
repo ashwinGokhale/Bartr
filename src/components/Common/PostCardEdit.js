@@ -147,9 +147,9 @@ class PostCardEdit extends Component {
             <form onSubmit={this.onSubmit} encType="multipart/form-data" className="createPost">
                 <div className="adjustDown" />
                 <label><strong>Title</strong></label><br />
-                <input className="titleAccount" value={post.title} id="title" onChange={this.onChange} /><br />
+                <input className="titleAccount" value={this.state.title} id="title" onChange={this.onChange} /><br />
                 <label><strong>Description</strong></label><br />
-                <textarea className="descriptionAccount" cols="86" rows="10" value={post.description} id="description" onChange={this.onChange} />
+                <textarea className="descriptionAccount" cols="86" rows="10" value={this.state.description} id="description" onChange={this.onChange} />
                 <br />
 
                 <label><strong>Tags</strong></label>

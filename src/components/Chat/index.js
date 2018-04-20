@@ -54,7 +54,7 @@ class Chat extends Component{
             this.interval = setInterval(this.getMessage, 1000);
     }
 
-    updateWhoChat(e){
+    updateWhoChat(e){        
         this.setState({selectValue: e.target.value})
         document.getElementById('dropDown').key=e.target.value;
     }
@@ -148,20 +148,25 @@ class Chat extends Component{
             
         )}</div>
 
-        const curUsers = <select id="dropDown" onChange={this.updateWhoChat}>{dataUI.map((users, j) =>
+        const curUsers = <select id="dropDown" className="chatDropDown" onChange={this.updateWhoChat}>{dataUI.map((users, j) =>
         <option key={users}>{users}</option>)}</select>
 
         return (
-            <div className="chatBoxFormat">
-                <h1>Chat App</h1>
-                {curUsers}
-                <button onClick={this.changeSelect}>Chat</ button>
-                <br />
-                {currentMessage}
-                <br />
-                <input onChange={this.updateMessage} type="text" placeholder="myMessage" />
-                <br />
-                <button onClick={this.submitMessage}>Submit Message</button>
+            <div className="chatWrapper">
+                <div className="chatBoxFormat">
+                    <div className="chatTitleBox">
+                        <h3 className="chatTitle">Chatting with</h3>
+                        <div className="chatCurrentUser">{curUsers}</div>
+                    </div>
+                    {/*<button onClick={this.changeSelect}>Chat</ button>*/}
+                    <br />
+                    {currentMessage}
+                    <br />
+                    <div className="chatInputBox">
+                        <input className="chatText" onChange={this.updateMessage} type="text" placeholder="Type a message" />
+                        <button className="chatSubmit" onClick={this.submitMessage}>Send</button>
+                    </div>
+                </div>
             </div>
         )   
     }
