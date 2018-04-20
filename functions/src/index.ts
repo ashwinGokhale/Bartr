@@ -39,13 +39,32 @@ const handleChange = async (type: string, index: algoliasearch.AlgoliaIndex, eve
 			const batch = firebase.firestore().batch();
 			if (type === 'posts') {
 				// Delete all trades involved w/ this post
-				const [buyerPosts, sellerPosts] = await Promise.all([
+				const [buyerTrades, sellerTrades] = await Promise.all([
 					firebase.firestore().collection('/trades').where('buyer.postId', '==', context.params.id).get(),
 					firebase.firestore().collection('/trades').where('seller.postId', '==', context.params.id).get()
 				]);
 
-				buyerPosts.forEach(doc => batch.delete(doc.ref));
-				sellerPosts.forEach(doc => batch.delete(doc.ref));
+				buyerTrades.forEach(async trade => {
+					try {
+						const post = await firebase.firestore().doc(`/posts/${trade.data().seller.postId}`).get();
+						batch.update(post.ref, 'state', 'OPEN');
+						batch.delete(trade.ref);	
+					} catch (error) {
+						console.error(error);
+						return error;
+					}
+				});
+
+				sellerTrades.forEach(async trade => {
+					try {
+						const post = await firebase.firestore().doc(`/posts/${trade.data().buyer.postId}`).get();
+						batch.update(post.ref, 'state', 'OPEN');
+						batch.delete(trade.ref);	
+					} catch (error) {
+						console.error(error);
+						return error;
+					}
+				});
 			}
 			else {
 				// Delete all trades involved with this user

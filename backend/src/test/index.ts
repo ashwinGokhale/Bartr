@@ -38,8 +38,8 @@ describe('-- API Tests --', () => {
 		try {
 			user = await firebase.auth().signInWithEmailAndPassword('apitests@tests.com','tests123');
 			token = await user.getIdToken(true);
-			// testUser = await firebase.auth().createUserWithEmailAndPassword('apiuserstests@tests.com','tests123');	
-			// testToken = await testUser.getIdToken(true);
+			testUser = await firebase.auth().createUserWithEmailAndPassword('apiuserstests@tests.com','tests123');	
+			testToken = await testUser.getIdToken(true);
 
 		} catch (error) {
 			console.error(error);
@@ -124,10 +124,25 @@ describe('-- API Tests --', () => {
 			
 		});
 
-		describe('Endpoint: /trades', () => {
-			it('Should test /trades/some-thing', done => {
+		describe('Endpoint: /ratings', () => {
+			it('Should test /ratings', done => {
 				api
-				.post('/trades/some-thing')
+				.post('/ratings')
+				.set({token})
+				.expect(400, done);
+			});
+
+			it('Should 401 Unauthorized', done => {
+				api
+				.post('/ratings')
+				.expect(401, done);
+			});
+		});
+
+		describe('Endpoint: /trades', () => {
+			it('Should test /trades', done => {
+				api
+				.get('/trades')
 				.set({token})
 				.expect(400, done);
 			});
