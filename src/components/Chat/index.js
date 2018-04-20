@@ -11,6 +11,7 @@ class Chat extends Component{
 
     constructor(props, context){
         super(props, context)
+        let { dbUser } = this.props;
         this.getMessage = this.getMessage.bind(this)
         this.getAllUserNames = this.getAllUserNames.bind(this)
         this.updateWhoChat = this.updateWhoChat.bind(this)
@@ -22,7 +23,7 @@ class Chat extends Component{
             uname:'',
             usersAr: [],
             myMessage:'',
-            selectValue: null,
+            selectValue: dbUser.displayName,
             displayName:''
         }
     }
@@ -49,6 +50,8 @@ class Chat extends Component{
             this.setState({
                 displayName: dbUser.displayName
             })
+
+            this.interval = setInterval(this.getMessage, 1000);
     }
 
     updateWhoChat(e){
@@ -70,6 +73,10 @@ class Chat extends Component{
     }
 
     getMessage(){
+
+      var objDiv = document.getElementById("div1");
+      objDiv.scrollTop = objDiv.scrollHeight;  
+
       if(this.state.displayName != null && this.state.selectValue != null){
           var docName;
         if(this.state.selectValue > this.state.displayName){
@@ -129,7 +136,7 @@ class Chat extends Component{
 
     render(){
         let dataUI = this.state.usersAr;
-        const currentMessage = <div className="scrollBox">{this.state.messages.map((message, i) =>
+        const currentMessage = <div id="div1" className="scrollBox">{this.state.messages.map((message, i) =>
             {
                 if(message.toString().startsWith(this.state.displayName)){
                     return <div className="container">

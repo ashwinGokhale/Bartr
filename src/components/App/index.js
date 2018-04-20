@@ -52,11 +52,8 @@ const App = () =>
           <Route exact path={routes.SETTINGS} component={SettingsPage} />
           <Route exact path={routes.CHAT} component={Chat} />
           <Route exact path={routes.CREATE_POST} component={CreatePostPage} />
-<<<<<<< HEAD
           <Route exact path={routes.VERIFICATION_PAGE} component={VerificationPage} />
-=======
           <Route exact path={routes.EDIT_POST} component={EditPostPage} />
->>>>>>> 80b61850b8fcd7282c1675248e7f6b20bf2a9690
           <Route exact path={routes.DISPLAY_POSTS} component={DisplayPostsPage} />
           <Route exact path={routes.SUPPORT} component={SupportPage} />
           <Route exact path={routes.TERMS} component={TermsPage} />
