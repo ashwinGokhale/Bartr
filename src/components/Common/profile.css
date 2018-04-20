@@ -14,6 +14,12 @@ h1 { font-size: 1.5em; margin: 10px; }
   padding-left: 0.8vw;
 }
 
+.verImage {
+  width: 35px;
+  height: 35px;
+  padding-left: 22%;
+}
+
 fieldset.rating {
   margin-left: 0;
   position: relative;
