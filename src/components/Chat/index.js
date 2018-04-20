@@ -34,10 +34,12 @@ class Chat extends Component{
         .get()
         .then(snapshot => {
             snapshot.forEach(data => {
-                var joined = this.state.usersAr.concat(data.data().displayName);
-                this.setState({
-                    usersAr: joined
-                })                
+                if(data.data().displayName != this.state.displayName){
+                    var joined = this.state.usersAr.concat(data.data().displayName);
+                    this.setState({
+                        usersAr: joined
+                    })       
+                }         
             })
         });
     }
