@@ -56,9 +56,9 @@ router.post('/:uid', async (req: utils.Req, res: utils.Res) => {
 			totalRatings: 5,
 			numRatings: 1,
 			verified: false,
-			lat: 0, 
-			lng: 0 ,
-			radius: 25000
+			lat: 40.427679,
+			lng: -86.916957,
+			radius: 250000
 		};
 		const { writeTime } = await userRef.set(newUser);
 		// return utils.successRes(res, newUser);

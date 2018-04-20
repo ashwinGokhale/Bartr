@@ -34,7 +34,8 @@ class PostCardEdit extends Component {
 	
 
 	onChange = (e) => {
-		e.preventDefault();
+        // e.preventDefault();
+        console.log('Attempting to change w/', e.target.id);
 		if (e.target.id === 'photos') {
 			this.setState({photos: e.target.files})
 			var x = document.getElementById("uploads");

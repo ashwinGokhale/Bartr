@@ -81,17 +81,13 @@ select:focus {
 }
     
 /* Clear floats */
-    
 .container::after {
     content: "";
     clear: both;
     display: table;
 }
-    
-    
-    
+   
 /* Style images */
-    
 .container img {
     float: left;
     max-width: 60px;
@@ -99,28 +95,20 @@ select:focus {
     margin-right: 20px;
     border-radius: 50%;
 }
-    
-    
-    
+   
 /* Style the right image */
-    
 .container img.right {
     float: right;
     margin-left: 20px;
     margin-right:0;
 }
-    
-    
-    
+   
 /* Style time text */
-    
 .time-right {
     float: right;
     color: #aaa;
 }
-    
-    
-    
+      
 /* Style time text */
     
 .time-left { 
@@ -160,6 +148,7 @@ select:focus {
     margin-bottom: 6em;
 }  
     
+
 .whiteBox {
     text-align: center;
     color: white;
@@ -202,4 +191,5 @@ select:focus {
     font-size: 1.25vw;
     background-color: rgb(78, 138, 205);
     color: white;
+
 }

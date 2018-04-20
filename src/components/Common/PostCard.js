@@ -13,7 +13,7 @@ class PostCard extends Component {
         // TODO: Fix this
         const userPosts = 
             (this.props.userPosts && this.props.userPosts.length) ? 
-            this.props.userPosts.filter(post => !this.props.trades.find(trade => post.postId === trade.buyer.postId)) : 
+            this.props.userPosts.filter(post => !this.props.trades.find(trade => post.postId === trade.buyer.postId) && post.state === 'OPEN') : 
             []
         
         console.log('Post Card userPosts:', userPosts);

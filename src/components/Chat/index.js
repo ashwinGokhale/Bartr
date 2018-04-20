@@ -18,6 +18,7 @@ class Chat extends Component{
         this.updateMessage = this.updateMessage.bind(this)
         this.submitMessage = this.submitMessage.bind(this)
         this.changeSelect = this.changeSelect.bind(this)
+
         this.state={
             messages: [],
             uname:'',
@@ -42,7 +43,6 @@ class Chat extends Component{
         });
     }
 
-  
     componentDidMount(){
             console.log('component mounted');
             this.getAllUserNames();
@@ -59,7 +59,12 @@ class Chat extends Component{
         document.getElementById('dropDown').key=e.target.value;
     }
 
-    updateMessage(event){
+    updateWhoChat = (e) => {
+        this.setState({selectValue: e.target.value})
+        document.getElementById('dropDown').key=e.target.value;
+    }
+
+    updateMessage = (event) => {
         this.setState({
             myMessage: event.target.value
         })
