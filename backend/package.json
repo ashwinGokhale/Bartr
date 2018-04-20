@@ -4,7 +4,7 @@
     "lint": "./node_modules/.bin/tslint --project .",
     "build": "./node_modules/.bin/tsc",
     "watch": "./node_modules/.bin/tsc -w",
-    "test": "./node_modules/.bin/mocha -t 30000 lib/test",
+    "test": "./node_modules/.bin/mocha -b -t 30000 lib/test",
     "serve": "./node_modules/.bin/nodemon lib",
     "shell": "npm run build && ./node_modules/.bin/firebase experimental:functions:shell",
     "watchServe": "FIREBASE_CONFIG=`pwd` && (npm run watch &) && (npm run serve)",
