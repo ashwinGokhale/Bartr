@@ -24,7 +24,6 @@ class AccountPage extends React.Component {
               <div className="profileCard">
                 <img className="profilePhoto" src={dbUser.photoUrl !== "none" ? dbUser.photoUrl : defaultPhoto} alt="Profile Photo"></img>
                 <h3 className="userName">{dbUser.displayName}</h3>
-                <h3>Verified: {dbUser.verified}</h3>
                 <a href="https://docs.google.com/forms/d/e/1FAIpQLScDEeZwyH-fQiDNSUggxKMZFNPm03H9cF3IaI5uwzR7MeECkA/viewform?usp=sf_link" target="_blank"><button className="reportUser">Report A User</button></a>
               </div>
             </div>

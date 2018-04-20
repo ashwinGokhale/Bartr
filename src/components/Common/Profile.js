@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import PostItem from '../Common/PostItem';
 import { createRating } from '../../actions';
 import defaultPhoto from '../../assets/default.png';
+import verLogo from '../../assets/bartrCircle.png'
 import './profile.css'
 
 export default class ProfilePage extends Component {
@@ -56,6 +57,7 @@ export default class ProfilePage extends Component {
 
 					<img className="profilePhoto" src={dbUser.photoUrl !== 'none' ? dbUser.photoUrl : defaultPhoto}></img>
 					{ !!dbUser && <h5 className="userName">{dbUser.displayName}</h5> }
+					{ dbUser.verified ? <img className="verImage" src={verLogo}></ img> : <div></div>	}
 					{ !currentUser && <this.Rating/>}
 				</div>
 				</div>
