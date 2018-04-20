@@ -24,6 +24,7 @@ import TradesPage from '../TradesPage';
 import SupportPage from '../Support';
 import TermsPage from '../Terms';
 import AboutUsPage from '../AboutUs';
+import VerificationPage from '../Verification';
 import * as routes from '../../constants';
 
 import './index.css';
@@ -51,6 +52,7 @@ const App = () =>
           <Route exact path={routes.SETTINGS} component={SettingsPage} />
           <Route exact path={routes.CHAT} component={Chat} />
           <Route exact path={routes.CREATE_POST} component={CreatePostPage} />
+          <Route exact path={routes.VERIFICATION_PAGE} component={VerificationPage} />
           <Route exact path={routes.EDIT_POST} component={EditPostPage} />
           <Route exact path={routes.DISPLAY_POSTS} component={DisplayPostsPage} />
           <Route exact path={routes.SUPPORT} component={SupportPage} />
