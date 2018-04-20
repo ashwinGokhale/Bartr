@@ -18,7 +18,7 @@ class CreatePostPage extends Component {
 			currentLocation: true,
 			address: '',
 			type: '',
-			error: this.props.userPostsError
+			error: this.props.userPostsError,
 		}
 	}
 
@@ -39,8 +39,37 @@ class CreatePostPage extends Component {
 				x.innerHTML = e.target.files[0].name
 			}
 		}
-		else
-			this.setState({[e.target.id] : e.target.value})
+		else {
+			this.setState({[e.target.id] : e.target.value});
+		}
+
+		document.getElementById("createPicturePreview").innerHTML = "";
+		var preview = document.querySelector('#createPicturePreview');
+		var files   = document.querySelector('input[type=file]').files;
+
+		function readAndPreview(file) {
+
+			// Make sure `file.name` matches our extensions criteria
+			if ( /\.(jpe?g|png|gif)$/i.test(file.name) ) {
+			var reader = new FileReader();
+
+			reader.addEventListener("load", function () {
+				var image = new Image();
+				image.height = 100;
+				image.title = file.name;
+				image.src = this.result;
+				preview.appendChild( image );
+			}, false);
+
+			reader.readAsDataURL(file);
+			}
+
+		}
+
+		if (files) {
+			[].forEach.call(files, readAndPreview);
+		}
+
 	}
 
 	getCurrentPosition = (options = {}) => new Promise((resolve, reject) => navigator.geolocation.getCurrentPosition(resolve, reject, options));
@@ -135,59 +164,73 @@ class CreatePostPage extends Component {
 	
 	render() {
 		return (
-			<form onSubmit={this.onSubmit} encType="multipart/form-data" className="createPost">
-				<div className="adjustDown"/>
-				<label><strong>Title</strong></label><br />
-				<input className="titleAccount" placeholder="Add a title..." id="title" onChange={this.onChange} /><br/>
-				<label><strong>Description</strong></label><br/>
-				<textarea className="descriptionAccount" cols="86" rows ="10" placeholder="Add a description..." id="description" onChange={this.onChange} />
-				<br/>
-
-				<label><strong>Tags</strong></label>
-				<ReactTags
-					tags={this.state.tags}
-					handleDelete={this.handleDelete}
-					handleAddition={this.handleAddition}
-					handleDrag={this.handleDrag} 
-				/>
-
-				<label><strong>Photos</strong></label><br/>
-				<div className="postUploadAccount">
-					{/*<input type="file" className="uploadPhoto" placeholder="Choose A Photo" id="photos" onChange={this.onChange} multiple />*/}
-					<label className="custom-file-upload">
-    					<input type="file" className="UploadPhoto" id="photos" onChange={this.onChange} multiple/>Browse
-					</label>
-					<label id="uploads" className="filesUploaded"></label>
-				</div>
-				
-				<div className="postInformation">
-					<label><strong>Post Type:</strong></label>
-					<label>Good</label>
-					<input type="radio" name="postType" onChange={(e) => {this.setState({type: 'good'})}} />
-					<label>Service</label>
-					<input type="radio" name="postType" onChange={(e) => {this.setState({type: 'service'})}} />
-					<br/>
+			<div>
+				<form onSubmit={this.onSubmit} encType="multipart/form-data" className="createPost">
+					<div className="adjustDown"/>
+					<label><strong>Title</strong></label><br />
+					<input className="titleAccount" placeholder="Add a title..." id="title" onChange={this.onChange} /><br/>
+					<label><strong>Description</strong></label><br/>
+					<textarea className="descriptionAccount" cols="86" rows ="10" placeholder="Add a description..." id="description" onChange={this.onChange} />
 					<br/>
 
-					<label><strong>Location: </strong></label>
-					<label>Current</label>
-					<input type="radio" name="location" onChange={(e) => {this.setState({currentLocation: true})}} />
-					<label>Address</label>
-					<input type="radio" name="location" onChange={(e) => {this.setState({currentLocation: false})}} />
-					
-					{
-						!this.state.currentLocation ?
-							<input className="addressInput" id="address" onChange={this.onChange} /> : 
-							null
-					}
+					<label><strong>Tags</strong></label>
+					<ReactTags
+						tags={this.state.tags}
+						handleDelete={this.handleDelete}
+						handleAddition={this.handleAddition}
+						handleDrag={this.handleDrag} 
+					/>
 
-					<div className="warningForm">
-						{ !!this.state.error ? <p className="warning" style={{'color': 'red'}}>ERROR: {this.state.error}</p> : null }
+					<label><strong>Photos</strong></label><br/>
+					<div className="postUploadAccount">
+						{/*<input type="file" className="uploadPhoto" placeholder="Choose A Photo" id="photos" onChange={this.onChange} multiple />*/}
+						<label className="custom-file-upload">
+							<input type="file" className="UploadPhoto" id="photos" onChange={this.onChange} multiple/>Browse
+						</label>
+						<label id="uploads" className="filesUploaded"></label>
 					</div>
-					<br/>
-					<input type="submit" className="createAccountPost" value="Create Post"/>
+					
+					<div className="postInformation">
+						<label><strong>Post Type:</strong></label>
+						<label>Good</label>
+						<input type="radio" name="postType" onChange={(e) => {this.setState({type: 'good'})}} />
+						<label>Service</label>
+						<input type="radio" name="postType" onChange={(e) => {this.setState({type: 'service'})}} />
+						<br/>
+						<br/>
+
+						<label><strong>Location: </strong></label>
+						<label>Current</label>
+						<input type="radio" name="location" onChange={(e) => {this.setState({currentLocation: true})}} />
+						<label>Address</label>
+						<input type="radio" name="location" onChange={(e) => {this.setState({currentLocation: false})}} />
+						
+						{
+							!this.state.currentLocation ?
+								<input className="addressInput" id="address" onChange={this.onChange} /> : 
+								null
+						}
+
+						<div className="warningForm">
+							{ !!this.state.error ? <p className="warning" style={{'color': 'red'}}>ERROR: {this.state.error}</p> : null }
+						</div>
+						<br/>
+						<input type="submit" className="createAccountPost" value="Create Post"/>
+					</div>
+				</form>
+				<div className="createPictures">
+					<div className="createPicturesCard">
+						<div className="createPicturesTop">
+							<h3 className="createPicturesTitle">Pictures</h3>
+						</div>
+						<div className="createPicturesBottom">
+							<ul id="createPicturePreview">
+								
+							</ul>
+						</div>
+					</div>
 				</div>
-			</form>
+			</div>
 		)
 	}
 }
