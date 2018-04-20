@@ -184,42 +184,15 @@ router.post('/close/:id', async (req: utils.Req, res: utils.Res) => {
     else
         return utils.errorRes(res, 401, 'Unauthorized');
 
-
-    // console.log('Seller Post:', sellerPost.data());
-    // console.log('Buyer Post:', buyerPost.data());
-    // console.log('Trade closed for:', userType, '\n', trade.data());
     if (userType == 'seller')
         return utils.closeSeller(res, trade, buyerPost, sellerPost);
     else
         return utils.closeBuyer(res, trade, buyerPost, sellerPost);
-    
-    // if (sellerPost.data().state !== 'PENDING') return utils.errorRes(res, 400, `Post: ${sellerPostId} is not available for closing`);
-    // if (buyerPost.data().state !== 'PENDING') return utils.errorRes(res, 400, `Post: ${buyerPostId} is not available for closing`);
-    
-    // // Update the states to accepted
-    // const batchUpdate = firebase.firestore().batch();
-    // if (userType === 'seller') {
-    //     batchUpdate.update(trade.ref, 'seller.closed', true);
-    //     batchUpdate.update(sellerPost.ref, 'state', 'CLOSED');
-    //     if (trade.data().buyer.closed)
-    //         batchUpdate.update(trade.ref, 'state', 'CLOSED');
-    // }
-    // else {
-    //     batchUpdate.update(trade.ref, 'buyer.closed', true);
-    //     batchUpdate.update(buyerPost.ref, 'state', 'CLOSED');
-    //     if (trade.data().seller.closed)
-    //         batchUpdate.update(trade.ref, 'state', 'CLOSED');
-    // }
-
-    // await batchUpdate.commit();
-
-    // return utils.successRes(res, (await trade.ref.get()).data());
 });
 
 router.get('/', async (req: utils.Req, res: utils.Res) => {
     try {
         const [sellerOpen, sellerAccepted, sellerClosed, sellerCompleted, buyerOpen, buyerAccepted, buyerClosed, buyerCompleted] = await Promise.all([
-            // utils.getTrades('OPEN', req.token.uid, false),
             firebase.firestore().collection('/trades')
                 .where('state', '==', 'OPEN')
 				.where('seller.userId', '==', req.token.uid)

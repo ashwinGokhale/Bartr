@@ -18,7 +18,7 @@ const postsIndex = algolia.initIndex('posts');
 const usersIndex = algolia.initIndex('users');
 
 
-const handleChange = (index: algoliasearch.AlgoliaIndex, event: functions.Change < FirebaseFirestore.DocumentSnapshot > , context: functions.EventContext) => {
+const handleChange = async (type: string, index: algoliasearch.AlgoliaIndex, event: functions.Change < FirebaseFirestore.DocumentSnapshot > , context: functions.EventContext) => {
 	// Document created/updated
 	if (event.after.exists) {
 		// Get the document
@@ -32,21 +32,52 @@ const handleChange = (index: algoliasearch.AlgoliaIndex, event: functions.Change
 		// Write to the algolia postsIndex
 		return index.saveObject(doc);
 	}
-	// Post deleted
-	else {
-		console.log('Deleting:', context.params.id, 'from Algolia');
 
-		// Delete post from Algolia
-		return index.deleteObject(context.params.id);
+	// Document deleted
+	else {
+		try {
+			const batchDelete = firebase.firestore().batch();
+			if (type === 'posts') {
+				// Delete all trades involved w/ this post
+				const [buyerPosts, sellerPosts] = await Promise.all([
+					firebase.firestore().collection('/trades').where('buyer.postId', '==', context.params.id).get(),
+					firebase.firestore().collection('/trades').where('seller.postId', '==', context.params.id).get()
+				]);
+
+				buyerPosts.forEach(doc => batchDelete.delete(doc.ref));
+				sellerPosts.forEach(doc => batchDelete.delete(doc.ref));
+			}
+			else {
+				// Delete all trades involved with this user
+				const trades = await firebase.firestore().collection('/trades').where('buyer.postId', '==', context.params.id).get();
+				trades.forEach(trade => batchDelete.delete(trade.ref));
+
+				// Reverse all ratings involved w/ this user
+				const ratings = await firebase.firestore().collection('/ratings').where('rater', '==', context.params.id).get();
+				ratings.forEach(rating => batchDelete.delete(rating.ref));
+			}
+
+			// Delete post from Algolia
+			console.log('Deleting:', context.params.id, 'from Algolia');
+
+			return Promise.all([
+				batchDelete.commit(),
+				index.deleteObject(context.params.id)
+			]);
+			
+		} catch (error) {
+			console.error(error);
+			return error;
+		}
 	}
 };
 
 
 // Update the search postsIndex every time a blog post is written
-export const postChanged = functions.firestore.document('/posts/{id}').onWrite((event, context) => handleChange(postsIndex, event, context));
+export const postChanged = functions.firestore.document('/posts/{id}').onWrite((event, context) => handleChange('posts', postsIndex, event, context));
 
 // Update the search postsIndex every time a blog post is written
-export const usersChanged = functions.firestore.document('/users/{id}').onWrite((event, context) => handleChange(usersIndex, event, context));
+export const usersChanged = functions.firestore.document('/users/{id}').onWrite((event, context) => handleChange('users', usersIndex, event, context));
 
 export const ratingUpdated = functions.firestore.document('/ratings/{rating}').onWrite(async (event, context) => {
 	const [userID, raterID] = context.params.rating.split('_');
@@ -58,7 +89,7 @@ export const ratingUpdated = functions.firestore.document('/ratings/{rating}').o
 	const newRating = {};
 
 	// Update rating
-	if (event.before.exists) {
+	if (event.before.exists && event.after.exists) {
 		Object.assign(
 			newRating, {
 				totalRatings: data.data().totalRatings + event.after.get('value') - event.before.get('value'),
@@ -66,8 +97,9 @@ export const ratingUpdated = functions.firestore.document('/ratings/{rating}').o
 		);
 		console.log('Changing rating to:', newRating);
 	}
+
 	// New rating
-	else {
+	else if (!event.before.exists && event.after.exists) {
 		Object.assign(
 			newRating, {
 				totalRatings: data.data().totalRatings + event.after.get('value'),
@@ -76,15 +108,17 @@ export const ratingUpdated = functions.firestore.document('/ratings/{rating}').o
 		);
 		console.log('Adding new rating:', newRating);
 	}
-	return data.ref.set(newRating, {
-		merge: true
-	});
-});
 
-// export const tradeDeleted = functions.firestore.document('/trades/{id}').onDelete(async (event, context) => {
-// 	const [sellerPostId, buyerPostId] = context.params.id.split('_');
-// 	return Promise.all([
-// 		firebase.firestore().doc(`/posts/${sellerPostId}`).update('state', 'OPEN'),
-// 		firebase.firestore().doc(`/posts/${buyerPostId}`).update('state', 'OPEN')
-// 	]).catch(err => console.error(err));
-// });
+	// Deleted rating
+	else if (event.before.exists && !event.after.exists) {
+		Object.assign(
+			newRating, {
+				totalRatings: data.data().totalRatings - event.before.get('value'),
+				numRatings: data.data().numRatings - 1,
+			}
+		);
+		console.log('Deleted rating:', newRating);
+	}
+	
+	return data.ref.set(newRating, {merge: true});
+});

@@ -65,7 +65,7 @@ class PostCard extends Component {
                         {
                             !self && post.state === 'OPEN' &&
                             <div className="makeOfferShiftDown">
-                                <h3 className="floatLeft offerTitle" >Make an Offer:</h3>
+                                <h3 className="floatLeft offerTitle" >Make an Offer:</h3><br/>
                                 <select className="floatLeft offerDropDown"onChange={e => this.setState({postId: e.target.value})}>
                                 {userPosts.map((userPost, i) => <option key={i} value={userPost.postId} >{userPost.title}</option>)}
                                 </select>
